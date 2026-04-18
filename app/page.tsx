@@ -43,7 +43,7 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
   );
 }
 
-function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void> }) {
   return (
     <header className="hero felt">
       <div className="bamboo" aria-hidden="true">
@@ -71,7 +71,7 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
           <p className="lede">Play American and Hong Kong style, practice versus bots, and start an online game with friends in seconds.</p>
 
           <form className="capture" id="signup" onSubmit={onSignupSubmit}>
-            <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary" type="submit">
               Get early access
             </button>
@@ -500,7 +500,7 @@ function Contact({ onOpenContact, onOpenSignup }: { onOpenContact: () => void; o
   );
 }
 
-function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void> }) {
   return (
     <section className="tight">
       <div className="wrap">
@@ -523,7 +523,7 @@ function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFo
           <h2 style={{ marginTop: '14px' }}>Pull up a chair.</h2>
           <p className="lede">Join the waitlist and we&apos;ll send one — and only one — email when the app is ready for you.</p>
           <form className="capture" onSubmit={onSignupSubmit}>
-            <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary gold" type="submit">
               Reserve my seat
             </button>
@@ -622,7 +622,7 @@ function ContactModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose:
   );
 }
 
-function SignupModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: () => void; onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+function SignupModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: () => void; onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void> }) {
   return (
     <div className={`modal ${isOpen ? 'on' : ''}`} id="signupModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div className="modal-backdrop" onClick={onClose}></div>
@@ -638,7 +638,7 @@ function SignupModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: 
           Drop your email and we&apos;ll send one note when the app is ready for you.
         </p>
         <form className="capture" style={{ marginTop: '22px', maxWidth: 'none' }} onSubmit={onSubmit}>
-          <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+          <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
           <button className="btn-primary gold" type="submit">
             Reserve my seat
           </button>
@@ -733,11 +733,36 @@ export default function Home() {
     toastTimerRef.current = setTimeout(() => setToastVisible(false), 3400);
   };
 
-  const handleSignup = (event: FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    event.currentTarget.reset();
-    setSignupModalOpen(false);
-    showToast("You're on the list. Look out for a note from us.");
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const email = formData.get('email');
+
+    if (typeof email !== 'string' || !email.trim()) {
+      showToast('Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/email-signups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      if (!response.ok) {
+        showToast("We couldn't save your email right now. Please try again.");
+        return;
+      }
+
+      form.reset();
+      setSignupModalOpen(false);
+      showToast("You're on the list. Look out for a note from us.");
+    } catch (error) {
+      console.error('Failed to submit email signup', error);
+      showToast("We couldn't save your email right now. Please try again.");
+    }
   };
 
   const handleContact = (event: FormEvent<HTMLFormElement>) => {
