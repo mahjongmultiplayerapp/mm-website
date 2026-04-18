@@ -17,11 +17,15 @@ function getRequiredEnv(name: 'GOOGLE_PRIVATE_KEY' | 'GOOGLE_CLIENT_EMAIL' | 'GO
 }
 
 function normalizePrivateKey(rawPrivateKey: string): string {
-  return rawPrivateKey
-    .trim()
-    .replace(/^"(.*)"$/s, '$1')
-    .replace(/^'(.*)'$/s, '$1')
-    .replace(/\\n/g, '\n');
+  const trimmed = rawPrivateKey.trim();
+
+  const unwrapped =
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+      ? trimmed.slice(1, -1)
+      : trimmed;
+
+  return unwrapped.replace(/\\n/g, '\n');
 }
 
 function parseSpreadsheetId(rawValue: string): string {
