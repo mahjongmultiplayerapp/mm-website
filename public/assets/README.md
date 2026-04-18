@@ -6,7 +6,4 @@ Before running or deploying, copy the landing page images from the original sour
 
 ```bash
 cp -R "Mahjong Multiplayer Website Source/assets/." public/assets/
-cp -R "Mahjong Multiplayer Website Source/uploads/." public/uploads/
 ```
-
-These files are required by `public/landing-page.html`.
