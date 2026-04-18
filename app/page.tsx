@@ -198,29 +198,26 @@ function AppStorePreview() {
               <strong>Mahjong Multiplayer</strong>
             </p>
             <p className="store-subtitle">Play Mahjong online with friends for free, practice versus bots</p>
-            <div className="store-badges">
-              <div className="store-badge ios">
-                <span className="store-badge-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" role="presentation">
-                    <path
-                      d="M16.06 12.94c.03 3.2 2.8 4.26 2.83 4.27-.02.08-.44 1.5-1.46 2.97-.88 1.27-1.8 2.54-3.24 2.57-1.42.03-1.88-.84-3.5-.84-1.62 0-2.13.81-3.47.87-1.4.05-2.47-1.39-3.35-2.65-1.8-2.6-3.17-7.34-1.33-10.52.91-1.58 2.54-2.58 4.3-2.61 1.35-.03 2.62.91 3.5.91.87 0 2.5-1.12 4.22-.95.72.03 2.75.29 4.06 2.2-.1.07-2.43 1.41-2.41 4.18ZM13.64 5.4c.74-.89 1.24-2.12 1.1-3.35-1.07.04-2.36.71-3.13 1.6-.68.78-1.28 2.04-1.12 3.24 1.19.09 2.4-.61 3.15-1.49Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                </span>
-                <span>Launching on iOS</span>
-              </div>
-              <div className="store-badge play">
-                <span className="store-badge-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" role="presentation">
-                    <path d="M3 3.6v16.8c0 .52.56.84 1.01.57l9.38-5.63-10.4-11.3c0-.02.01-.03.01-.05Z" fill="currentColor" />
-                    <path d="M14.78 8.16 5.36 2.53A.66.66 0 0 0 4.35 3l10.43 11.35 3.24-1.95a2.54 2.54 0 0 0 0-4.24l-3.24-2Z" fill="currentColor" />
-                    <path d="m14.78 15.66-10.43 6.3c-.45.27-1.01-.05-1.01-.57V20.4l10.4-11.28 1.04.63Z" fill="currentColor" />
-                    <path d="m20.03 11.1-3.22-1.93-1.09.65 1.05.61c.95.57.95 1.95 0 2.52l-1.05.63 1.09.65 3.22-1.94c1.3-.78 1.3-2.67 0-3.45Z" fill="currentColor" />
-                  </svg>
-                </span>
-                <span>Launching on Google Play</span>
-              </div>
+          </div>
+          <div className="store-badges">
+            <div className="store-badge ios">
+              <span className="store-badge-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path
+                    d="M16.06 12.94c.03 3.2 2.8 4.26 2.83 4.27-.02.08-.44 1.5-1.46 2.97-.88 1.27-1.8 2.54-3.24 2.57-1.42.03-1.88-.84-3.5-.84-1.62 0-2.13.81-3.47.87-1.4.05-2.47-1.39-3.35-2.65-1.8-2.6-3.17-7.34-1.33-10.52.91-1.58 2.54-2.58 4.3-2.61 1.35-.03 2.62.91 3.5.91.87 0 2.5-1.12 4.22-.95.72.03 2.75.29 4.06 2.2-.1.07-2.43 1.41-2.41 4.18ZM13.64 5.4c.74-.89 1.24-2.12 1.1-3.35-1.07.04-2.36.71-3.13 1.6-.68.78-1.28 2.04-1.12 3.24 1.19.09 2.4-.61 3.15-1.49Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <span>Launching on iOS</span>
+            </div>
+            <div className="store-badge play">
+              <span className="store-badge-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M3.5 2.5v19l16-9.5-16-9.5Z" fill="currentColor" />
+                </svg>
+              </span>
+              <span>Launching on Google Play</span>
             </div>
           </div>
         </div>
