@@ -6,7 +6,7 @@ function Brand() {
   return (
     <a className="brand" href="#">
       <span className="mark">
-        <img src="/assets/floating-tile-logo.jpg" alt="Mahjong Multiplayer logo" />
+        <img src="/assets/floating-tile-logo-sm.jpg" alt="Mahjong Multiplayer logo" />
       </span>
       <span className="name">Mahjong Multiplayer</span>
     </a>
@@ -93,7 +93,7 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
         <div>
           <div className="hero-stage default angle-stage">
             <div className="gold-ring"></div>
-            <img className="hero-phone-img" src="/assets/iphone-mockup-angle.png" alt="Mahjong Multiplayer running on iPhone" />
+            <img className="hero-phone-img" src="/assets/iphone-mockup-portrait-hero.png" alt="Mahjong Multiplayer running on iPhone" />
           </div>
 
           <div className="hero-stage table" style={{ width: '400px' }}>
@@ -542,7 +542,7 @@ function Footer() {
           <div>
             <a className="brand" href="#" style={{ marginBottom: '14px' }}>
               <span className="mark">
-                <img src="/assets/floating-tile-logo.jpg" alt="Mahjong Multiplayer logo" />
+                <img src="/assets/floating-tile-logo-sm.jpg" alt="Mahjong Multiplayer logo" />
               </span>
               <span className="name">Mahjong Multiplayer</span>
             </a>
