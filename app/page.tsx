@@ -208,7 +208,7 @@ function AppStorePreview() {
                     />
                   </svg>
                 </span>
-                <span>Download for iOS</span>
+                <span>Launching on iOS</span>
               </div>
               <div className="store-badge play">
                 <span className="store-badge-icon" aria-hidden="true">
@@ -219,7 +219,7 @@ function AppStorePreview() {
                     <path d="m20.03 11.1-3.22-1.93-1.09.65 1.05.61c.95.57.95 1.95 0 2.52l-1.05.63 1.09.65 3.22-1.94c1.3-.78 1.3-2.67 0-3.45Z" fill="currentColor" />
                   </svg>
                 </span>
-                <span>Download for Google Play</span>
+                <span>Launching on Google Play</span>
               </div>
             </div>
           </div>

@@ -294,6 +294,10 @@
     border-top: 1px solid rgba(245,238,221,.06);
     border-bottom: 1px solid rgba(245,238,221,.06);
   }
+  .store-preview .wrap {
+    display: flex;
+    justify-content: center;
+  }
   .store-preview-card {
     background: linear-gradient(180deg, rgba(14,42,34,.88), rgba(10,53,40,.7));
     border: 1px solid rgba(245,238,221,.12);
@@ -301,13 +305,15 @@
     padding: 22px;
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: center;
+    align-items: stretch;
     gap: 20px;
+    width: fit-content;
+    max-width: 100%;
     box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 16px 34px -28px rgba(0,0,0,.9);
   }
   .store-icon-wrap {
-    width: 94px;
-    height: 94px;
+    height: 100%;
+    aspect-ratio: 1 / 1;
     border-radius: 22px;
     overflow: hidden;
     border: 1px solid rgba(245,238,221,.2);
@@ -316,19 +322,20 @@
     flex-shrink: 0;
   }
   .store-icon-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .store-copy { display: flex; flex-direction: column; gap: 10px; }
+  .store-copy { display: flex; flex-direction: column; gap: 10px; max-width: 52ch; }
   .store-title, .store-subtitle { margin: 0; }
   .store-title { font-size: clamp(20px, 2.1vw, 28px); }
-  .store-subtitle { color: var(--ivory-dim); font-size: clamp(14px, 1.1vw, 16px); }
+  .store-subtitle { color: var(--ivory-dim); font-size: clamp(14px, 1.1vw, 16px); max-width: 52ch; }
   .store-badges {
     margin-top: 2px;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
-    max-width: 700px;
+    width: 100%;
+    max-width: 52ch;
   }
   .store-badge {
-    border-radius: 999px;
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -727,7 +734,7 @@
   @media (max-width: 960px) {
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
     .store-preview-card { grid-template-columns: 1fr; gap: 16px; }
-    .store-icon-wrap { width: 74px; height: 74px; border-radius: 18px; }
+    .store-icon-wrap { width: 88px; height: 88px; border-radius: 18px; }
     .store-copy { gap: 8px; }
     .store-badges { grid-template-columns: 1fr; max-width: none; }
     .store-badge { justify-content: flex-start; }
