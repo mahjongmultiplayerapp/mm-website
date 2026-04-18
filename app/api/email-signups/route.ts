@@ -16,6 +16,39 @@ function getRequiredEnv(name: 'GOOGLE_PRIVATE_KEY' | 'GOOGLE_CLIENT_EMAIL' | 'GO
   return value;
 }
 
+function normalizePrivateKey(rawPrivateKey: string): string {
+  return rawPrivateKey
+    .trim()
+    .replace(/^"(.*)"$/s, '$1')
+    .replace(/^'(.*)'$/s, '$1')
+    .replace(/\\n/g, '\n');
+}
+
+function parseSpreadsheetId(rawValue: string): string {
+  const value = rawValue.trim();
+
+  if (!value) {
+    throw new Error('GOOGLE_SHEET_ID is empty');
+  }
+
+  const fromDocsUrl = value.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  if (fromDocsUrl?.[1]) {
+    return fromDocsUrl[1];
+  }
+
+  const fromEditSuffix = value.match(/^([a-zA-Z0-9-_]+)\/edit(?:\?|$)/);
+  if (fromEditSuffix?.[1]) {
+    return fromEditSuffix[1];
+  }
+
+  const fromPlainId = value.match(/^([a-zA-Z0-9-_]+)$/);
+  if (fromPlainId?.[1]) {
+    return fromPlainId[1];
+  }
+
+  throw new Error('GOOGLE_SHEET_ID format is invalid');
+}
+
 function toBase64Url(value: string): string {
   return Buffer.from(value)
     .toString('base64')
@@ -91,9 +124,9 @@ async function appendEmailRow(params: { spreadsheetId: string; accessToken: stri
 }
 
 function getGoogleConfig() {
-  const privateKey = getRequiredEnv('GOOGLE_PRIVATE_KEY').replace(/\\n/g, '\n');
+  const privateKey = normalizePrivateKey(getRequiredEnv('GOOGLE_PRIVATE_KEY'));
   const clientEmail = getRequiredEnv('GOOGLE_CLIENT_EMAIL');
-  const spreadsheetId = getRequiredEnv('GOOGLE_SHEET_ID');
+  const spreadsheetId = parseSpreadsheetId(getRequiredEnv('GOOGLE_SHEET_ID'));
   return { privateKey, clientEmail, spreadsheetId };
 }
 
@@ -113,6 +146,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('Failed to append email signup', error);
-    return NextResponse.json({ error: 'Unable to save your email right now. Please try again.' }, { status: 500 });
+    return NextResponse.json({ error: 'Unable to save your email right now. Please verify server configuration and try again.' }, { status: 500 });
   }
 }
