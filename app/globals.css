@@ -707,23 +707,21 @@
 
     /* nav: compact 3 columns on mobile */
     nav.top {
-      padding: 12px 0;
+      padding: 9px 0;
     }
     nav.top .row {
       display: grid;
       grid-template-columns: auto 1fr auto;
       grid-template-rows: auto auto;
       column-gap: 8px;
-      row-gap: 10px;
+      row-gap: 8px;
       align-items: center;
     }
     nav.top .brand { grid-column: 1; grid-row: 1; }
     nav.top .brand .mark {
-      width: 56px;
-      height: 56px;
-      padding: 15px;
-      border-radius: 14px;
-      box-sizing: border-box;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
     }
     nav.top ul { display:none; }
     nav.top .nav-cta { display: none; }
@@ -731,16 +729,16 @@
       grid-column: 3;
       grid-row: 1;
       justify-self: end;
-      width: 44px;
-      height: 44px;
+      width: 38px;
+      height: 38px;
       border: 1px solid rgba(245,238,221,.2);
       border-radius: 10px;
       background: rgba(5,19,15,.65);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 5px;
-      padding: 0 10px;
+      gap: 4px;
+      padding: 0 8px;
       cursor: pointer;
     }
     nav.top .menu-toggle span {
@@ -809,7 +807,7 @@
       grid-column: 2;
       grid-row: 1;
       font-family: var(--font-display);
-      font-size: 28px;
+      font-size: 22px;
       line-height: 1.05;
       font-weight: 500;
       letter-spacing: -0.01em;
