@@ -6,6 +6,11 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GOOGLE_TOKEN_AUDIENCE = 'https://oauth2.googleapis.com/token';
 const GOOGLE_SHEETS_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 
+function buildA1Range(sheetTabName: string): string {
+  const escapedSheetName = sheetTabName.replace(/'/g, "''");
+  return `'${escapedSheetName}'!A:B`;
+}
+
 function getRequiredEnv(name: 'GOOGLE_PRIVATE_KEY' | 'GOOGLE_CLIENT_EMAIL' | 'GOOGLE_SHEET_ID'): string {
   const value = process.env[name];
 
@@ -98,7 +103,8 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
   });
 
   if (!tokenResponse.ok) {
-    throw new Error(`Failed to fetch Google access token: ${tokenResponse.status}`);
+    const errorBody = await tokenResponse.text();
+    throw new Error(`Failed to fetch Google access token: ${tokenResponse.status} ${errorBody}`);
   }
 
   const tokenJson = (await tokenResponse.json()) as { access_token?: string };
@@ -111,7 +117,10 @@ async function getAccessToken(clientEmail: string, privateKey: string): Promise<
 
 async function appendEmailRow(params: { spreadsheetId: string; accessToken: string; email: string }) {
   const { spreadsheetId, accessToken, email } = params;
-  const appendResponse = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${SHEET_TAB_NAME}!A:B:append?valueInputOption=USER_ENTERED`, {
+  const range = encodeURIComponent(buildA1Range(SHEET_TAB_NAME));
+  const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}:append?valueInputOption=USER_ENTERED`;
+
+  const appendResponse = await fetch(appendUrl, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -123,7 +132,8 @@ async function appendEmailRow(params: { spreadsheetId: string; accessToken: stri
   });
 
   if (!appendResponse.ok) {
-    throw new Error(`Failed to append row to Google Sheet: ${appendResponse.status}`);
+    const errorBody = await appendResponse.text();
+    throw new Error(`Failed to append row to Google Sheet: ${appendResponse.status} ${errorBody}`);
   }
 }
 
