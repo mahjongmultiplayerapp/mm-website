@@ -589,8 +589,21 @@
     h1 { font-size: clamp(38px, 9vw, 56px); }
     .hero { padding: 36px 0 56px; }
     .hero-grid { gap: 32px; }
-    .hero-stage.angle-stage { aspect-ratio: 1 / 1; max-width: 280px; }
-    .hero-phone-img { width: clamp(170px, 62vw, 240px); }
+    .hero-stage.angle-stage {
+      aspect-ratio: 9 / 16;
+      max-width: 240px;
+      overflow: hidden;
+      border-radius: 30px;
+      background: transparent;
+    }
+    .hero-phone-img {
+      position: static;
+      transform: none;
+      width: 100%;
+      max-width: none;
+      display: block;
+      margin: 0 auto;
+    }
     section { padding: 64px 0; }
     section.tight { padding: 56px 0; }
     .section-head { margin-bottom: 36px; }
