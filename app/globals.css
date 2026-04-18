@@ -287,6 +287,84 @@
   .section-head .eyebrow { display:block; margin-bottom: 14px; }
   .section-head .lede { margin-top: 18px; }
 
+  /* ——— App-store preview card ——— */
+  .store-preview {
+    padding: 38px 0 34px;
+    background: linear-gradient(180deg, rgba(5,19,15,.98), rgba(7,27,24,.94));
+    border-top: 1px solid rgba(245,238,221,.06);
+    border-bottom: 1px solid rgba(245,238,221,.06);
+  }
+  .store-preview .wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .store-preview-card {
+    background: linear-gradient(180deg, rgba(14,42,34,.88), rgba(10,53,40,.7));
+    border: 1px solid rgba(245,238,221,.12);
+    border-radius: 22px;
+    padding: 22px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "icon copy"
+      "icon badges";
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+    max-width: 100%;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 16px 34px -28px rgba(0,0,0,.9);
+  }
+  .store-icon-wrap {
+    grid-area: icon;
+    width: clamp(132px, 12vw, 152px);
+    height: clamp(132px, 12vw, 152px);
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(245,238,221,.2);
+    box-shadow: 0 14px 26px -18px rgba(0,0,0,.8);
+    background: #0A2A20;
+    flex-shrink: 0;
+  }
+  .store-icon-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .store-copy { grid-area: copy; display: flex; flex-direction: column; gap: 10px; max-width: 52ch; }
+  .store-title, .store-subtitle { margin: 0; }
+  .store-title { font-size: clamp(20px, 2.1vw, 28px); }
+  .store-subtitle { color: var(--ivory-dim); font-size: clamp(14px, 1.1vw, 16px); max-width: 52ch; }
+  .store-badges {
+    grid-area: badges;
+    margin-top: 2px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 52ch;
+  }
+  .store-badge {
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .store-badge-icon { width: 17px; height: 17px; display: inline-flex; align-items: center; justify-content: center; }
+  .store-badge-icon svg { width: 100%; height: 100%; display: block; }
+  .store-badge.ios {
+    background: #fff;
+    color: #111;
+    border-color: rgba(255,255,255,.65);
+  }
+  .store-badge.play {
+    background: #111a1a;
+    color: #f5f0e4;
+    border-color: rgba(245,238,221,.24);
+  }
+
   /* ——— Features grid ——— */
   .features {
     display: grid;
@@ -660,6 +738,17 @@
 
   @media (max-width: 960px) {
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .store-preview-card {
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "icon copy"
+        "badges badges";
+      gap: 14px 16px;
+    }
+    .store-icon-wrap { width: clamp(96px, 24vw, 120px); height: clamp(96px, 24vw, 120px); border-radius: 18px; }
+    .store-copy { gap: 8px; }
+    .store-badges { grid-template-columns: 1fr; max-width: none; margin-top: 4px; }
+    .store-badge { justify-content: flex-start; }
     .features { grid-template-columns: 1fr; }
     .card.span-7, .card.span-5, .card.span-6, .card.span-4, .card.span-8 { grid-column: span 1; }
     .phones-row { grid-template-columns: 1fr; }

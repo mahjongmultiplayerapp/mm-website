@@ -185,6 +185,47 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
   );
 }
 
+function AppStorePreview() {
+  return (
+    <section className="store-preview">
+      <div className="wrap">
+        <div className="store-preview-card">
+          <div className="store-icon-wrap" aria-hidden="true">
+            <img src="/assets/floating-tile-logo-sm.jpg" alt="" />
+          </div>
+          <div className="store-copy">
+            <p className="store-title">
+              <strong>Mahjong Multiplayer</strong>
+            </p>
+            <p className="store-subtitle">Play Mahjong online with friends for free, practice versus bots</p>
+          </div>
+          <div className="store-badges">
+            <div className="store-badge ios">
+              <span className="store-badge-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path
+                    d="M16.06 12.94c.03 3.2 2.8 4.26 2.83 4.27-.02.08-.44 1.5-1.46 2.97-.88 1.27-1.8 2.54-3.24 2.57-1.42.03-1.88-.84-3.5-.84-1.62 0-2.13.81-3.47.87-1.4.05-2.47-1.39-3.35-2.65-1.8-2.6-3.17-7.34-1.33-10.52.91-1.58 2.54-2.58 4.3-2.61 1.35-.03 2.62.91 3.5.91.87 0 2.5-1.12 4.22-.95.72.03 2.75.29 4.06 2.2-.1.07-2.43 1.41-2.41 4.18ZM13.64 5.4c.74-.89 1.24-2.12 1.1-3.35-1.07.04-2.36.71-3.13 1.6-.68.78-1.28 2.04-1.12 3.24 1.19.09 2.4-.61 3.15-1.49Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <span>Launching on iOS</span>
+            </div>
+            <div className="store-badge play">
+              <span className="store-badge-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M3.5 2.5v19l16-9.5-16-9.5Z" fill="currentColor" />
+                </svg>
+              </span>
+              <span>Launching on Google Play</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Features({ onOpenSignup }: { onOpenSignup: () => void }) {
   return (
     <section id="features" className="felt">
@@ -751,6 +792,7 @@ export default function Home() {
     <>
       <TopNav onOpenSignup={() => setSignupModalOpen(true)} />
       <Hero onSignupSubmit={handleSignup} />
+      <AppStorePreview />
       <Features onOpenSignup={() => setSignupModalOpen(true)} />
       <Showcase onOpenSignup={() => setSignupModalOpen(true)} />
       <HowItWorks onOpenSignup={() => setSignupModalOpen(true)} />
