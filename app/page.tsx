@@ -71,7 +71,7 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
           <p className="lede">Play American and Hong Kong style, practice versus bots, and start an online game with friends in seconds.</p>
 
           <form className="capture" id="signup" onSubmit={onSignupSubmit}>
-            <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary" type="submit">
               Get early access
             </button>
@@ -564,7 +564,7 @@ function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFo
           <h2 style={{ marginTop: '14px' }}>Pull up a chair.</h2>
           <p className="lede">Join the waitlist and we&apos;ll send one — and only one — email when the app is ready for you.</p>
           <form className="capture" onSubmit={onSignupSubmit}>
-            <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary gold" type="submit">
               Reserve my seat
             </button>
@@ -679,7 +679,7 @@ function SignupModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: 
           Drop your email and we&apos;ll send one note when the app is ready for you.
         </p>
         <form className="capture" style={{ marginTop: '22px', maxWidth: 'none' }} onSubmit={onSubmit}>
-          <input type="email" placeholder="your@email.com" required aria-label="Email address" />
+          <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
           <button className="btn-primary gold" type="submit">
             Reserve my seat
           </button>
@@ -740,7 +740,11 @@ export default function Home() {
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("You're on the list. Look out for a note from us.");
   const [toastVisible, setToastVisible] = useState(false);
+  const [isSavingSignup, setIsSavingSignup] = useState(false);
+  const [isSavingContact, setIsSavingContact] = useState(false);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   useEffect(() => {
     document.body.dataset.hero = 'default';
@@ -774,16 +778,92 @@ export default function Home() {
     toastTimerRef.current = setTimeout(() => setToastVisible(false), 3400);
   };
 
-  const handleSignup = (event: FormEvent<HTMLFormElement>) => {
+  const insertRow = async (table: string, payload: Record<string, string>) => {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return { error: new Error('Supabase environment variables are missing.') };
+    }
+
+    const response = await fetch(`${supabaseUrl}/rest/v1/${table}`, {
+      method: 'POST',
+      headers: {
+        apikey: supabaseAnonKey,
+        Authorization: `Bearer ${supabaseAnonKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      return { error: new Error(`Supabase insert failed with status ${response.status}`) };
+    }
+
+    return { error: null };
+  };
+
+  const handleSignup = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    event.currentTarget.reset();
+    if (isSavingSignup) return;
+
+    const form = event.currentTarget;
+    const emailField = form.elements.namedItem('email') as HTMLInputElement | null;
+    const email = emailField?.value.trim();
+
+    if (!email) {
+      showToast('Please enter a valid email address.');
+      return;
+    }
+
+    setIsSavingSignup(true);
+
+    const { error } = await insertRow('email_early_access', { email });
+
+    setIsSavingSignup(false);
+
+    if (error) {
+      showToast('Unable to save your email right now. Please try again.');
+      return;
+    }
+
+    form.reset();
     setSignupModalOpen(false);
     showToast("You're on the list. Look out for a note from us.");
   };
 
-  const handleContact = (event: FormEvent<HTMLFormElement>) => {
+  const handleContact = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    event.currentTarget.reset();
+    if (isSavingContact) return;
+
+    const form = event.currentTarget;
+    const nameField = form.elements.namedItem('name') as HTMLInputElement | null;
+    const emailField = form.elements.namedItem('email') as HTMLInputElement | null;
+    const messageField = form.elements.namedItem('message') as HTMLTextAreaElement | null;
+
+    const name = nameField?.value.trim();
+    const email = emailField?.value.trim();
+    const message = messageField?.value.trim();
+
+    if (!name || !email || !message) {
+      showToast('Please complete all contact form fields.');
+      return;
+    }
+
+    setIsSavingContact(true);
+
+    const { error } = await insertRow('contact_submissions', {
+      name,
+      email,
+      message
+    });
+
+    setIsSavingContact(false);
+
+    if (error) {
+      showToast('Unable to send your message right now. Please try again.');
+      return;
+    }
+
+    form.reset();
     setContactModalOpen(false);
     showToast("Thanks! We'll be in touch as soon as possible.");
   };
