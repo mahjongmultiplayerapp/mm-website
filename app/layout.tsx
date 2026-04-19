@@ -1,9 +1,19 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: 'Mahjong Multiplayer',
   description: 'Mahjong Multiplayer landing page',
+  openGraph: {
+    images: [{ url: '/assets/social-share-image.png', alt: 'Mahjong Multiplayer social share image' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/assets/social-share-image.png'],
+  },
   icons: {
     icon: [
       { url: '/assets/favicon.ico', sizes: 'any' },
