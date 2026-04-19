@@ -6,7 +6,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: 'Mahjong Multiplayer',
-  description: 'Mahjong Multiplayer landing page',
+  description: 'Play Mahjong online with friends for free',
   openGraph: {
     images: [{ url: '/assets/social-share-image.png', alt: 'Mahjong Multiplayer social share image' }],
   },
