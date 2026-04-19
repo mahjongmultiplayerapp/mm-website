@@ -123,6 +123,9 @@
     transition: background .15s, border-color .15s;
   }
   .nav-cta:hover { background: rgba(245,238,221,.1); border-color: rgba(245,238,221,.22); }
+  .brand-name-mobile,
+  .menu-toggle,
+  .mobile-menu { display: none; }
 
   /* ——— Hero ——— */
   .hero { padding: 60px 0 80px; position:relative; }
@@ -702,35 +705,131 @@
     /* marquee strip wraps cleanly */
     .marquee-row { gap: 16px !important; justify-content: center !important; }
 
-    /* nav: 2 cols / 2 rows on mobile */
+    /* nav: compact 3 columns on mobile */
+    nav.top {
+      min-height: 80px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
     nav.top .row {
       display: grid;
-      grid-template-columns: auto 1fr;
-      grid-template-rows: auto auto;
-      column-gap: 14px; row-gap: 10px;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: 60px auto;
+      column-gap: 10px;
+      row-gap: 8px;
       align-items: center;
+      min-height: 100%;
     }
-    nav.top .brand { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
-    nav.top .brand .name { grid-column: auto; }
-    nav.top .brand-name-wrap { grid-column: 2; grid-row: 1; }
+    nav.top .brand {
+      grid-column: 1;
+      grid-row: 1;
+      margin: 0;
+      align-self: center;
+    }
+    nav.top .brand .mark {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+    }
     nav.top ul { display:none; }
-    nav.top .nav-cta {
-      grid-column: 2; grid-row: 2;
+    nav.top .nav-cta { display: none; }
+    nav.top .menu-toggle {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+      align-self: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(245,238,221,.2);
+      border-radius: 10px;
+      background: rgba(5,19,15,.65);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+    nav.top .menu-toggle span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--ivory);
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    nav.top .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    nav.top .menu-toggle.open span:nth-child(2) { opacity: 0; }
+    nav.top .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    nav.top .mobile-menu {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      border: 1px solid rgba(245,238,221,.12);
+      background: rgba(5,19,15,.95);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    nav.top .mobile-menu:not(.open) { display: none; }
+    nav.top .mobile-menu.open { display: block; }
+    nav.top .mobile-menu-cta {
+      display: block;
       width: 100%;
       text-align: center;
-      padding: 12px 16px;
-      background: linear-gradient(180deg, var(--jade-500), var(--jade-600));
-      border-color: var(--jade-600);
+      text-decoration: none;
       font-weight: 600;
+      color: var(--gold-200);
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, var(--jade-500), var(--jade-600));
+      border: 1px solid var(--jade-600);
+      margin-bottom: 14px;
     }
-    /* Hide brand .name (we'll use a wrapper for grid placement) */
+    nav.top .mobile-menu-cta:hover { color: var(--ivory); }
+    nav.top .mobile-menu-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    nav.top .mobile-menu h4 {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold-300);
+      margin: 0 0 8px;
+    }
+    nav.top .mobile-menu ul {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+      gap: 8px;
+      padding: 0;
+      margin: 0;
+    }
+    nav.top .mobile-menu a {
+      text-decoration: none;
+      color: var(--ivory-dim);
+      font-size: 14px;
+    }
+    nav.top .mobile-menu a:hover { color: var(--ivory); }
     nav.top .brand .name { display: none; }
-    nav.top .brand-name-mobile { display: block; font-family: var(--font-display); font-size: 18px; font-weight: 500; letter-spacing: -0.01em; color: var(--ivory); }
+    nav.top .brand-name-mobile {
+      display: block;
+      grid-column: 2;
+      grid-row: 1;
+      align-self: center;
+      font-family: var(--font-display);
+      font-size: 22px;
+      line-height: 1.05;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--ivory);
+    }
 
     footer .row { flex-direction: column; gap: 32px; }
     footer .cols { gap: 40px; flex-wrap: wrap; }
   }
-  .brand-name-mobile { display: none; }
 
   @media (min-width: 721px) and (max-width: 960px) {
     .hero-phone-img { width: clamp(190px, 42vw, 260px); }

@@ -14,16 +14,32 @@ function Brand() {
 }
 
 function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const onSignupClick = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onOpenSignup();
+    setMobileMenuOpen(false);
   };
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <nav className="top">
       <div className="wrap row">
         <Brand />
         <span className="brand-name-mobile">Mahjong Multiplayer</span>
+        <button
+          type="button"
+          className={`menu-toggle ${mobileMenuOpen ? 'open' : ''}`}
+          aria-expanded={mobileMenuOpen}
+          aria-label="Toggle navigation menu"
+          onClick={() => setMobileMenuOpen((isOpen) => !isOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         <ul>
           <li>
             <a href="#features">Features</a>
@@ -38,6 +54,54 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
         <a className="nav-cta" href="#" onClick={onSignupClick}>
           Get early access →
         </a>
+
+        <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+          <a className="mobile-menu-cta" href="#" onClick={onSignupClick}>
+            Get early access →
+          </a>
+          <div className="mobile-menu-cols">
+            <div>
+              <h4>App</h4>
+              <ul>
+                <li>
+                  <a href="#features" onClick={closeMobileMenu}>
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#how" onClick={closeMobileMenu}>
+                    How it works
+                  </a>
+                </li>
+                <li>
+                  <a href="#faq" onClick={closeMobileMenu}>
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" onClick={closeMobileMenu}>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4>Legal</h4>
+              <ul>
+                <li>
+                  <a href="#" onClick={closeMobileMenu}>
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" onClick={closeMobileMenu}>
+                    Terms
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   );
