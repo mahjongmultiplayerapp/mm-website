@@ -34,6 +34,9 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
           <li>
             <a href="#faq">FAQ</a>
           </li>
+          <li>
+            <a href="#contact">Contact</a>
+          </li>
         </ul>
         <a className="nav-cta" href="#" onClick={onSignupClick}>
           Get early access →
@@ -490,19 +493,19 @@ function FAQ() {
             <summary>
               Will it be free? <span className="plus">+</span>
             </summary>
-            <div className="answer">The core game — playing with friends at your tables — will always be free. We&apos;re exploring an optional subscription for advanced stats, tournament hosting, and cosmetic tile sets, but nothing gated that affects gameplay.</div>
+            <div className="answer">Mahjong Multiplayer will always offer a way to play online with friends for free. We&apos;re exploring an optional subscription for additional features but nothing that affects the core gameplay.</div>
           </details>
           <details>
             <summary>
               Can I play with people who don&apos;t have the app? <span className="plus">+</span>
             </summary>
-            <div className="answer">Invite links onboard new players in under a minute — they install, create a quick profile, and join your table. No separate account flows, no friend-request ping-pong.</div>
+            <div className="answer">Each player will need to have a profile to play online. We plan on launching the game to be available in the web browser which will make it possible to play regardless if you have the app downloaded or not.</div>
           </details>
           <details>
             <summary>
               Is there a desktop version? <span className="plus">+</span>
             </summary>
-            <div className="answer">Mobile first. A tablet-optimized layout ships alongside phone, and we&apos;re prototyping a spectator-friendly web view for streamers and tournament organizers.</div>
+            <div className="answer">We plan to make it possible to play in your web browser, and have the game be cross-platform. This means you can be playing in the web browser while you&apos;re playing against a friend who&apos;s playing on the app.</div>
           </details>
         </div>
       </div>
@@ -533,7 +536,7 @@ function Contact({ onOpenContact, onOpenSignup }: { onOpenContact: () => void; o
           <a className="contact-card" href="#signup" onClick={onSignupClick}>
             <span className="contact-eye">Early access</span>
             <div className="contact-val">Join the waitlist →</div>
-            <div className="contact-meta">Be first when we ship.</div>
+            <div className="contact-meta">Be first when we launch.</div>
           </a>
         </div>
       </div>
