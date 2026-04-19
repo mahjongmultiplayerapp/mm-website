@@ -4,6 +4,13 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Mahjong Multiplayer',
   description: 'Mahjong Multiplayer landing page',
+  icons: {
+    icon: [
+      { url: '/assets/favicon.ico', sizes: 'any' },
+      { url: '/assets/google-icon.png', sizes: '196x196', type: 'image/png' },
+    ],
+    apple: [{ url: '/assets/apple-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
 };
 
 export default function RootLayout({
