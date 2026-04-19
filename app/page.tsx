@@ -71,7 +71,7 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
           <p className="lede">Play American and Hong Kong style, practice versus bots, and start an online game with friends in seconds.</p>
 
           <form className="capture" id="signup" onSubmit={onSignupSubmit}>
-            <input type="email" name="email" placeholder="your@email.com" required pattern="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary" type="submit">
               Get early access
             </button>
@@ -564,7 +564,7 @@ function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFo
           <h2 style={{ marginTop: '14px' }}>Pull up a chair.</h2>
           <p className="lede">Join the waitlist and we&apos;ll send one — and only one — email when the app is ready for you.</p>
           <form className="capture" onSubmit={onSignupSubmit}>
-            <input type="email" name="email" placeholder="your@email.com" required pattern="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" aria-label="Email address" />
+            <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
             <button className="btn-primary gold" type="submit">
               Reserve my seat
             </button>
@@ -648,7 +648,7 @@ function ContactModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose:
           </label>
           <label>
             Email
-            <input type="email" name="email" required pattern="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" placeholder="your@email.com" />
+            <input type="email" name="email" required placeholder="your@email.com" />
           </label>
           <label>
             Message
@@ -679,7 +679,7 @@ function SignupModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: 
           Drop your email and we&apos;ll send one note when the app is ready for you.
         </p>
         <form className="capture" style={{ marginTop: '22px', maxWidth: 'none' }} onSubmit={onSubmit}>
-          <input type="email" name="email" placeholder="your@email.com" required pattern="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" aria-label="Email address" />
+          <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
           <button className="btn-primary gold" type="submit">
             Reserve my seat
           </button>
@@ -745,7 +745,6 @@ export default function Home() {
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
   useEffect(() => {
     document.body.dataset.hero = 'default';
@@ -815,7 +814,8 @@ export default function Home() {
       return;
     }
 
-    if (!emailRegex.test(email)) {
+    if (!emailField?.checkValidity()) {
+      emailField?.reportValidity();
       showToast('Please enter a valid email address.');
       return;
     }
@@ -854,7 +854,8 @@ export default function Home() {
       return;
     }
 
-    if (!emailRegex.test(email)) {
+    if (!emailField?.checkValidity()) {
+      emailField?.reportValidity();
       showToast('Please enter a valid email address for contact.');
       return;
     }
