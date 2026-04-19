@@ -707,26 +707,28 @@
 
     /* nav: compact 3 columns on mobile */
     nav.top {
-      padding: 0;
+      min-height: 80px;
+      padding: 10px;
+      box-sizing: border-box;
     }
     nav.top .row {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      grid-template-rows: auto auto;
-      column-gap: 8px;
+      grid-template-rows: 60px auto;
+      column-gap: 10px;
       row-gap: 8px;
       align-items: center;
-      min-height: 72px;
+      min-height: 100%;
     }
     nav.top .brand {
       grid-column: 1;
       grid-row: 1;
-      margin: 10px 14px 10px 6px;
+      margin: 0;
       align-self: center;
     }
     nav.top .brand .mark {
-      width: 52px;
-      height: 52px;
+      width: 60px;
+      height: 60px;
       border-radius: 12px;
     }
     nav.top ul { display:none; }
