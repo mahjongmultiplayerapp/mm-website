@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahjong Multiplayer - Social Share Image</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      width: 1200px;
+      height: 630px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #071B18;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #071B18 0%, #0A2A20 50%, #061A14 100%);
+    }
+
+    /* Felt texture overlay */
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0.18  0 0 0 0 0.14  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/></svg>");
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* Radial gradient accents */
+    .container::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 800px 400px at 50% 40%, rgba(31,138,98,.15), transparent 70%),
+        radial-gradient(ellipse 600px 600px at 80% 20%, rgba(197,162,92,.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+      padding: 60px;
+      max-width: 900px;
+    }
+
+    .logo-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .logo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));
+    }
+
+    .gold-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(197,162,92,.25);
+      box-shadow: 0 0 0 1px rgba(197,162,92,.1), inset 0 0 60px rgba(197,162,92,.1);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      font-family: 'Newsreader', 'Georgia', serif;
+      font-size: 72px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #F5EEDD;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: #E8DFC7;
+      margin: 0;
+      letter-spacing: -0.01em;
+      max-width: 700px;
+      line-height: 1.4;
+    }
+
+    .accent {
+      color: #C5A25C;
+      font-style: italic;
+      font-weight: 300;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="logo-wrapper">
+        <div class="gold-ring"></div>
+        <img src="/assets/floating-tile-logo.jpg" alt="Mahjong Multiplayer">
+      </div>
+
+      <h1>Mahjong Multiplayer</h1>
+
+      <p class="tagline">
+        Play Mahjong <span class="accent">with friends,</span> online for free
+      </p>
+    </div>
+  </div>
+</body>
+</html>
