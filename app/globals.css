@@ -764,13 +764,13 @@
     nav.top .mobile-menu {
       position: absolute;
       top: 100%;
-      left: 0;
-      right: 0;
+      left: 16px;
+      right: 16px;
       border: 1px solid rgba(245,238,221,.12);
       background: rgba(5,19,15,.95);
-      border-radius: 0;
+      border-radius: 14px;
       padding: 14px;
-      margin-top: 0;
+      margin-top: 8px;
     }
     nav.top .mobile-menu:not(.open) { display: none; }
     nav.top .mobile-menu.open { display: block; }
