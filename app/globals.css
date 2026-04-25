@@ -290,6 +290,49 @@
   .section-head .eyebrow { display:block; margin-bottom: 14px; }
   .section-head .lede { margin-top: 18px; }
 
+  /* ——— Learning module ——— */
+  .learning-module {
+    padding: 96px 0;
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(31,138,98,.24), transparent 55%),
+      radial-gradient(ellipse at 85% 10%, rgba(197,162,92,.12), transparent 58%),
+      linear-gradient(180deg, #071F1A 0%, #061A15 100%);
+    border-top: 1px solid rgba(245,238,221,.07);
+    border-bottom: 1px solid rgba(245,238,221,.07);
+  }
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .module-card {
+    background: linear-gradient(180deg, rgba(14,42,34,.92), rgba(7,27,24,.86));
+    border: 1px solid rgba(245,238,221,.11);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 14px 28px -24px rgba(0,0,0,.9);
+  }
+  .module-card h3 {
+    font-size: clamp(21px, 2.1vw, 26px);
+    line-height: 1.2;
+    color: var(--ivory);
+  }
+  .module-objective {
+    margin: 10px 0 0;
+    color: var(--ivory-dim);
+    font-size: 15px;
+  }
+  .module-card ul {
+    margin: 16px 0 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 10px;
+    color: var(--ivory-soft);
+  }
+  .module-card li::marker {
+    color: var(--gold-500);
+  }
+
   /* ——— App-store preview card ——— */
   .store-preview {
     padding: 38px 0 34px;
@@ -857,6 +900,7 @@
     .phone.center { transform: none; }
     .quote-wrap { grid-template-columns: 1fr; gap: 24px; }
     .steps { grid-template-columns: 1fr; }
+    .module-grid { grid-template-columns: 1fr; }
     nav.top ul { display:none; }
     .final { padding: 48px 24px; }
     .final-tiles { display: none; }

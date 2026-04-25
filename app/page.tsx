@@ -45,6 +45,9 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
             <a href="#features">Features</a>
           </li>
           <li>
+            <a href="#learning">Learning</a>
+          </li>
+          <li>
             <a href="#how">How it works</a>
           </li>
           <li>
@@ -74,6 +77,11 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
                 <li>
                   <a href="#how" onClick={closeMobileMenu}>
                     How it works
+                  </a>
+                </li>
+                <li>
+                  <a href="#learning" onClick={closeMobileMenu}>
+                    Learning
                   </a>
                 </li>
                 <li>
@@ -512,6 +520,64 @@ function HowItWorks({ onOpenSignup }: { onOpenSignup: () => void }) {
   );
 }
 
+function LearningModule({ onOpenSignup }: { onOpenSignup: () => void }) {
+  const modules = [
+    {
+      title: 'Module 1 · Tile Literacy & Setup',
+      objective: 'Learn the full Hong Kong tile set, seating flow, and how to build the wall and deal correctly.',
+      lessons: ['Suited tiles, honors, and flowers basics', 'Seat winds, dealer rotation, and round progression', 'Building walls, breaking, and opening hand structure']
+    },
+    {
+      title: 'Module 2 · Turn Flow & Legal Actions',
+      objective: 'Practice a legal turn cycle and know exactly when Chow, Pung, Kong, and win calls are allowed.',
+      lessons: ['Draw-discard rhythm and hand state tracking', 'Call priority: win over Kong over Pung over Chow', 'Concealed vs exposed meld behavior']
+    },
+    {
+      title: 'Module 3 · Winning Hands & Scoring',
+      objective: 'Build confidence in standard hand patterns and calculate fan quickly after each hand.',
+      lessons: ['4 melds + 1 pair structure and common waits', 'Hong Kong fan table foundations and payout flow', 'Limit hands, penalties, and invalid hand checks']
+    },
+    {
+      title: 'Module 4 · Applied Play Drills',
+      objective: 'Use scenario-based drills to transition from knowing rules to making stronger table decisions.',
+      lessons: ['Safe discard and risk-reading drills', 'Offense vs defense checkpoints by hand stage', 'Post-hand review and mistake taxonomy']
+    }
+  ];
+
+  return (
+    <section id="learning" className="learning-module">
+      <div className="wrap">
+        <div className="section-head">
+          <span className="eyebrow">Hong Kong curriculum</span>
+          <h2 style={{ marginTop: '14px' }}>A structured learning module, from first shuffle to confident play.</h2>
+          <p className="lede">
+            This track turns Hong Kong Mahjong rules into practical lessons with objectives, drills, and checkpoints. It is built to support guided onboarding, solo practice, and coach-led sessions.
+          </p>
+          <div style={{ marginTop: '26px' }}>
+            <button type="button" className="btn-primary" onClick={onOpenSignup}>
+              Join learning beta →
+            </button>
+          </div>
+        </div>
+
+        <div className="module-grid">
+          {modules.map((module) => (
+            <article key={module.title} className="module-card">
+              <h3>{module.title}</h3>
+              <p className="module-objective">{module.objective}</p>
+              <ul>
+                {module.lessons.map((lesson) => (
+                  <li key={lesson}>{lesson}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function QuoteSection() {
   return (
     <section className="tight">
@@ -665,6 +731,9 @@ function Footer() {
                 </li>
                 <li>
                   <a href="#how">How it works</a>
+                </li>
+                <li>
+                  <a href="#learning">Learning</a>
                 </li>
                 <li>
                   <a href="#faq">FAQ</a>
@@ -955,6 +1024,7 @@ export default function Home() {
       <Features onOpenSignup={() => setSignupModalOpen(true)} />
       <Showcase onOpenSignup={() => setSignupModalOpen(true)} />
       <HowItWorks onOpenSignup={() => setSignupModalOpen(true)} />
+      <LearningModule onOpenSignup={() => setSignupModalOpen(true)} />
       <QuoteSection />
       <FAQ />
       <Contact onOpenContact={() => setContactModalOpen(true)} onOpenSignup={() => setSignupModalOpen(true)} />
