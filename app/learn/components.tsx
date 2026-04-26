@@ -1,9 +1,15 @@
+'use client';
+
 import Link from 'next/link';
-import { LearnSection, getFirstLessonPath, learnSections, totalLessonCount } from './learn-data';
+import { useState } from 'react';
+import { LearnSection } from './learn-data';
 
 export function LearnNav() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
-    <nav className="top learn-top">
+    <nav className="top">
       <div className="wrap row">
         <Link className="brand" href="/">
           <span className="mark">
@@ -11,20 +17,91 @@ export function LearnNav() {
           </span>
           <span className="name">Mahjong Multiplayer</span>
         </Link>
+        <span className="brand-name-mobile">Mahjong Multiplayer</span>
+        <button
+          type="button"
+          className={`menu-toggle ${mobileMenuOpen ? 'open' : ''}`}
+          aria-expanded={mobileMenuOpen}
+          aria-label="Toggle navigation menu"
+          onClick={() => setMobileMenuOpen((isOpen) => !isOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         <ul>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/learn">Learn</Link>
           </li>
           <li>
-            <Link href="/learn">Curriculum</Link>
+            <Link href="/#features">Features</Link>
           </li>
           <li>
-            <Link href="/learn/final-readiness-test">Final test</Link>
+            <Link href="/#how">How it works</Link>
+          </li>
+          <li>
+            <Link href="/#faq">FAQ</Link>
+          </li>
+          <li>
+            <Link href="/#contact">Contact</Link>
           </li>
         </ul>
-        <Link className="nav-cta" href={getFirstLessonPath(learnSections[0])}>
-          Start learning →
+        <Link className="nav-cta" href="/#signup">
+          Get early access →
         </Link>
+
+        <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+          <Link className="mobile-menu-cta" href="/#signup" onClick={closeMobileMenu}>
+            Get early access →
+          </Link>
+          <div className="mobile-menu-cols">
+            <div>
+              <h4>App</h4>
+              <ul>
+                <li>
+                  <Link href="/learn" onClick={closeMobileMenu}>
+                    Learn
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#features" onClick={closeMobileMenu}>
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#how" onClick={closeMobileMenu}>
+                    How it works
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#faq" onClick={closeMobileMenu}>
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#contact" onClick={closeMobileMenu}>
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4>Legal</h4>
+              <ul>
+                <li>
+                  <Link href="#" onClick={closeMobileMenu}>
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" onClick={closeMobileMenu}>
+                    Terms
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   );
@@ -32,46 +109,53 @@ export function LearnNav() {
 
 export function LearnFooter() {
   return (
-    <footer className="learn-footer">
+    <footer>
       <div className="wrap">
         <div className="row">
           <div>
-            <Link className="brand" href="/">
+            <Link className="brand" href="/" style={{ marginBottom: '14px' }}>
               <span className="mark">
                 <img src="/assets/floating-tile-logo-sm.jpg" alt="Mahjong Multiplayer logo" />
               </span>
               <span className="name">Mahjong Multiplayer</span>
             </Link>
-            <p style={{ color: 'var(--ivory-dim)', maxWidth: '34ch', margin: '14px 0 0', fontSize: '14px' }}>
-              Learn the rhythm of Hong Kong Mahjong, then bring it to the table.
-            </p>
+            <p style={{ color: 'var(--ivory-dim)', maxWidth: '32ch', margin: '14px 0 0', fontSize: '14px' }}>Play Mahjong online with friends, for free.</p>
           </div>
           <div className="cols">
-            <div>
-              <h4>Learn</h4>
-              <ul>
-                <li>
-                  <Link href="/learn">Curriculum</Link>
-                </li>
-                <li>
-                  <Link href="/learn/final-readiness-test">Final test</Link>
-                </li>
-              </ul>
-            </div>
             <div>
               <h4>App</h4>
               <ul>
                 <li>
-                  <Link href="/">Home</Link>
+                  <Link href="/learn">Learn</Link>
+                </li>
+                <li>
+                  <Link href="/#features">Features</Link>
+                </li>
+                <li>
+                  <Link href="/#how">How it works</Link>
+                </li>
+                <li>
+                  <Link href="/#faq">FAQ</Link>
                 </li>
                 <li>
                   <Link href="/#contact">Contact</Link>
                 </li>
               </ul>
             </div>
+            <div>
+              <h4>Legal</h4>
+              <ul>
+                <li>
+                  <Link href="#">Privacy</Link>
+                </li>
+                <li>
+                  <Link href="#">Terms</Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div className="fine">Phase 1 shell · {totalLessonCount} lessons mapped</div>
+        <div className="fine">© 2026 Mahjong Multiplayer · Built with ♥ for the tiles.</div>
       </div>
     </footer>
   );

@@ -21,7 +21,7 @@ export const learnSections: LearnSection[] = [
     slug: 'what-is-hong-kong-mahjong',
     title: 'What Is Hong Kong Mahjong?',
     purpose: 'Build a clear mental model of the game before introducing technical rules.',
-    estimatedMinutes: 12,
+    estimatedMinutes: 5,
     goals: ['Explain what Hong Kong Mahjong is', 'Describe the objective of a hand', 'Understand the broad flow of a full hand'],
     lessons: [
       { number: '1.1', slug: 'welcome-to-the-game', title: 'Welcome to the Game', objective: 'Understand mahjong as a four-player tile game about completing a legal hand.' },
@@ -36,7 +36,7 @@ export const learnSections: LearnSection[] = [
     slug: 'tiles-melds-winning-hands',
     title: 'Tiles, Melds, and Winning Hands',
     purpose: 'Teach the tile set, basic groups, and the difference between hand shape and scoring value.',
-    estimatedMinutes: 24,
+    estimatedMinutes: 15,
     goals: ['Recognize suited and honor tiles', 'Identify pairs, chows, pungs, and kongs', 'Spot a standard winning hand shape'],
     lessons: [
       { number: '2.1', slug: 'the-tile-set', title: 'The Tile Set', objective: 'Recognize the full Hong Kong Mahjong tile set.' },
@@ -54,7 +54,7 @@ export const learnSections: LearnSection[] = [
     slug: 'setup-and-dealing',
     title: 'Setup and Dealing',
     purpose: 'Show how players sit, build the wall, open it, and deal the starting hands.',
-    estimatedMinutes: 22,
+    estimatedMinutes: 15,
     goals: ['Name seat winds and dealer role', 'Understand the wall and dead wall', 'Describe how tiles are dealt'],
     lessons: [
       { number: '3.1', slug: 'seating-and-seat-winds', title: 'Seating and Seat Winds', objective: 'Place East, South, West, and North around the table.' },
@@ -72,7 +72,7 @@ export const learnSections: LearnSection[] = [
     slug: 'turn-flow-and-discarding',
     title: 'Turn Flow and Discarding',
     purpose: 'Teach the rhythm of a turn and how calls can interrupt normal order.',
-    estimatedMinutes: 22,
+    estimatedMinutes: 15,
     goals: ['Know who starts', 'Describe draw and discard flow', 'Understand how a hand ends'],
     lessons: [
       { number: '4.1', slug: 'dealer-starts', title: 'The Dealer Starts', objective: 'Understand East opening the hand.' },
@@ -90,7 +90,7 @@ export const learnSections: LearnSection[] = [
     slug: 'calls-chow-pung-kong-win',
     title: 'Calls: Chow, Pung, Kong, and Win',
     purpose: 'Teach legal calls, call priority, and how exposed melds change the hand.',
-    estimatedMinutes: 34,
+    estimatedMinutes: 20,
     goals: ['Know when Chow, Pung, Kong, and Win are legal', 'Understand call priority', 'Place open melds clearly'],
     lessons: [
       { number: '5.1', slug: 'what-is-a-call', title: 'What Is a Call?', objective: "Understand claiming another player's discard." },
@@ -114,7 +114,7 @@ export const learnSections: LearnSection[] = [
     slug: 'scoring-and-fan',
     title: 'Scoring and Fan',
     purpose: 'Introduce fan, the three-fan minimum, payment basics, and beginner scoring patterns.',
-    estimatedMinutes: 28,
+    estimatedMinutes: 20,
     goals: ['Understand fan as scoring value', 'Know the 3-fan minimum', 'Compare self-draw and discard win payments'],
     lessons: [
       { number: '6.1', slug: 'what-makes-a-hand-winnable', title: 'What Makes a Hand Winnable', objective: 'Connect valid shape to enough scoring value.' },
@@ -134,7 +134,7 @@ export const learnSections: LearnSection[] = [
     slug: 'rounds-draws-table-rules',
     title: 'Rounds, Draws, and Table Rules',
     purpose: 'Wrap a single hand into a full table session with dealer movement, draws, and etiquette.',
-    estimatedMinutes: 24,
+    estimatedMinutes: 15,
     goals: ['Handle drawn hands', 'Know when the dealer passes', 'Avoid dead hands and common table errors'],
     lessons: [
       { number: '7.1', slug: 'what-happens-after-a-hand-ends', title: 'What Happens After a Hand Ends', objective: 'Move from one hand into the next.' },

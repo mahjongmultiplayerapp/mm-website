@@ -33,10 +33,10 @@ export default async function SectionOverviewPage({ params }: SectionPageProps) 
       <section className="learn-section-hero felt">
         <div className="wrap learn-section-hero-grid">
           <div>
-            <Link className="learn-breadcrumb" href="/learn">
-              ← Curriculum
-            </Link>
-            <span className="eyebrow">Section {section.number}</span>
+            <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+              <Link href="/learn">← Curriculum</Link>
+              <span>Section {section.number}</span>
+            </nav>
             <h1 style={{ marginTop: '18px' }}>{section.title}</h1>
             <p className="lede">{section.purpose}</p>
             <div className="learn-section-actions">

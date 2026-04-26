@@ -13,10 +13,10 @@ export default function FinalReadinessTestPage() {
     <LearnShell>
       <section className="learn-lesson-page felt">
         <div className="wrap learn-readable">
-          <Link className="learn-breadcrumb" href="/learn">
-            ← Curriculum
-          </Link>
-          <span className="eyebrow">Final readiness test</span>
+          <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+            <Link href="/learn">← Curriculum</Link>
+            <span>Final readiness test</span>
+          </nav>
           <h1 style={{ marginTop: '18px' }}>Are You Ready to Play Hong Kong Mahjong?</h1>
           <p className="lede">Answer 20 practical questions across the whole curriculum. Score 85% or better to pass.</p>
           <FinalReadinessTest />

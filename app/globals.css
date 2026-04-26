@@ -158,8 +158,9 @@
     box-shadow: 0 1px 0 rgba(255,255,255,.18) inset, 0 -2px 0 rgba(0,0,0,.25) inset, 0 6px 14px -6px rgba(31,138,98,.6);
     transition: transform .1s, filter .15s;
     white-space: nowrap;
+    text-decoration: none;
   }
-  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:hover { filter: brightness(1.08); text-decoration: none; }
   .btn-primary:active { transform: translateY(1px); }
   .btn-primary.gold {
     background: linear-gradient(180deg, var(--gold-300), var(--gold-600));
@@ -396,6 +397,8 @@
     text-decoration: none;
     color: var(--ivory);
     transition: transform .15s, border-color .2s;
+    display: flex;
+    flex-direction: column;
   }
   .learn-section-card:hover {
     transform: translateY(-3px);
@@ -428,35 +431,84 @@
     border-radius: 50%;
     border: 1px solid rgba(197,162,92,.35);
     background: rgba(197,162,92,.06);
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    gap: 6px;
+    padding-top: 2px;
   }
   .learn-progress-ring span {
     display: block;
     color: var(--gold-300);
     font-family: var(--font-display);
     font-size: 24px;
-    line-height: .9;
+    line-height: 1;
   }
-  .learn-progress-ring small { display: block; font-size: 8px; letter-spacing: .08em; }
+  .learn-progress-ring small {
+    display: block;
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
   .learn-card-meta {
-    margin-top: 22px;
+    margin-top: auto;
+    padding-top: 22px;
     display: flex;
     justify-content: space-between;
     gap: 12px;
     color: var(--gold-300);
   }
+  .learn-shell .btn-primary,
+  .learn-shell .btn-primary:hover,
+  .learn-shell .btn-primary:focus {
+    text-decoration: none;
+  }
   .learn-outcome-card .btn-primary { display: inline-flex; margin-top: 28px; text-decoration: none; }
   .learn-section-hero { padding: 76px 0 86px; }
-  .learn-breadcrumb {
+  .learn-breadcrumb,
+  .learn-breadcrumb-trail {
     display: inline-flex;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 24px;
     color: var(--ivory-dim);
     text-decoration: none;
     font-size: 14px;
   }
   .learn-breadcrumb:hover { color: var(--ivory); }
+  .learn-breadcrumb-trail {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .learn-breadcrumb-trail a,
+  .learn-breadcrumb-trail span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+  }
+  .learn-breadcrumb-trail a {
+    color: var(--ivory-dim);
+    text-decoration: none;
+  }
+  .learn-breadcrumb-trail a:hover { color: var(--ivory); }
+  .learn-breadcrumb-trail a + a::before,
+  .learn-breadcrumb-trail a + span::before {
+    content: "<";
+    color: rgba(230,200,137,.72);
+    margin-right: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .learn-breadcrumb-trail span {
+    color: var(--gold-300);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
   .learn-section-actions { margin-top: 28px; }
   .learn-goals-card {
     border-radius: 24px;

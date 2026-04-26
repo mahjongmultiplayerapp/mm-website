@@ -141,10 +141,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
       <LearnShell>
         <section className="learn-lesson-page felt">
           <div className="wrap learn-readable">
-            <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-              ← {section.title}
-            </Link>
-            <span className="eyebrow">Section recap</span>
+            <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+              <Link href="/learn">← Curriculum</Link>
+              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <span>Recap</span>
+            </nav>
             <h1 style={{ marginTop: '18px' }}>{section.title}</h1>
             <p className="lede">
               {isSectionOne
@@ -207,10 +208,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
       <LearnShell>
         <section className="learn-lesson-page felt">
           <div className="wrap learn-readable">
-            <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-              ← {section.title}
-            </Link>
-            <span className="eyebrow">Checkpoint</span>
+            <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+              <Link href="/learn">← Curriculum</Link>
+              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <span>Checkpoint</span>
+            </nav>
             <h1 style={{ marginTop: '18px' }}>Checkpoint: {section.title}</h1>
             <p className="lede">
               {isSectionOne
@@ -275,10 +277,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <span style={{ width: `${lessonProgress}%` }} />
         </div>
         <div className="wrap learn-readable">
-          <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-            ← {section.title}
-          </Link>
-          <span className="eyebrow">Lesson {lesson.number}</span>
+          <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+            <Link href="/learn">← Curriculum</Link>
+            <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+            <span>Lesson {lesson.number}</span>
+          </nav>
           <h1 style={{ marginTop: '18px' }}>{lesson.title}</h1>
           <p className="lede">{lesson.objective}</p>
 

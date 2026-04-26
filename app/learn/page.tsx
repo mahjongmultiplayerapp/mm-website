@@ -26,9 +26,9 @@ export default function LearnLandingPage() {
         </div>
         <div className="wrap learn-hero-grid">
           <div>
-            <span className="eyebrow">Learn the game</span>
-            <h1 style={{ marginTop: '18px' }}>Learn Hong Kong Mahjong interactively</h1>
-            <p className="lede">Start with the tiles, then learn how to set up, play, call, win, score, and complete a full round.</p>
+            <span className="eyebrow">Learning Hub</span>
+            <h1 style={{ marginTop: '18px' }}>Learn Hong Kong Mahjong for free</h1>
+            <p className="lede">Perfect for beginners looking to learn enough of the basics to play a full round.</p>
             <LandingProgressActions firstLessonHref={firstLessonHref} totalLessons={totalLessonCount} />
           </div>
           <div className="learn-hero-card">
@@ -52,7 +52,7 @@ export default function LearnLandingPage() {
       <section id="curriculum" className="learn-curriculum">
         <div className="wrap">
           <div className="section-head">
-            <span className="eyebrow">Curriculum map</span>
+            <span className="eyebrow">Curriculum</span>
             <h2 style={{ marginTop: '14px' }}>Seven sections from first tile to real table.</h2>
           </div>
           <div className="learn-section-grid">
@@ -77,13 +77,13 @@ export default function LearnLandingPage() {
       <section className="learn-outcome tight felt">
         <div className="wrap">
           <div className="final learn-outcome-card">
-            <span className="eyebrow">Outcome</span>
-            <h2 style={{ marginTop: '14px' }}>Ready for a real table.</h2>
+            <span className="eyebrow">Check your readiness</span>
+            <h2 style={{ marginTop: '14px' }}>Take the Final Quiz</h2>
             <p className="lede">
-              The finished course will leave learners able to recognize tiles, follow turn flow, make legal calls, understand fan, and avoid common table mistakes.
+              Check how well you understand Hong Kong Mahjong so that you prepared for your first game.
             </p>
             <Link className="btn-primary gold" href="/learn/final-readiness-test">
-              Preview final test
+              Take Final Quiz
             </Link>
           </div>
         </div>
