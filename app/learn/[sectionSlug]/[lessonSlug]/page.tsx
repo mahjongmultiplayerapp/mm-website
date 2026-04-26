@@ -3,6 +3,60 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LessonCompletionPanel } from '../../LearnProgress';
 import { HandFlowLesson, MahjongStylesLesson, ObjectiveLesson, SectionOneCheckpoint, SectionOneRecap, ShapeOfGameLesson } from '../../SectionOneLessons';
+import {
+  HonorTilesLesson,
+  OpenVsConcealedLesson,
+  SectionTwoCheckpoint,
+  SectionTwoRecap,
+  ShapeVsScoringLesson,
+  StandardWinningShapeLesson,
+  ThirteenOrphansLesson,
+  ThreeSuitsLesson,
+  TileGroupingsLesson,
+  TileSetLesson,
+} from '../../SectionTwoLessons';
+import {
+  CommonSetupMistakesLesson,
+  DealerEastLesson,
+  DealingTilesLesson,
+  DiceOpeningLesson,
+  LiveDeadWallLesson,
+  SeatingSeatWindsLesson,
+  SectionThreeCheckpoint,
+  SectionThreeRecap,
+  TableAreasLesson,
+  WallLesson,
+} from '../../SectionThreeLessons';
+import {
+  AnatomyTurnLesson,
+  ArrangingHandLesson,
+  CallWindowLesson,
+  DealerStartsLesson,
+  DiscardingLesson,
+  DrawingTileLesson,
+  SectionFourCheckpoint,
+  SectionFourRecap,
+  TurnOrderLesson,
+  WhatEndsHandLesson,
+} from '../../SectionFourLessons';
+import {
+  AddedKongLesson,
+  BeginnerCallDecisionsLesson,
+  BigExposedKongLesson,
+  CallsChangeFlowLesson,
+  CallPriorityLesson,
+  ChowLesson,
+  ConcealedKongLesson,
+  OpenMeldPlacementLesson,
+  PungLesson,
+  RobbingKongLesson,
+  SectionFiveCheckpoint,
+  SectionFiveRecap,
+  SelfDrawWinLesson,
+  SupplementKongLesson,
+  WhatIsCallLesson,
+  WinOnDiscardLesson,
+} from '../../SectionFiveLessons';
 import { WelcomeToGameLesson } from '../../WelcomeToGameLesson';
 import { LearnShell, TileRail } from '../../components';
 import { getLesson, getNextLessonPath, getPreviousLessonPath, learnSections } from '../../learn-data';
@@ -49,6 +103,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const { section, lesson } = getLesson(sectionSlug, lessonSlug);
   if (!section) notFound();
   const isSectionOne = section.slug === 'what-is-hong-kong-mahjong';
+  const isSectionTwo = section.slug === 'tiles-melds-winning-hands';
+  const isSectionThree = section.slug === 'setup-and-dealing';
+  const isSectionFour = section.slug === 'turn-flow-and-discarding';
+  const isSectionFive = section.slug === 'calls-chow-pung-kong-win';
 
   if (lessonSlug === 'recap') {
     return (
@@ -60,9 +118,29 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </Link>
             <span className="eyebrow">Section recap</span>
             <h1 style={{ marginTop: '18px' }}>{section.title}</h1>
-            <p className="lede">{isSectionOne ? 'Review the big picture before the checkpoint.' : 'This recap page is scaffolded for the section summary, key concepts, and checkpoint preparation.'}</p>
+            <p className="lede">
+              {isSectionOne
+                ? 'Review the big picture before the checkpoint.'
+                : isSectionTwo
+                  ? 'Review tiles, groups, and winning shapes before the checkpoint.'
+                  : isSectionThree
+                    ? 'Review seating, wall setup, dealing, and table areas before the checkpoint.'
+                    : isSectionFour
+                      ? 'Review draw, arrange, discard, call windows, interruptions, and hand endings.'
+                      : isSectionFive
+                        ? 'Review call legality, kongs, wins, priority, and call turn flow.'
+                      : 'This recap page is scaffolded for the section summary, key concepts, and checkpoint preparation.'}
+            </p>
             {isSectionOne ? (
               <SectionOneRecap />
+            ) : isSectionTwo ? (
+              <SectionTwoRecap />
+            ) : isSectionThree ? (
+              <SectionThreeRecap />
+            ) : isSectionFour ? (
+              <SectionFourRecap />
+            ) : isSectionFive ? (
+              <SectionFiveRecap />
             ) : (
               <div className="learn-content-grid">
                 {section.goals.map((goal) => (
@@ -98,9 +176,29 @@ export default async function LessonPage({ params }: LessonPageProps) {
             </Link>
             <span className="eyebrow">Checkpoint</span>
             <h1 style={{ marginTop: '18px' }}>Checkpoint: {section.title}</h1>
-            <p className="lede">{isSectionOne ? 'Answer five questions to confirm you understand the big picture.' : 'This quiz route is ready for the 80% pass checkpoint flow from the spec.'}</p>
+            <p className="lede">
+              {isSectionOne
+                ? 'Answer five questions to confirm you understand the big picture.'
+                : isSectionTwo
+                  ? 'Answer eight questions to confirm you can read tiles and shapes.'
+                  : isSectionThree
+                    ? 'Answer eight questions to confirm you can start a hand correctly.'
+                    : isSectionFour
+                      ? 'Answer eight questions to confirm you can follow a hand turn by turn.'
+                      : isSectionFive
+                        ? 'Answer ten questions to confirm you understand legal calls.'
+                      : 'This quiz route is ready for the 80% pass checkpoint flow from the spec.'}
+            </p>
             {isSectionOne ? (
               <SectionOneCheckpoint />
+            ) : isSectionTwo ? (
+              <SectionTwoCheckpoint />
+            ) : isSectionThree ? (
+              <SectionThreeCheckpoint />
+            ) : isSectionFour ? (
+              <SectionFourCheckpoint />
+            ) : isSectionFive ? (
+              <SectionFiveCheckpoint />
             ) : (
               <div className="learn-complete-card">
                 <div>
@@ -150,6 +248,82 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <ShapeOfGameLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'how-a-hand-flows' && isSectionOne ? (
             <HandFlowLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'the-tile-set' && isSectionTwo ? (
+            <TileSetLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'the-three-suits' && isSectionTwo ? (
+            <ThreeSuitsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'honor-tiles' && isSectionTwo ? (
+            <HonorTilesLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'tile-groupings' && isSectionTwo ? (
+            <TileGroupingsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'open-vs-concealed' && isSectionTwo ? (
+            <OpenVsConcealedLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'standard-winning-shape' && isSectionTwo ? (
+            <StandardWinningShapeLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'thirteen-orphans' && isSectionTwo ? (
+            <ThirteenOrphansLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'valid-shape-vs-scoring-pattern' && isSectionTwo ? (
+            <ShapeVsScoringLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'seating-and-seat-winds' && isSectionThree ? (
+            <SeatingSeatWindsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'dealer-and-east' && isSectionThree ? (
+            <DealerEastLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'the-wall' && isSectionThree ? (
+            <WallLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'rolling-dice-opening-wall' && isSectionThree ? (
+            <DiceOpeningLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'live-wall-vs-dead-wall' && isSectionThree ? (
+            <LiveDeadWallLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'dealing-the-tiles' && isSectionThree ? (
+            <DealingTilesLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'table-areas' && isSectionThree ? (
+            <TableAreasLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'common-setup-mistakes' && isSectionThree ? (
+            <CommonSetupMistakesLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'dealer-starts' && isSectionFour ? (
+            <DealerStartsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'anatomy-of-a-turn' && isSectionFour ? (
+            <AnatomyTurnLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'drawing-a-tile' && isSectionFour ? (
+            <DrawingTileLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'arranging-your-hand' && isSectionFour ? (
+            <ArrangingHandLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'discarding' && isSectionFour ? (
+            <DiscardingLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'the-call-window' && isSectionFour ? (
+            <CallWindowLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'turn-order-around-the-table' && isSectionFour ? (
+            <TurnOrderLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'what-ends-a-hand' && isSectionFour ? (
+            <WhatEndsHandLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'what-is-a-call' && isSectionFive ? (
+            <WhatIsCallLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'chow' && isSectionFive ? (
+            <ChowLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'pung' && isSectionFive ? (
+            <PungLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'concealed-kong' && isSectionFive ? (
+            <ConcealedKongLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'added-kong' && isSectionFive ? (
+            <AddedKongLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'big-exposed-kong' && isSectionFive ? (
+            <BigExposedKongLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'supplement-tile-after-kong' && isSectionFive ? (
+            <SupplementKongLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'self-draw-win' && isSectionFive ? (
+            <SelfDrawWinLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'win-on-discard' && isSectionFive ? (
+            <WinOnDiscardLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'robbing-a-kong' && isSectionFive ? (
+            <RobbingKongLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'call-priority' && isSectionFive ? (
+            <CallPriorityLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'how-calls-change-turn-flow' && isSectionFive ? (
+            <CallsChangeFlowLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'open-meld-placement' && isSectionFive ? (
+            <OpenMeldPlacementLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'beginner-call-decisions' && isSectionFive ? (
+            <BeginnerCallDecisionsLesson lessonId={lessonId} nextHref={nextHref} />
           ) : (
             <div className="learn-lesson-template">
               <div className="learn-content-card">
