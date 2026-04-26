@@ -1,15 +1,19 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { LessonInteraction } from '@/components/learn/lesson-interaction';
 import { useLearnProgress } from '@/components/learn/progress-provider';
 import { getSectionBySlug } from '@/lib/learn-curriculum';
 
-export default function LessonPage({ params }: { params: { sectionSlug: string; lessonSlug: string } }) {
+export default function LessonPage() {
+  const params = useParams<{ sectionSlug: string | string[]; lessonSlug: string | string[] }>();
+  const sectionSlug = Array.isArray(params.sectionSlug) ? params.sectionSlug[0] : params.sectionSlug;
+  const lessonSlug = Array.isArray(params.lessonSlug) ? params.lessonSlug[0] : params.lessonSlug;
   const { progress, setProgress } = useLearnProgress();
-  const section = getSectionBySlug(params.sectionSlug);
-  const lesson = section?.lessons.find((item) => item.slug === params.lessonSlug);
+  const section = sectionSlug ? getSectionBySlug(sectionSlug) : undefined;
+  const lesson = lessonSlug ? section?.lessons.find((item) => item.slug === lessonSlug) : undefined;
   const [interactionComplete, setInteractionComplete] = useState(false);
 
   if (!section || !lesson) {

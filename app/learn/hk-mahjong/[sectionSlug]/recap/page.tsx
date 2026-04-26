@@ -1,10 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { getSectionBySlug } from '@/lib/learn-curriculum';
 
-export default function RecapPage({ params }: { params: { sectionSlug: string } }) {
-  const section = getSectionBySlug(params.sectionSlug);
+export default function RecapPage() {
+  const params = useParams<{ sectionSlug: string | string[] }>();
+  const sectionSlug = Array.isArray(params.sectionSlug) ? params.sectionSlug[0] : params.sectionSlug;
+  const section = sectionSlug ? getSectionBySlug(sectionSlug) : undefined;
   if (!section) {
     return (
       <main className="learn-page">

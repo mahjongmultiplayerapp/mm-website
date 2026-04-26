@@ -1,12 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Quiz } from '@/components/learn/quiz';
 import { useLearnProgress } from '@/components/learn/progress-provider';
 import { getSectionBySlug } from '@/lib/learn-curriculum';
 
-export default function CheckpointPage({ params }: { params: { sectionSlug: string } }) {
-  const section = getSectionBySlug(params.sectionSlug);
+export default function CheckpointPage() {
+  const params = useParams<{ sectionSlug: string | string[] }>();
+  const sectionSlug = Array.isArray(params.sectionSlug) ? params.sectionSlug[0] : params.sectionSlug;
+  const section = sectionSlug ? getSectionBySlug(sectionSlug) : undefined;
   const { progress, setProgress } = useLearnProgress();
   if (!section) {
     return (

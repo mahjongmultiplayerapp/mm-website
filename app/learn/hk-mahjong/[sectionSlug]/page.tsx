@@ -1,12 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { useLearnProgress } from '@/components/learn/progress-provider';
 import { getSectionBySlug } from '@/lib/learn-curriculum';
 
-export default function SectionOverviewPage({ params }: { params: { sectionSlug: string } }) {
-  const section = getSectionBySlug(params.sectionSlug);
+export default function SectionOverviewPage() {
+  const params = useParams<{ sectionSlug: string | string[] }>();
+  const sectionSlug = Array.isArray(params.sectionSlug) ? params.sectionSlug[0] : params.sectionSlug;
+  const section = sectionSlug ? getSectionBySlug(sectionSlug) : undefined;
   const { progress } = useLearnProgress();
 
   if (!section) {
