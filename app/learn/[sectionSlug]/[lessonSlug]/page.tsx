@@ -57,6 +57,32 @@ import {
   WhatIsCallLesson,
   WinOnDiscardLesson,
 } from '../../SectionFiveLessons';
+import {
+  BasicScoringPrinciplesLesson,
+  BeginnerFanLesson,
+  IntermediateFanLesson,
+  LimitHandsLesson,
+  PackagePaymentLesson,
+  PaymentBasicsLesson,
+  PointsConversionTableLesson,
+  PresentingWinningHandLesson,
+  SectionSixCheckpoint,
+  SectionSixRecap,
+  WhatIsFanLesson,
+  WhatMakesHandWinnableLesson,
+} from '../../SectionSixLessons';
+import {
+  AfterHandEndsLesson,
+  DeadHandsErrorsLesson,
+  DrawnHandsLesson,
+  EndRoundLesson,
+  PassingDealLesson,
+  ReadyForRealTableLesson,
+  SectionSevenCheckpoint,
+  SectionSevenRecap,
+  TableEtiquetteLesson,
+  WindCyclesRoundsLesson,
+} from '../../SectionSevenLessons';
 import { WelcomeToGameLesson } from '../../WelcomeToGameLesson';
 import { LearnShell, TileRail } from '../../components';
 import { getLesson, getNextLessonPath, getPreviousLessonPath, learnSections } from '../../learn-data';
@@ -107,6 +133,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const isSectionThree = section.slug === 'setup-and-dealing';
   const isSectionFour = section.slug === 'turn-flow-and-discarding';
   const isSectionFive = section.slug === 'calls-chow-pung-kong-win';
+  const isSectionSix = section.slug === 'scoring-and-fan';
+  const isSectionSeven = section.slug === 'rounds-draws-table-rules';
 
   if (lessonSlug === 'recap') {
     return (
@@ -129,7 +157,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
                       ? 'Review draw, arrange, discard, call windows, interruptions, and hand endings.'
                       : isSectionFive
                         ? 'Review call legality, kongs, wins, priority, and call turn flow.'
-                      : 'This recap page is scaffolded for the section summary, key concepts, and checkpoint preparation.'}
+                        : isSectionSix
+                          ? 'Review fan, minimums, caps, payment, package payment, and winning-hand presentation.'
+                          : isSectionSeven
+                            ? 'Review hand endings, draws, dealer movement, wind cycles, dead hands, and etiquette.'
+                            : 'This recap page is scaffolded for the section summary, key concepts, and checkpoint preparation.'}
             </p>
             {isSectionOne ? (
               <SectionOneRecap />
@@ -141,6 +173,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <SectionFourRecap />
             ) : isSectionFive ? (
               <SectionFiveRecap />
+            ) : isSectionSix ? (
+              <SectionSixRecap />
+            ) : isSectionSeven ? (
+              <SectionSevenRecap />
             ) : (
               <div className="learn-content-grid">
                 {section.goals.map((goal) => (
@@ -187,7 +223,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
                       ? 'Answer eight questions to confirm you can follow a hand turn by turn.'
                       : isSectionFive
                         ? 'Answer ten questions to confirm you understand legal calls.'
-                      : 'This quiz route is ready for the 80% pass checkpoint flow from the spec.'}
+                        : isSectionSix
+                          ? 'Answer ten questions to confirm you understand fan and payment basics.'
+                          : isSectionSeven
+                            ? 'Answer eight questions to confirm you are ready for table flow and etiquette.'
+                            : 'This quiz route is ready for the 80% pass checkpoint flow from the spec.'}
             </p>
             {isSectionOne ? (
               <SectionOneCheckpoint />
@@ -199,6 +239,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <SectionFourCheckpoint />
             ) : isSectionFive ? (
               <SectionFiveCheckpoint />
+            ) : isSectionSix ? (
+              <SectionSixCheckpoint />
+            ) : isSectionSeven ? (
+              <SectionSevenCheckpoint />
             ) : (
               <div className="learn-complete-card">
                 <div>
@@ -324,6 +368,42 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <OpenMeldPlacementLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'beginner-call-decisions' && isSectionFive ? (
             <BeginnerCallDecisionsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'what-makes-a-hand-winnable' && isSectionSix ? (
+            <WhatMakesHandWinnableLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'what-is-fan' && isSectionSix ? (
+            <WhatIsFanLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'basic-scoring-principles' && isSectionSix ? (
+            <BasicScoringPrinciplesLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'payment-basics' && isSectionSix ? (
+            <PaymentBasicsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'package-payment' && isSectionSix ? (
+            <PackagePaymentLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'beginner-fan' && isSectionSix ? (
+            <BeginnerFanLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'intermediate-fan' && isSectionSix ? (
+            <IntermediateFanLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'limit-hands' && isSectionSix ? (
+            <LimitHandsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'points-conversion-table' && isSectionSix ? (
+            <PointsConversionTableLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'presenting-a-winning-hand' && isSectionSix ? (
+            <PresentingWinningHandLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'what-happens-after-a-hand-ends' && isSectionSeven ? (
+            <AfterHandEndsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'drawn-hands' && isSectionSeven ? (
+            <DrawnHandsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'passing-the-deal' && isSectionSeven ? (
+            <PassingDealLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'wind-cycles-and-rounds' && isSectionSeven ? (
+            <WindCyclesRoundsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'end-of-a-round' && isSectionSeven ? (
+            <EndRoundLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'dead-hands-and-common-errors' && isSectionSeven ? (
+            <DeadHandsErrorsLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'table-etiquette' && isSectionSeven ? (
+            <TableEtiquetteLesson lessonId={lessonId} nextHref={nextHref} />
+          ) : lesson.slug === 'ready-for-a-real-table' && isSectionSeven ? (
+            <ReadyForRealTableLesson lessonId={lessonId} nextHref={nextHref} />
           ) : (
             <div className="learn-lesson-template">
               <div className="learn-content-card">
