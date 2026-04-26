@@ -13,6 +13,12 @@ export type InteractionData =
       steps: { title: string; description: string }[];
     }
   | {
+      type: 'cardCarousel';
+      title: string;
+      prompt: string;
+      cards: { title: string; description: string; tag?: string }[];
+    }
+  | {
       type: 'multipleChoice';
       title: string;
       prompt: string;
@@ -30,6 +36,12 @@ export type InteractionData =
       title: string;
       prompt: string;
       hands: { id: string; label: string; isWinningShape: boolean; explanation: string }[];
+    }
+  | {
+      type: 'tableMap';
+      title: string;
+      prompt: string;
+      hotspots: { id: string; label: string; description: string }[];
     }
   | {
       type: 'turnOrderSimulator';
@@ -138,6 +150,42 @@ export const sections: Section[] = [
       {
         id: 's1-l2',
         sectionId: 'section-1',
+        slug: 'hk-mahjong-vs-other-styles',
+        title: 'HK Mahjong vs Other Styles',
+        objective: 'Understand that this curriculum teaches the 13-tile Classical Hong Kong ruleset.',
+        estimatedMinutes: 3,
+        concept: 'Mahjong is a family of games. Rule details differ by region and style.',
+        visualSpec: 'Style comparison carousel: Hong Kong, Riichi, Taiwanese, and other Chinese styles.',
+        plainEnglishRule: 'Always confirm rules before play; this course is specifically Hong Kong Mahjong.',
+        takeaway: 'There is no single global mahjong ruleset. This curriculum is Hong Kong Mahjong only.',
+        interaction: {
+          type: 'cardCarousel',
+          title: 'Compare major styles',
+          prompt: 'Swipe or tap through each style to see the key differences.',
+          cards: [
+            {
+              title: 'Hong Kong Mahjong',
+              tag: 'This course',
+              description: 'Call-friendly play, fan-based scoring, and a practical 13-tile table flow.',
+            },
+            {
+              title: 'Riichi (Japanese)',
+              description: 'Distinct declarations, defensive play patterns, and different scoring logic.',
+            },
+            {
+              title: 'Taiwanese Mahjong',
+              description: 'Often played with 16-tile hand structures and table-specific conventions.',
+            },
+            {
+              title: 'Other Chinese styles',
+              description: 'Regional differences can change allowed hands, scoring, and table etiquette.',
+            },
+          ],
+        },
+      },
+      {
+        id: 's1-l3',
+        sectionId: 'section-1',
         slug: 'objective-of-a-hand',
         title: 'The Objective of a Hand',
         objective: 'Recognize the standard winning shape.',
@@ -153,7 +201,7 @@ export const sections: Section[] = [
         ]),
       },
       {
-        id: 's1-l3',
+        id: 's1-l4',
         sectionId: 'section-1',
         slug: 'shape-of-the-game',
         title: 'The Shape of the Game',
@@ -163,14 +211,48 @@ export const sections: Section[] = [
         visualSpec: 'Compass seating map with East highlighted.',
         plainEnglishRule: 'Seat and round winds can affect scoring and flow.',
         takeaway: 'Remember your seat; it impacts both play order and scoring.',
-        interaction: mc('Who is the dealer at the start of a hand?', [
-          { id: 'a', label: 'East', correct: true, explanation: 'Correct. East is dealer.' },
-          { id: 'b', label: 'North', correct: false, explanation: 'North is a seat but not initial dealer.' },
-          { id: 'c', label: 'Any player', correct: false, explanation: 'Dealer is a specific seat for each hand.' },
-        ]),
+        interaction: {
+          type: 'tableMap',
+          title: 'Seat map interactive',
+          prompt: 'Tap each seat to learn its role in turn order and dealing.',
+          hotspots: [
+            { id: 'east', label: 'East', description: 'Dealer seat. Starts the hand and has special flow effects.' },
+            { id: 'south', label: 'South', description: 'Next seat in order after East.' },
+            { id: 'west', label: 'West', description: 'Across from East.' },
+            { id: 'north', label: 'North', description: 'Fourth seat, completing the table.' },
+          ],
+        },
+      },
+      {
+        id: 's1-l5',
+        sectionId: 'section-1',
+        slug: 'how-a-hand-flows',
+        title: 'How a Hand Flows',
+        objective: 'Understand the end-to-end sequence of one hand.',
+        estimatedMinutes: 4,
+        concept: 'A hand moves through repeating draw/discard turns with occasional legal calls.',
+        visualSpec: 'Flow strip: deal → turns → calls/claims → win or draw.',
+        plainEnglishRule: 'When no call interrupts, turn flow continues in seat order around the table.',
+        takeaway: 'Think in cycles: draw, evaluate, discard, and react to claims.',
+        interaction: {
+          type: 'turnOrderSimulator',
+          title: 'Hand flow simulator',
+          prompt: 'Choose the correct next event in a normal hand sequence.',
+          scenario: {
+            action: 'East discarded; nobody claimed. It is now South’s turn.',
+            choices: ['South draws from the wall', 'West calls chow', 'East draws again'],
+            correctChoice: 'South draws from the wall',
+            explanation: 'Without claims, turns advance in order and the next player draws.',
+          },
+        },
       },
     ],
-    recap: ['Mahjong is a 4-player tile game.', 'Standard target shape is 4 melds + 1 pair.', 'East is dealer and seat winds matter.'],
+    recap: [
+      'Hong Kong Mahjong is one style within a broader mahjong family.',
+      'The standard winning target is 4 melds + 1 pair.',
+      'Seats and winds structure dealer position and turn order.',
+      'A hand usually cycles through draw/discard until a win or draw.',
+    ],
     checkpoint: {
       title: 'Section 1 checkpoint',
       passThreshold: 80,
@@ -184,15 +266,23 @@ export const sections: Section[] = [
           { id: 'a', label: '4 melds + 1 pair', correct: true, explanation: 'Correct.' },
           { id: 'b', label: '2 melds + 4 pairs', correct: false, explanation: 'Not the standard shape.' },
         ]},
-        { id: 'q3', question: 'Which seat is dealer?', options: [
+        { id: 'q3', question: 'Which seat starts as dealer?', options: [
           { id: 'a', label: 'East', correct: true, explanation: 'Correct.' },
           { id: 'b', label: 'South', correct: false, explanation: 'South is next in order.' },
         ]},
-        { id: 'q4', question: 'A hand can end in…', options: [
+        { id: 'q4', question: 'This curriculum is teaching which ruleset?', options: [
+          { id: 'a', label: '13-tile Classical Hong Kong Mahjong', correct: true, explanation: 'Correct.' },
+          { id: 'b', label: 'Riichi only', correct: false, explanation: 'Riichi is a different style.' },
+        ]},
+        { id: 'q5', question: 'A hand can end in…', options: [
           { id: 'a', label: 'Win or draw', correct: true, explanation: 'Correct.' },
           { id: 'b', label: 'Only self-draw', correct: false, explanation: 'Discard wins are also possible.' },
         ]},
-        { id: 'q5', question: 'Turns generally follow?', options: [
+        { id: 'q6', question: 'If no one claims a discard, what happens?', options: [
+          { id: 'a', label: 'Next player draws', correct: true, explanation: 'Correct. The turn proceeds in order.' },
+          { id: 'b', label: 'Discarder draws again', correct: false, explanation: 'Turn does not stay with discarder.' },
+        ]},
+        { id: 'q7', question: 'Turns generally follow?', options: [
           { id: 'a', label: 'Draw then discard', correct: true, explanation: 'Correct.' },
           { id: 'b', label: 'Discard then draw', correct: false, explanation: 'Usually draw first.' },
         ]},

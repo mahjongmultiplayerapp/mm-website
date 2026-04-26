@@ -136,10 +136,73 @@ function HandValidatorCard({ interaction, onComplete }: { interaction: Extract<I
   );
 }
 
+function CardCarouselCard({ interaction, onComplete }: { interaction: Extract<InteractionData, { type: 'cardCarousel' }>; onComplete: () => void }) {
+  const [index, setIndex] = useState(0);
+  const done = index === interaction.cards.length - 1;
+
+  return (
+    <div className="learn-card">
+      <h4>{interaction.title}</h4>
+      <p className="learn-muted">{interaction.prompt}</p>
+      <div className="learn-interaction-surface">
+        <p className="learn-eyebrow">
+          Card {index + 1}/{interaction.cards.length}
+        </p>
+        <h5>{interaction.cards[index].title}</h5>
+        {interaction.cards[index].tag ? <p className="learn-feedback ok">{interaction.cards[index].tag}</p> : null}
+        <p>{interaction.cards[index].description}</p>
+      </div>
+      <div className="learn-row">
+        <button type="button" className="learn-btn ghost" disabled={index === 0} onClick={() => setIndex((v) => v - 1)}>
+          Back
+        </button>
+        {done ? (
+          <button type="button" className="learn-btn" onClick={onComplete}>
+            Mark complete
+          </button>
+        ) : (
+          <button type="button" className="learn-btn" onClick={() => setIndex((v) => v + 1)}>
+            Next
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function TableMapCard({ interaction, onComplete }: { interaction: Extract<InteractionData, { type: 'tableMap' }>; onComplete: () => void }) {
+  const [seen, setSeen] = useState<string[]>([]);
+  const allSeen = interaction.hotspots.every((spot) => seen.includes(spot.id));
+  return (
+    <div className="learn-card">
+      <h4>{interaction.title}</h4>
+      <p className="learn-muted">{interaction.prompt}</p>
+      <div className="learn-grid-2">
+        {interaction.hotspots.map((spot) => (
+          <button
+            key={spot.id}
+            type="button"
+            className={`learn-option ${seen.includes(spot.id) ? 'selected' : ''}`}
+            onClick={() => setSeen((prev) => (prev.includes(spot.id) ? prev : [...prev, spot.id]))}
+          >
+            <strong>{spot.label}</strong>
+            <p className="learn-muted">{spot.description}</p>
+          </button>
+        ))}
+      </div>
+      <button type="button" className="learn-btn" disabled={!allSeen} onClick={onComplete}>
+        Continue
+      </button>
+    </div>
+  );
+}
+
 export function LessonInteraction({ interaction, onComplete }: Props) {
   switch (interaction.type) {
     case 'clickThrough':
       return <ClickThroughCard interaction={interaction} onComplete={onComplete} />;
+    case 'cardCarousel':
+      return <CardCarouselCard interaction={interaction} onComplete={onComplete} />;
     case 'multipleChoice':
       return (
         <div className="learn-card">
@@ -153,6 +216,8 @@ export function LessonInteraction({ interaction, onComplete }: Props) {
       return <TileClassifierCard interaction={interaction} onComplete={onComplete} />;
     case 'handValidator':
       return <HandValidatorCard interaction={interaction} onComplete={onComplete} />;
+    case 'tableMap':
+      return <TableMapCard interaction={interaction} onComplete={onComplete} />;
     case 'turnOrderSimulator':
       return (
         <div className="learn-card">
