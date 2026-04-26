@@ -943,3 +943,152 @@
   .modal-close:hover { background: rgba(245,238,221,.14); }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes popIn { from { opacity: 0; transform: translate(-50%,-46%) scale(.96); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+
+/* Learn Hong Kong Mahjong */
+.learn-page {
+  min-height: 100vh;
+  background: var(--background, #f7f3ea);
+  color: #1e1b16;
+  padding: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+.learn-hero,
+.learn-card,
+.learn-progress-card {
+  background: #fffdf7;
+  border: 1px solid #e5ddcc;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(8, 59, 46, 0.08);
+}
+.learn-hero {
+  background: linear-gradient(135deg, #fffdf7 0%, #f3f7f2 100%);
+}
+.learn-eyebrow {
+  font-family: var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #0f5a43;
+}
+.learn-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.learn-grid-2 {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.learn-mini-card {
+  border: 1px solid #e5ddcc;
+  border-radius: 16px;
+  padding: 14px;
+}
+.learn-stack {
+  display: grid;
+  gap: 12px;
+}
+.learn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.learn-row.between { justify-content: space-between; }
+.learn-btn {
+  border-radius: 999px;
+  border: 0;
+  background: #0f5a43;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 18px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.learn-btn.ghost {
+  border: 1px solid #0f5a43;
+  background: transparent;
+  color: #0f5a43;
+}
+.learn-btn[aria-disabled='true'],
+.learn-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.learn-link {
+  color: #0f5a43;
+  text-decoration: none;
+  font-weight: 600;
+}
+.learn-muted { color: #6f6a5f; }
+.learn-breadcrumbs a { color: #0f5a43; text-decoration: none; }
+.learn-progress-track {
+  width: 100%;
+  height: 10px;
+  background: #e5ddcc;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.learn-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0f5a43 0%, #c9a24a 100%);
+}
+.learn-question { font-weight: 600; }
+.learn-option {
+  border-radius: 14px;
+  border: 1px solid #e5ddcc;
+  padding: 12px;
+  text-align: left;
+  background: #fff;
+  cursor: pointer;
+}
+.learn-option.correct,
+.learn-option.selected {
+  border-color: #0f5a43;
+  box-shadow: inset 0 0 0 1px #0f5a43;
+}
+.learn-option.wrong {
+  border-color: #b91c1c;
+}
+.learn-feedback {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.learn-feedback.ok {
+  background: rgba(21, 128, 61, 0.12);
+  color: #14532d;
+}
+.learn-feedback.bad {
+  background: rgba(185, 28, 28, 0.12);
+  color: #7f1d1d;
+}
+.learn-interaction-surface {
+  border-radius: 16px;
+  border: 1px dashed #c9a24a;
+  padding: 16px;
+  background: #fffcf3;
+}
+.learn-tile {
+  border: 1px solid #e5ddcc;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  min-width: 120px;
+  background: #fff;
+}
+
+@media (max-width: 760px) {
+  .learn-page {
+    padding: 18px;
+  }
+}

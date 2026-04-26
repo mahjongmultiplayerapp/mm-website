@@ -42,6 +42,9 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
         </button>
         <ul>
           <li>
+            <a href="/learn/hk-mahjong">Learn HK Mahjong</a>
+          </li>
+          <li>
             <a href="#features">Features</a>
           </li>
           <li>
@@ -66,6 +69,11 @@ function TopNav({ onOpenSignup }: { onOpenSignup: () => void }) {
             <div>
               <h4>App</h4>
               <ul>
+                <li>
+                  <a href="/learn/hk-mahjong" onClick={closeMobileMenu}>
+                    Learn HK Mahjong
+                  </a>
+                </li>
                 <li>
                   <a href="#features" onClick={closeMobileMenu}>
                     Features
