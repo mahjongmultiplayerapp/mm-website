@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { MiniTile } from './components';
 
 type LessonRuntimeProps = {
   lessonId: string;
@@ -107,6 +108,7 @@ function readProgress() {
 
 function saveProgress(progress: ReturnType<typeof readProgress>) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
@@ -136,26 +138,17 @@ function useCompletion(lessonId: string) {
   return { isComplete, setIsComplete };
 }
 
-function CompleteButton({ lessonId, nextHref, ready = true, label = 'Mark complete' }: LessonRuntimeProps & { ready?: boolean; label?: string }) {
+function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps & { ready?: boolean; label?: string }) {
   const { isComplete, setIsComplete } = useCompletion(lessonId);
 
-  const onComplete = () => {
-    if (!ready) return;
+  useEffect(() => {
+    if (!ready || isComplete) return;
     completeLesson(lessonId, nextHref);
     setIsComplete(true);
-  };
+  }, [isComplete, lessonId, nextHref, ready, setIsComplete]);
 
   return (
-    <div className="section-one-complete">
-      <button type="button" className={`btn-primary ${ready || isComplete ? 'gold' : ''}`} disabled={!ready} onClick={onComplete}>
-        {isComplete ? 'Completed' : label}
-      </button>
-      {isComplete ? (
-        <a className="learn-secondary-link" href={nextHref}>
-          Continue
-        </a>
-      ) : null}
-    </div>
+    <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
   );
 }
 
@@ -199,9 +192,7 @@ function TileGroup({ label, tiles }: { label: string; tiles: string[] }) {
     <div className="section-one-tile-group">
       <div className="learn-tile-rail">
         {tiles.map((tile, index) => (
-          <span className={`mini-tile ${tile === '中' ? 'red' : ''}`} key={`${tile}-${index}`}>
-            {tile}
-          </span>
+          <MiniTile tile={tile} key={`${tile}-${index}`} />
         ))}
       </div>
       <small>{label}</small>
@@ -214,6 +205,7 @@ export function MahjongStylesLesson({ lessonId, nextHref }: LessonRuntimeProps) 
   const [viewed, setViewed] = useState(() => new Set([0]));
   const current = styles[activeIndex];
   const allViewed = viewed.size === styles.length;
+  const viewedProgress = (viewed.size / styles.length) * 100;
 
   const selectStyle = (index: number) => {
     setActiveIndex(index);
@@ -233,16 +225,22 @@ export function MahjongStylesLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       </article>
 
       <section className="learn-content-card section-one-carousel">
-        <span className="eyebrow">Visual example</span>
+        <div className="learn-card-title-row">
+          <span className="eyebrow">Visual example</span>
+          <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={allViewed} />
+        </div>
+        <h3>Swipe through common mahjong styles.</h3>
+        <p>{allViewed ? 'You viewed all styles. The important habit is knowing which ruleset your table is using.' : 'Open each style card to see how this course focuses on Hong Kong Mahjong.'}</p>
+        <div className="welcome-flow-meter" aria-label={`${viewed.size} of ${styles.length} style cards viewed`}>
+          <span style={{ width: `${viewedProgress}%` }} />
+        </div>
         <div className="section-one-style-card">
           <span className="eyebrow">{current.eyebrow}</span>
           <h3>{current.title}</h3>
           <p>{current.detail}</p>
           <div className="learn-tile-rail">
             {current.tiles.map((tile) => (
-              <span className={`mini-tile ${tile === '中' ? 'red' : ''}`} key={tile}>
-                {tile}
-              </span>
+              <MiniTile tile={tile} key={tile} />
             ))}
           </div>
         </div>
@@ -259,15 +257,6 @@ export function MahjongStylesLesson({ lessonId, nextHref }: LessonRuntimeProps) 
         <span className="eyebrow">Rule in plain English</span>
         <h3>Learn one table at a time.</h3>
         <p>Do not panic if another table plays slightly differently. This curriculum gives you one clear ruleset first.</p>
-      </section>
-
-      <section className="learn-complete-card">
-        <div>
-          <span className="eyebrow">Interactive check</span>
-          <h3>Swipe through common mahjong styles.</h3>
-          <p>{allViewed ? 'You viewed all styles. The important habit is knowing which ruleset your table is using.' : 'Open each style card to see how this course focuses on Hong Kong Mahjong.'}</p>
-        </div>
-        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={allViewed} />
       </section>
 
       <section className="learn-content-card learn-takeaway-card">
@@ -341,6 +330,7 @@ export function ShapeOfGameLesson({ lessonId, nextHref }: LessonRuntimeProps) {
   const [activeSeat, setActiveSeat] = useState('East');
   const [visited, setVisited] = useState(() => new Set(['East']));
   const allVisited = visited.size === 4;
+  const visitedProgress = (visited.size / 4) * 100;
   const descriptions: Record<string, string> = {
     East: 'East is the dealer for this hand and starts play.',
     South: 'South is the next seat in normal turn order.',
@@ -366,7 +356,15 @@ export function ShapeOfGameLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       </article>
 
       <section className="learn-content-card welcome-table-card">
-        <span className="eyebrow">Visual example</span>
+        <div className="learn-card-title-row">
+          <span className="eyebrow">Visual example</span>
+          <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={allVisited} />
+        </div>
+        <h3>Tap each seat to learn its role.</h3>
+        <p>{allVisited ? 'You have visited every seat. East is the dealer, and every player has a seat wind.' : 'Tap East, South, West, and North on the table.'}</p>
+        <div className="welcome-flow-meter" aria-label={`${visited.size} of 4 seats visited`}>
+          <span style={{ width: `${visitedProgress}%` }} />
+        </div>
         <MiniTable activeSeat={activeSeat} onSeat={selectSeat} />
       </section>
 
@@ -374,15 +372,6 @@ export function ShapeOfGameLesson({ lessonId, nextHref }: LessonRuntimeProps) {
         <span className="eyebrow">Rule in plain English</span>
         <h3>{activeSeat}</h3>
         <p>{descriptions[activeSeat]}</p>
-      </section>
-
-      <section className="learn-complete-card">
-        <div>
-          <span className="eyebrow">Interactive check</span>
-          <h3>Tap each seat to learn its role.</h3>
-          <p>{allVisited ? 'You have visited every seat. East is the dealer, and every player has a seat wind.' : 'Tap East, South, West, and North on the table.'}</p>
-        </div>
-        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={allVisited} />
       </section>
 
       <section className="learn-content-card learn-takeaway-card">
@@ -397,6 +386,7 @@ export function ShapeOfGameLesson({ lessonId, nextHref }: LessonRuntimeProps) {
 export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
   const [activeStep, setActiveStep] = useState(0);
   const complete = activeStep === handFlowSteps.length - 1;
+  const stepProgress = ((activeStep + 1) / handFlowSteps.length) * 100;
   const descriptions = [
     'Shuffle the tiles and build the wall.',
     'Open the wall and deal each player their starting hand.',
@@ -419,7 +409,15 @@ export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       </article>
 
       <section className="learn-content-card section-one-timeline-card">
-        <span className="eyebrow">Visual example</span>
+        <div className="learn-card-title-row">
+          <span className="eyebrow">Visual example</span>
+          <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={complete} />
+        </div>
+        <h3>Tap through one complete hand from setup to scoring.</h3>
+        <p>{complete ? 'You reached scoring. You can now narrate the full shape of one hand.' : 'Tap each stage in order.'}</p>
+        <div className="welcome-flow-meter" aria-label={`Step ${activeStep + 1} of ${handFlowSteps.length}`}>
+          <span style={{ width: `${stepProgress}%` }} />
+        </div>
         <div className="section-one-timeline">
           {handFlowSteps.map((step, index) => (
             <button type="button" className={index === activeStep ? 'active' : ''} onClick={() => setActiveStep(index)} key={step}>
@@ -434,15 +432,6 @@ export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
         <span className="eyebrow">Rule in plain English</span>
         <h3>{handFlowSteps[activeStep]}</h3>
         <p>{descriptions[activeStep]}</p>
-      </section>
-
-      <section className="learn-complete-card">
-        <div>
-          <span className="eyebrow">Interactive check</span>
-          <h3>Tap through one complete hand from setup to scoring.</h3>
-          <p>{complete ? 'You reached scoring. You can now narrate the full shape of one hand.' : 'Tap each stage in order.'}</p>
-        </div>
-        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={complete} />
       </section>
 
       <section className="learn-content-card learn-takeaway-card">
@@ -474,9 +463,7 @@ export function SectionOneRecap() {
         </div>
         <div className="learn-tile-rail">
           {['東', '南', '西', '北', '中'].map((tile) => (
-            <span className={`mini-tile ${tile === '中' ? 'red' : ''}`} key={tile}>
-              {tile}
-            </span>
+            <MiniTile tile={tile} key={tile} />
           ))}
         </div>
       </div>
@@ -489,11 +476,11 @@ export function SectionOneCheckpoint() {
   const [submitted, setSubmitted] = useState(false);
   const score = useMemo(() => checkpointQuestions.reduce((sum, question, index) => sum + (answers[index] === question.answer ? 1 : 0), 0), [answers]);
   const answeredCount = Object.keys(answers).length;
-  const passed = score >= 4;
 
   const submit = () => {
     setSubmitted(true);
-    if (score >= 4) completeSection('section-1');
+    completeLesson('what-is-hong-kong-mahjong/checkpoint', '/learn/tiles-melds-winning-hands');
+    completeSection('section-1');
   };
 
   return (
@@ -501,7 +488,7 @@ export function SectionOneCheckpoint() {
       <div className="learn-content-card section-one-checkpoint-intro">
         <span className="eyebrow">Checkpoint quiz</span>
         <h3>Do you understand the big picture?</h3>
-        <p>Answer all five questions. A passing score is 4 out of 5.</p>
+        <p>Answer all five questions, then submit to see your score.</p>
       </div>
 
       <div className="section-one-question-list">
@@ -536,12 +523,18 @@ export function SectionOneCheckpoint() {
       <div className="learn-complete-card section-one-score-card">
         <div>
           <span className="eyebrow">Score</span>
-          <h3>{submitted ? `${score} / ${checkpointQuestions.length}` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
-          <p>{submitted ? (passed ? 'Passed. You understand the big picture of a Hong Kong Mahjong hand.' : 'Almost. Review the missed ideas, then submit again.') : 'Submit when every question has an answer.'}</p>
+          <h3>{submitted ? `${score}/${checkpointQuestions.length} Correct` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
+          <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
-        <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
-          {submitted ? 'Resubmit' : 'Submit checkpoint'}
-        </button>
+        {submitted ? (
+          <a className="btn-primary gold" href="/learn/tiles-melds-winning-hands">
+            Continue to next section
+          </a>
+        ) : (
+          <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
+            Submit
+          </button>
+        )}
       </div>
     </div>
   );

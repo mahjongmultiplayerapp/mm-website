@@ -188,6 +188,9 @@ export function getPreviousLessonPath(sectionSlug: string, lessonSlug: string) {
   const section = learnSections[sectionIndex];
   if (!section) return '/learn';
 
+  if (lessonSlug === 'recap') return getLessonPath(section.slug, section.lessons[section.lessons.length - 1].slug);
+  if (lessonSlug === 'checkpoint') return `/learn/${section.slug}/recap`;
+
   const lessonIndex = section.lessons.findIndex((lesson) => lesson.slug === lessonSlug);
   const previousLesson = section.lessons[lessonIndex - 1];
   if (previousLesson) return getLessonPath(section.slug, previousLesson.slug);

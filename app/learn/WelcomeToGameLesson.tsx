@@ -35,21 +35,23 @@ const flowSteps = [
 function readProgress() {
   try {
     const stored = window.localStorage.getItem(storageKey);
-    if (!stored) return { completedLessons: [] as string[], lastVisitedPath: undefined as string | undefined };
-    const parsed = JSON.parse(stored) as { completedLessons?: string[]; lastVisitedPath?: string };
+    if (!stored) return { completedLessons: [] as string[], completedSections: [] as string[], lastVisitedPath: undefined as string | undefined };
+    const parsed = JSON.parse(stored) as { completedLessons?: string[]; completedSections?: string[]; lastVisitedPath?: string };
     return {
       completedLessons: Array.isArray(parsed.completedLessons) ? parsed.completedLessons : [],
+      completedSections: Array.isArray(parsed.completedSections) ? parsed.completedSections : [],
       lastVisitedPath: typeof parsed.lastVisitedPath === 'string' ? parsed.lastVisitedPath : undefined,
     };
   } catch {
-    return { completedLessons: [] as string[], lastVisitedPath: undefined as string | undefined };
+    return { completedLessons: [] as string[], completedSections: [] as string[], lastVisitedPath: undefined as string | undefined };
   }
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
   const progress = readProgress();
   const completedLessons = progress.completedLessons.includes(lessonId) ? progress.completedLessons : [...progress.completedLessons, lessonId];
-  window.localStorage.setItem(storageKey, JSON.stringify({ completedLessons, lastVisitedPath: nextHref }));
+  window.localStorage.setItem(storageKey, JSON.stringify({ ...progress, completedLessons, lastVisitedPath: nextHref }));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonProps) {
@@ -63,14 +65,16 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
     setIsComplete(readProgress().completedLessons.includes(lessonId));
   }, [lessonId]);
 
+  useEffect(() => {
+    if (!hasReachedEnd || isComplete) return;
+    completeLesson(lessonId, nextHref);
+    setIsComplete(true);
+  }, [hasReachedEnd, isComplete, lessonId, nextHref]);
+
   const goNext = () => {
     if (!hasReachedEnd) {
       setActiveStep((step) => step + 1);
-      return;
     }
-
-    completeLesson(lessonId, nextHref);
-    setIsComplete(true);
   };
 
   return (
@@ -128,7 +132,10 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
 
       <section className="learn-complete-card welcome-flow-card">
         <div className="welcome-flow-copy">
-          <span className="eyebrow">Interactive check</span>
+          <div className="learn-card-title-row">
+            <span className="eyebrow">Interactive check</span>
+            <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
+          </div>
           <h3>Tap through the basic life cycle of a hand.</h3>
           <p>{currentStep.body}</p>
           <div className="welcome-flow-meter" aria-hidden="true">
@@ -146,9 +153,6 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
               </li>
             ))}
           </ol>
-          <button type="button" className={`btn-primary ${hasReachedEnd || isComplete ? 'gold' : ''}`} onClick={goNext}>
-            {isComplete ? 'Completed' : hasReachedEnd ? 'Mark complete' : 'Next step'}
-          </button>
         </div>
       </section>
 
@@ -156,11 +160,6 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
         <span className="eyebrow">Takeaway</span>
         <h3>Four players, draw, discard, call, complete a hand.</h3>
         <p>Hong Kong Mahjong is a race to complete a legal hand through drawing, discarding, and calling tiles.</p>
-        {isComplete ? (
-          <a className="btn-primary gold" href={nextHref}>
-            Continue to Lesson 1.2
-          </a>
-        ) : null}
       </section>
     </div>
   );

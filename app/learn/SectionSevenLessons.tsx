@@ -66,6 +66,7 @@ function readProgress() {
 
 function saveProgress(progress: ReturnType<typeof readProgress>) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
@@ -98,23 +99,14 @@ function useCompletion(lessonId: string) {
 function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps & { ready?: boolean }) {
   const { isComplete, setIsComplete } = useCompletion(lessonId);
 
-  const onComplete = () => {
-    if (!ready) return;
+  useEffect(() => {
+    if (!ready || isComplete) return;
     completeLesson(lessonId, nextHref);
     setIsComplete(true);
-  };
+  }, [isComplete, lessonId, nextHref, ready, setIsComplete]);
 
   return (
-    <div className="section-one-complete">
-      <button type="button" className={`btn-primary ${ready || isComplete ? 'gold' : ''}`} disabled={!ready} onClick={onComplete}>
-        {isComplete ? 'Completed' : 'Mark complete'}
-      </button>
-      {isComplete ? (
-        <a className="learn-secondary-link" href={nextHref}>
-          Continue
-        </a>
-      ) : null}
-    </div>
+    <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
   );
 }
 
@@ -642,18 +634,20 @@ export function SectionSevenCheckpoint() {
     () => checkpointQuestions.reduce((total, question, index) => total + (answers[index] === question.answer ? 1 : 0), 0),
     [answers],
   );
-  const passed = submitted && score >= 7;
+  const answeredCount = Object.keys(answers).length;
 
   useEffect(() => {
-    if (passed) completeSection('section-7');
-  }, [passed]);
+    if (!submitted) return;
+    completeLesson('rounds-draws-table-rules/checkpoint', '/learn/final-readiness-test');
+    completeSection('section-7');
+  }, [submitted]);
 
   return (
     <div className="section-one-score-card section-seven-checkpoint">
       <div className="learn-content-card">
         <span className="eyebrow">Checkpoint quiz</span>
-        <h3>Score at least 7 out of 8</h3>
-        <p>Confirm post-hand flow, drawn hands, dealer movement, wind cycles, round endings, dead hands, and etiquette.</p>
+        <h3>Check your table-readiness</h3>
+        <p>Answer all eight questions, then submit to see your score.</p>
       </div>
       {checkpointQuestions.map((question, index) => (
         <div className="learn-content-card" key={question.prompt}>
@@ -685,12 +679,18 @@ export function SectionSevenCheckpoint() {
       <div className="learn-complete-card">
         <div>
           <span className="eyebrow">Result</span>
-          <h3>{submitted ? `${score}/8 correct` : 'Submit when ready'}</h3>
-          <p>{passed ? 'Checkpoint passed. Section 7 is complete.' : 'You need 7 correct answers to pass this checkpoint.'}</p>
+          <h3>{submitted ? `${score}/${checkpointQuestions.length} Correct` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
+          <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
-        <button type="button" className="btn-primary gold" disabled={Object.keys(answers).length < checkpointQuestions.length} onClick={() => setSubmitted(true)}>
-          Submit checkpoint
-        </button>
+        {submitted ? (
+          <a className="btn-primary gold" href="/learn/final-readiness-test">
+            Continue to final test
+          </a>
+        ) : (
+          <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={() => setSubmitted(true)}>
+            Submit
+          </button>
+        )}
       </div>
     </div>
   );

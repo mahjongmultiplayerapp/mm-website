@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { MiniTile } from './components';
 
 type LessonRuntimeProps = {
   lessonId: string;
@@ -97,6 +98,7 @@ function readProgress() {
 
 function saveProgress(progress: ReturnType<typeof readProgress>) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
@@ -129,23 +131,14 @@ function useCompletion(lessonId: string) {
 function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps & { ready?: boolean }) {
   const { isComplete, setIsComplete } = useCompletion(lessonId);
 
-  const onComplete = () => {
-    if (!ready) return;
+  useEffect(() => {
+    if (!ready || isComplete) return;
     completeLesson(lessonId, nextHref);
     setIsComplete(true);
-  };
+  }, [isComplete, lessonId, nextHref, ready, setIsComplete]);
 
   return (
-    <div className="section-one-complete">
-      <button type="button" className={`btn-primary ${ready || isComplete ? 'gold' : ''}`} disabled={!ready} onClick={onComplete}>
-        {isComplete ? 'Completed' : 'Mark complete'}
-      </button>
-      {isComplete ? (
-        <a className="learn-secondary-link" href={nextHref}>
-          Continue
-        </a>
-      ) : null}
-    </div>
+    <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
   );
 }
 
@@ -153,9 +146,7 @@ function TileRail({ tiles }: { tiles: string[] }) {
   return (
     <div className="learn-tile-rail">
       {tiles.map((tile, index) => (
-        <span className={`mini-tile ${['中', '發', '白'].includes(tile) ? 'red' : ''}`} key={`${tile}-${index}`}>
-          {tile}
-        </span>
+        <MiniTile tile={tile} key={`${tile}-${index}`} />
       ))}
     </div>
   );
@@ -751,18 +742,20 @@ export function SectionSixCheckpoint() {
     () => checkpointQuestions.reduce((total, question, index) => total + (answers[index] === question.answer ? 1 : 0), 0),
     [answers],
   );
-  const passed = submitted && score >= 8;
+  const answeredCount = Object.keys(answers).length;
 
   useEffect(() => {
-    if (passed) completeSection('section-6');
-  }, [passed]);
+    if (!submitted) return;
+    completeLesson('scoring-and-fan/checkpoint', '/learn/rounds-draws-table-rules');
+    completeSection('section-6');
+  }, [submitted]);
 
   return (
     <div className="section-one-score-card section-six-checkpoint">
       <div className="learn-content-card">
         <span className="eyebrow">Checkpoint quiz</span>
-        <h3>Score at least 8 out of 10</h3>
-        <p>Confirm the 3-fan minimum, fan meaning, cap, payment basics, package payment, common fan, limit hands, and the points table.</p>
+        <h3>Check your scoring foundation</h3>
+        <p>Answer all ten questions, then submit to see your score.</p>
       </div>
       {checkpointQuestions.map((question, index) => (
         <div className="learn-content-card" key={question.prompt}>
@@ -794,12 +787,18 @@ export function SectionSixCheckpoint() {
       <div className="learn-complete-card">
         <div>
           <span className="eyebrow">Result</span>
-          <h3>{submitted ? `${score}/10 correct` : 'Submit when ready'}</h3>
-          <p>{passed ? 'Checkpoint passed. Section 6 is complete.' : 'You need 8 correct answers to pass this checkpoint.'}</p>
+          <h3>{submitted ? `${score}/${checkpointQuestions.length} Correct` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
+          <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
-        <button type="button" className="btn-primary gold" disabled={Object.keys(answers).length < checkpointQuestions.length} onClick={() => setSubmitted(true)}>
-          Submit checkpoint
-        </button>
+        {submitted ? (
+          <a className="btn-primary gold" href="/learn/rounds-draws-table-rules">
+            Continue to next section
+          </a>
+        ) : (
+          <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={() => setSubmitted(true)}>
+            Submit
+          </button>
+        )}
       </div>
     </div>
   );

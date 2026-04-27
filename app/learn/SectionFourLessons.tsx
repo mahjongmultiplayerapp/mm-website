@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { MiniTile, getTileSrc } from './components';
 
 type LessonRuntimeProps = {
   lessonId: string;
@@ -55,6 +56,7 @@ function readProgress() {
 
 function saveProgress(progress: ReturnType<typeof readProgress>) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
@@ -87,23 +89,14 @@ function useCompletion(lessonId: string) {
 function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps & { ready?: boolean }) {
   const { isComplete, setIsComplete } = useCompletion(lessonId);
 
-  const onComplete = () => {
-    if (!ready) return;
+  useEffect(() => {
+    if (!ready || isComplete) return;
     completeLesson(lessonId, nextHref);
     setIsComplete(true);
-  };
+  }, [isComplete, lessonId, nextHref, ready, setIsComplete]);
 
   return (
-    <div className="section-one-complete">
-      <button type="button" className={`btn-primary ${ready || isComplete ? 'gold' : ''}`} disabled={!ready} onClick={onComplete}>
-        {isComplete ? 'Completed' : 'Mark complete'}
-      </button>
-      {isComplete ? (
-        <a className="learn-secondary-link" href={nextHref}>
-          Continue
-        </a>
-      ) : null}
-    </div>
+    <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
   );
 }
 
@@ -111,9 +104,7 @@ function TileRail({ tiles }: { tiles: string[] }) {
   return (
     <div className="learn-tile-rail">
       {tiles.map((tile, index) => (
-        <span className={`mini-tile ${tile === '中' ? 'red' : ''}`} key={`${tile}-${index}`}>
-          {tile}
-        </span>
+        <MiniTile tile={tile} key={`${tile}-${index}`} />
       ))}
     </div>
   );
@@ -307,7 +298,7 @@ export function DiscardingLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       nextHref={nextHref}
       title="Confirm the discard only after it visibly lands in the river."
       copy={['To discard, choose one tile and place it face up in the river so everyone can see it.', 'Once the tile is clearly discarded, you cannot pull it back into your concealed hand. Clear discards make calls fair.']}
-      visual={<div className="section-four-discard-board"><div><span className="eyebrow">Hand</span><div className="learn-tile-rail">{['一', '二', '三', '發', '9萬'].map((tile) => <button type="button" className={`mini-tile ${selected === tile ? 'active' : ''}`} onClick={() => setSelected(tile)} key={tile}>{tile}</button>)}</div></div><button type="button" className="section-four-river" onClick={() => selected && setDiscarded(selected)}><span className="eyebrow">River</span>{discarded ? <span className="mini-tile">{discarded}</span> : 'Tap after choosing a tile'}</button></div>}
+      visual={<div className="section-four-discard-board"><div><span className="eyebrow">Hand</span><div className="learn-tile-rail">{['一', '二', '三', '發', '9萬'].map((tile) => <button type="button" className={`mini-tile tile-image ${selected === tile ? 'active' : ''}`} onClick={() => setSelected(tile)} key={tile}><img src={getTileSrc(tile)} alt="" /></button>)}</div></div><button type="button" className="section-four-river" onClick={() => selected && setDiscarded(selected)}><span className="eyebrow">River</span>{discarded ? <MiniTile tile={discarded} /> : 'Tap after choosing a tile'}</button></div>}
       ruleTitle="Discard clearly."
       rule="A discard must be clear, face up, and visible to everyone."
       check={<><h3>Place one tile into the river.</h3><p>{ready ? 'Discard confirmed. Other players can now call or pass.' : 'Choose a tile, then tap the river.'}</p></>}
@@ -325,7 +316,7 @@ export function CallWindowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       nextHref={nextHref}
       title="Discard, pause, then next draw."
       copy={['After a discard, the table briefly pauses. Other players may call the most recent discard for Chow, Pung, Kong, or Win if the rules allow it.', 'If nobody calls, the next player draws from the live wall. The pause matters because drawing too quickly can block a legal call.']}
-      visual={<div className="section-four-call-window"><span className="mini-tile red">中</span><button>Call</button><button>Pass</button><button>Pass</button></div>}
+      visual={<div className="section-four-call-window"><MiniTile tile="中" /><button>Call</button><button>Pass</button><button>Pass</button></div>}
       ruleTitle="Pause after discard."
       rule="After every discard, there is a brief chance for opponents to call."
       check={<ChoiceCheck question={{ prompt: 'A tile is discarded. Nobody calls. What happens next?', options: ['Next player draws from the live wall', 'The tile returns to hand', 'The hand ends', 'East scores'], answer: 0, explanation: 'Correct. If nobody calls, the next player draws.' }} onCorrect={() => setReady(true)} />}
@@ -400,11 +391,11 @@ export function SectionFourCheckpoint() {
   const [submitted, setSubmitted] = useState(false);
   const score = useMemo(() => checkpointQuestions.reduce((sum, question, index) => sum + (answers[index] === question.answer ? 1 : 0), 0), [answers]);
   const answeredCount = Object.keys(answers).length;
-  const passed = score >= 7;
 
   const submit = () => {
     setSubmitted(true);
-    if (score >= 7) completeSection('section-4');
+    completeLesson('turn-flow-and-discarding/checkpoint', '/learn/calls-chow-pung-kong-win');
+    completeSection('section-4');
   };
 
   return (
@@ -412,7 +403,7 @@ export function SectionFourCheckpoint() {
       <div className="learn-content-card section-one-checkpoint-intro">
         <span className="eyebrow">Checkpoint quiz</span>
         <h3>Can you follow a hand turn by turn?</h3>
-        <p>Answer all eight questions. A passing score is 7 out of 8.</p>
+        <p>Answer all eight questions, then submit to see your score.</p>
       </div>
       <div className="section-one-question-list">
         {checkpointQuestions.map((question, questionIndex) => {
@@ -445,12 +436,18 @@ export function SectionFourCheckpoint() {
       <div className="learn-complete-card section-one-score-card">
         <div>
           <span className="eyebrow">Score</span>
-          <h3>{submitted ? `${score} / ${checkpointQuestions.length}` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
-          <p>{submitted ? (passed ? 'Passed. You can follow the turn flow of a Hong Kong Mahjong hand.' : 'Almost. Review the missed turn-flow ideas, then submit again.') : 'Submit when every question has an answer.'}</p>
+          <h3>{submitted ? `${score}/${checkpointQuestions.length} Correct` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
+          <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
-        <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
-          {submitted ? 'Resubmit' : 'Submit checkpoint'}
-        </button>
+        {submitted ? (
+          <a className="btn-primary gold" href="/learn/calls-chow-pung-kong-win">
+            Continue to next section
+          </a>
+        ) : (
+          <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
+            Submit
+          </button>
+        )}
       </div>
     </div>
   );
