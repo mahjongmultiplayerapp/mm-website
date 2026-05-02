@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { MiniTile } from './components';
 
 type Category = 'Tiles' | 'Setup' | 'Turn flow' | 'Calls' | 'Scoring' | 'Rounds';
 
@@ -71,7 +72,7 @@ const questions: FinalQuestion[] = [
     explanation: 'Winds and dragons are honor tiles.',
     reviewHref: '/learn/tiles-melds-winning-hands/honor-tiles',
     reviewLabel: 'Review honor tiles',
-    tiles: ['E', 'R', 'W'],
+    tiles: ['E', 'R', 'white'],
   },
   {
     category: 'Setup',
@@ -272,9 +273,7 @@ function MiniTiles({ tiles }: { tiles?: string[] }) {
   return (
     <div className="learn-tile-rail final-test-tiles" aria-hidden="true">
       {tiles.map((tile, index) => (
-        <span className={`mini-tile ${['R', 'W'].includes(tile) ? 'red' : ''}`} key={`${tile}-${index}`}>
-          {tile}
-        </span>
+        <MiniTile tile={tile} key={`${tile}-${index}`} />
       ))}
     </div>
   );

@@ -84,7 +84,7 @@ import {
   WindCyclesRoundsLesson,
 } from '../../SectionSevenLessons';
 import { WelcomeToGameLesson } from '../../WelcomeToGameLesson';
-import { LearnShell, TileRail } from '../../components';
+import { CompleteProgressItem, LearnShell, SectionTopProgress, TileRail } from '../../components';
 import { getLesson, getNextLessonPath, getPreviousLessonPath, learnSections } from '../../learn-data';
 
 type LessonPageProps = {
@@ -137,14 +137,19 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const isSectionSeven = section.slug === 'rounds-draws-table-rules';
 
   if (lessonSlug === 'recap') {
+    const previousHref = getPreviousLessonPath(section.slug, 'recap');
+
     return (
       <LearnShell>
         <section className="learn-lesson-page felt">
+          <SectionTopProgress section={section} />
           <div className="wrap learn-readable">
-            <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-              ← {section.title}
-            </Link>
-            <span className="eyebrow">Section recap</span>
+            <CompleteProgressItem itemId={`${section.slug}/recap`} nextHref={`/learn/${section.slug}/checkpoint`} />
+            <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+              <Link href="/learn">← Curriculum</Link>
+              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <span>Recap</span>
+            </nav>
             <h1 style={{ marginTop: '18px' }}>{section.title}</h1>
             <p className="lede">
               {isSectionOne
@@ -189,8 +194,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
               </div>
             )}
             <div className="learn-prev-next">
-              <Link className="learn-secondary-link" href={`/learn/${section.slug}`}>
-                Section overview
+              <Link className="learn-secondary-link" href={previousHref}>
+                ← Previous
               </Link>
               <Link className="btn-primary gold" href={`/learn/${section.slug}/checkpoint`}>
                 Go to checkpoint
@@ -206,11 +211,13 @@ export default async function LessonPage({ params }: LessonPageProps) {
     return (
       <LearnShell>
         <section className="learn-lesson-page felt">
+          <SectionTopProgress section={section} />
           <div className="wrap learn-readable">
-            <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-              ← {section.title}
-            </Link>
-            <span className="eyebrow">Checkpoint</span>
+            <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+              <Link href="/learn">← Curriculum</Link>
+              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <span>Checkpoint</span>
+            </nav>
             <h1 style={{ marginTop: '18px' }}>Checkpoint: {section.title}</h1>
             <p className="lede">
               {isSectionOne
@@ -266,19 +273,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const lessonId = `${section.slug}/${lesson.slug}`;
   const nextHref = getNextLessonPath(section.slug, lesson.slug);
   const previousHref = getPreviousLessonPath(section.slug, lesson.slug);
-  const lessonProgress = ((section.lessons.findIndex((item) => item.slug === lesson.slug) + 1) / section.lessons.length) * 100;
 
   return (
     <LearnShell>
       <section className="learn-lesson-page felt">
-        <div className="learn-top-progress" aria-hidden="true">
-          <span style={{ width: `${lessonProgress}%` }} />
-        </div>
+        <SectionTopProgress section={section} />
         <div className="wrap learn-readable">
-          <Link className="learn-breadcrumb" href={`/learn/${section.slug}`}>
-            ← {section.title}
-          </Link>
-          <span className="eyebrow">Lesson {lesson.number}</span>
+          <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
+            <Link href="/learn">← Curriculum</Link>
+            <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+            <span>Lesson {lesson.number}</span>
+          </nav>
           <h1 style={{ marginTop: '18px' }}>{lesson.title}</h1>
           <p className="lede">{lesson.objective}</p>
 

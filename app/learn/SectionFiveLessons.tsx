@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { MiniTile } from './components';
 
 type LessonRuntimeProps = {
   lessonId: string;
@@ -55,6 +56,7 @@ function readProgress() {
 
 function saveProgress(progress: ReturnType<typeof readProgress>) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 function completeLesson(lessonId: string, nextHref: string) {
@@ -87,23 +89,14 @@ function useCompletion(lessonId: string) {
 function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps & { ready?: boolean }) {
   const { isComplete, setIsComplete } = useCompletion(lessonId);
 
-  const onComplete = () => {
-    if (!ready) return;
+  useEffect(() => {
+    if (!ready || isComplete) return;
     completeLesson(lessonId, nextHref);
     setIsComplete(true);
-  };
+  }, [isComplete, lessonId, nextHref, ready, setIsComplete]);
 
   return (
-    <div className="section-one-complete">
-      <button type="button" className={`btn-primary ${ready || isComplete ? 'gold' : ''}`} disabled={!ready} onClick={onComplete}>
-        {isComplete ? 'Completed' : 'Mark complete'}
-      </button>
-      {isComplete ? (
-        <a className="learn-secondary-link" href={nextHref}>
-          Continue
-        </a>
-      ) : null}
-    </div>
+    <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
   );
 }
 
@@ -111,9 +104,7 @@ function TileRail({ tiles }: { tiles: string[] }) {
   return (
     <div className="learn-tile-rail">
       {tiles.map((tile, index) => (
-        <span className={`mini-tile ${tile === '中' ? 'red' : ''}`} key={`${tile}-${index}`}>
-          {tile}
-        </span>
+        <MiniTile tile={tile} key={`${tile}-${index}`} />
       ))}
     </div>
   );
@@ -202,7 +193,7 @@ function CallButtonsVisual({ active = 'Pung' }: { active?: string }) {
     <div className="section-five-call-visual">
       <div className="section-five-discard">
         <span className="eyebrow">Latest discard</span>
-        <span className="mini-tile red">中</span>
+        <MiniTile tile="中" />
       </div>
       <div className="section-five-call-buttons">
         {['Chow', 'Pung', 'Kong', 'Win', 'Pass'].map((call) => (
@@ -534,11 +525,11 @@ export function SectionFiveCheckpoint() {
   const [submitted, setSubmitted] = useState(false);
   const score = useMemo(() => checkpointQuestions.reduce((sum, question, index) => sum + (answers[index] === question.answer ? 1 : 0), 0), [answers]);
   const answeredCount = Object.keys(answers).length;
-  const passed = score >= 8;
 
   const submit = () => {
     setSubmitted(true);
-    if (score >= 8) completeSection('section-5');
+    completeLesson('calls-chow-pung-kong-win/checkpoint', '/learn/scoring-and-fan');
+    completeSection('section-5');
   };
 
   return (
@@ -546,7 +537,7 @@ export function SectionFiveCheckpoint() {
       <div className="learn-content-card section-one-checkpoint-intro">
         <span className="eyebrow">Checkpoint quiz</span>
         <h3>Can you make legal calls?</h3>
-        <p>Answer all ten questions. A passing score is 8 out of 10.</p>
+        <p>Answer all ten questions, then submit to see your score.</p>
       </div>
       <div className="section-one-question-list">
         {checkpointQuestions.map((question, questionIndex) => {
@@ -579,12 +570,18 @@ export function SectionFiveCheckpoint() {
       <div className="learn-complete-card section-one-score-card">
         <div>
           <span className="eyebrow">Score</span>
-          <h3>{submitted ? `${score} / ${checkpointQuestions.length}` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
-          <p>{submitted ? (passed ? 'Passed. You can handle the core calls in Hong Kong Mahjong.' : 'Almost. Review the missed call rules, then submit again.') : 'Submit when every question has an answer.'}</p>
+          <h3>{submitted ? `${score}/${checkpointQuestions.length} Correct` : `${answeredCount} / ${checkpointQuestions.length} answered`}</h3>
+          <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
-        <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
-          {submitted ? 'Resubmit' : 'Submit checkpoint'}
-        </button>
+        {submitted ? (
+          <a className="btn-primary gold" href="/learn/scoring-and-fan">
+            Continue to next section
+          </a>
+        ) : (
+          <button type="button" className="btn-primary gold" disabled={answeredCount < checkpointQuestions.length} onClick={submit}>
+            Submit
+          </button>
+        )}
       </div>
     </div>
   );

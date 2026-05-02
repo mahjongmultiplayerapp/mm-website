@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 type LearnProgressState = {
   completedLessons: string[];
+  completedSections: string[];
   lastVisitedPath?: string;
 };
 
@@ -12,23 +13,25 @@ const storageKey = 'mahjong-multiplayer-learn-progress';
 function readProgress(): LearnProgressState {
   try {
     const stored = window.localStorage.getItem(storageKey);
-    if (!stored) return { completedLessons: [] };
+    if (!stored) return { completedLessons: [], completedSections: [] };
     const parsed = JSON.parse(stored) as Partial<LearnProgressState>;
     return {
       completedLessons: Array.isArray(parsed.completedLessons) ? parsed.completedLessons : [],
+      completedSections: Array.isArray(parsed.completedSections) ? parsed.completedSections : [],
       lastVisitedPath: typeof parsed.lastVisitedPath === 'string' ? parsed.lastVisitedPath : undefined,
     };
   } catch {
-    return { completedLessons: [] };
+    return { completedLessons: [], completedSections: [] };
   }
 }
 
 function writeProgress(progress: LearnProgressState) {
   window.localStorage.setItem(storageKey, JSON.stringify(progress));
+  window.dispatchEvent(new Event('learn-progress-updated'));
 }
 
 export function LandingProgressActions({ firstLessonHref, totalLessons }: { firstLessonHref: string; totalLessons: number }) {
-  const [progress, setProgress] = useState<LearnProgressState>({ completedLessons: [] });
+  const [progress, setProgress] = useState<LearnProgressState>({ completedLessons: [], completedSections: [] });
   const completedCount = progress.completedLessons.length;
   const progressLabel = useMemo(() => `${completedCount} of ${totalLessons} lessons complete`, [completedCount, totalLessons]);
 
@@ -62,23 +65,21 @@ export function LessonCompletionPanel({ lessonId, nextHref }: { lessonId: string
     setIsComplete(progress.completedLessons.includes(lessonId));
   }, [lessonId]);
 
-  const markComplete = () => {
+  useEffect(() => {
     const progress = readProgress();
     const completedLessons = progress.completedLessons.includes(lessonId) ? progress.completedLessons : [...progress.completedLessons, lessonId];
-    writeProgress({ completedLessons, lastVisitedPath: nextHref });
+    writeProgress({ ...progress, completedLessons, lastVisitedPath: nextHref });
     setIsComplete(true);
-  };
+  }, [lessonId, nextHref]);
 
   return (
     <div className="learn-complete-card">
       <div>
         <span className="eyebrow">Interactive check</span>
-        <h3>{isComplete ? 'Check complete' : 'Ready for the lesson interaction'}</h3>
-        <p>{isComplete ? 'This placeholder is marked complete for now.' : 'The real exercise will live here in the next build pass.'}</p>
+        <h3>Lesson interaction complete</h3>
+        <p>This placeholder auto-completes while the full lesson interaction is being built.</p>
       </div>
-      <a className={`btn-primary ${isComplete ? 'gold' : ''}`} href={nextHref} onClick={markComplete}>
-        {isComplete ? 'Continue' : 'Mark complete'}
-      </a>
+      <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
     </div>
   );
 }

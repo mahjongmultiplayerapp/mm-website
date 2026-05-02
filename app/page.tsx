@@ -177,49 +177,49 @@ function Hero({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFormEl
               龍
             </div>
             <div className="tile" style={{ left: '6%', top: '46%', transform: 'rotate(90deg)' }}>
-              <span className="corner">W</span>西
+              <img src="/assets/tiles/west-wind.svg" alt="" />
             </div>
             <div className="tile" style={{ right: '6%', top: '46%', transform: 'rotate(-90deg)' }}>
-              <span className="corner">E</span>東
+              <img src="/assets/tiles/east-wind.svg" alt="" />
             </div>
             <div className="tile" style={{ left: '46%', top: '6%' }}>
-              <span className="corner">N</span>北
+              <img src="/assets/tiles/north-wind.svg" alt="" />
             </div>
             <div className="tile" style={{ left: '46%', bottom: '6%', top: 'auto' }}>
-              <span className="corner">S</span>南
+              <img src="/assets/tiles/south-wind.svg" alt="" />
             </div>
             <div className="tile red" style={{ left: '30%', top: '40%' }}>
-              <span className="corner">C</span>中
+              <img src="/assets/tiles/dragon-red-chun.svg" alt="" />
             </div>
             <div className="tile" style={{ right: '30%', top: '40%' }}>
-              <span className="corner">F</span>發
+              <img src="/assets/tiles/dragon-green-fa.svg" alt="" />
             </div>
           </div>
 
           <div className="hero-stage rain">
             <div className="rain-tile" style={{ left: '8%', ['--r' as string]: '-10deg', animationDelay: '0s' }}>
-              發
+              <img src="/assets/tiles/dragon-green-fa.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '22%', ['--r' as string]: '6deg', animationDelay: '1.2s' }}>
-              中
+              <img src="/assets/tiles/dragon-red-chun.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '36%', ['--r' as string]: '-4deg', animationDelay: '0.6s' }}>
-              東
+              <img src="/assets/tiles/east-wind.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '50%', ['--r' as string]: '12deg', animationDelay: '2s' }}>
-              南
+              <img src="/assets/tiles/south-wind.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '64%', ['--r' as string]: '-8deg', animationDelay: '0.3s' }}>
-              西
+              <img src="/assets/tiles/west-wind.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '78%', ['--r' as string]: '4deg', animationDelay: '1.8s' }}>
-              北
+              <img src="/assets/tiles/north-wind.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '14%', ['--r' as string]: '8deg', animationDelay: '3s' }}>
-              白
+              <img src="/assets/tiles/dragon-white-soap.svg" alt="" />
             </div>
             <div className="rain-tile" style={{ left: '56%', ['--r' as string]: '-12deg', animationDelay: '3.6s' }}>
-              九
+              <img src="/assets/tiles/9-crak.svg" alt="" />
             </div>
           </div>
         </div>
@@ -367,11 +367,11 @@ function Features({ onOpenSignup }: { onOpenSignup: () => void }) {
                   <span className="chip">American</span>
                 </div>
                 <div className="variant-tile-row" style={{ justifyContent: 'center' }}>
-                  <span className="mini-tile">發</span>
-                  <span className="mini-tile red">中</span>
-                  <span className="mini-tile">東</span>
-                  <span className="mini-tile red">西</span>
-                  <span className="mini-tile">九</span>
+                  <span className="mini-tile tile-image"><img src="/assets/tiles/dragon-green-fa.svg" alt="" /></span>
+                  <span className="mini-tile tile-image"><img src="/assets/tiles/dragon-red-chun.svg" alt="" /></span>
+                  <span className="mini-tile tile-image"><img src="/assets/tiles/east-wind.svg" alt="" /></span>
+                  <span className="mini-tile tile-image"><img src="/assets/tiles/west-wind.svg" alt="" /></span>
+                  <span className="mini-tile tile-image"><img src="/assets/tiles/9-crak.svg" alt="" /></span>
                 </div>
               </div>
             </div>
@@ -623,16 +623,16 @@ function FinalCTA({ onSignupSubmit }: { onSignupSubmit: (event: FormEvent<HTMLFo
         <div className="final">
           <div className="final-tiles">
             <div className="tile ft1">
-              <span className="corner">1</span>發
+              <img src="/assets/tiles/dragon-green-fa.svg" alt="" />
             </div>
             <div className="tile ft2 red">
-              <span className="corner">2</span>中
+              <img src="/assets/tiles/dragon-red-chun.svg" alt="" />
             </div>
             <div className="tile ft3">
-              <span className="corner">3</span>東
+              <img src="/assets/tiles/east-wind.svg" alt="" />
             </div>
             <div className="tile ft4 red">
-              <span className="corner">4</span>西
+              <img src="/assets/tiles/west-wind.svg" alt="" />
             </div>
           </div>
           <span className="eyebrow">Early access</span>
