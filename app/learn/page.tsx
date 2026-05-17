@@ -27,8 +27,8 @@ export default function LearnLandingPage() {
         <div className="wrap learn-hero-grid">
           <div>
             <span className="eyebrow">Learning Hub</span>
-            <h1 style={{ marginTop: '18px' }}>Learn Hong Kong Mahjong for free</h1>
-            <p className="lede">Perfect for beginners looking to learn enough of the basics to play a full round.</p>
+            <h1 style={{ marginTop: '18px' }}>Learn Hong Kong Mahjong</h1>
+            <p className="lede">Free guide which is perfect for beginners looking to learn enough of the basics to play a full round.</p>
             <LandingProgressActions firstLessonHref={firstLessonHref} totalLessons={totalLessonCount} />
           </div>
           <div className="learn-hero-card">
@@ -53,7 +53,7 @@ export default function LearnLandingPage() {
         <div className="wrap">
           <div className="section-head">
             <span className="eyebrow">Curriculum</span>
-            <h2 style={{ marginTop: '14px' }}>Seven sections from first tile to real table.</h2>
+            <h2 style={{ marginTop: '14px' }}>Learn the basics in seven sections.</h2>
           </div>
           <div className="learn-section-grid">
             {learnSections.map((section) => (
@@ -80,7 +80,7 @@ export default function LearnLandingPage() {
             <span className="eyebrow">Check your readiness</span>
             <h2 style={{ marginTop: '14px' }}>Take the Final Quiz</h2>
             <p className="lede">
-              Check how well you understand Hong Kong Mahjong so that you prepared for your first game.
+              Check how well you understand Hong Kong Mahjong so that you're prepared for your first game.
             </p>
             <Link className="btn-primary gold" href="/learn/final-readiness-test">
               Take Final Quiz

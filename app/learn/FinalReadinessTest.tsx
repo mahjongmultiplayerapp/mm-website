@@ -60,8 +60,8 @@ const questions: FinalQuestion[] = [
     options: ['It has no pair', 'It has only three complete melds and a pair', 'It has too many dragons', 'It includes suited tiles'],
     answer: 1,
     explanation: 'A standard win needs four complete melds and a pair, not three melds and a pair.',
-    reviewHref: '/learn/tiles-melds-winning-hands/valid-shape-vs-scoring-pattern',
-    reviewLabel: 'Review shape vs scoring',
+    reviewHref: '/learn/tiles-melds-winning-hands/standard-winning-shape',
+    reviewLabel: 'Review winning shape',
   },
   {
     category: 'Tiles',

@@ -37,36 +37,80 @@ const dragonTiles: Tile[] = [
 ];
 
 const groupingScenarios = [
-  { label: '3 Bamboo + 4 Bamboo + 5 Bamboo', tiles: ['三', '四', '五'], answer: 'Sequence', explanation: 'Consecutive numbers in the same suit make a sequence.' },
-  { label: 'East + East', tiles: ['東', '東'], answer: 'Pair', explanation: 'Two identical tiles make a pair.' },
-  { label: 'Red + Red + Red', tiles: ['中', '中', '中'], answer: 'Triplet', explanation: 'Three identical tiles make a triplet.' },
+  { label: '3 Bamboo + 4 Bamboo + 5 Bamboo', tiles: ['三', '四', '五'], answer: 'Chow', explanation: 'Consecutive numbers in the same suit make a chow.' },
+  { label: 'East + East', tiles: ['東', '東'], answer: 'Eyes', explanation: 'Two identical tiles make eyes.' },
+  { label: 'Red + Red + Red', tiles: ['中', '中', '中'], answer: 'Pung', explanation: 'Three identical tiles make a pung.' },
   { label: '7 Dot + 7 Dot + 7 Dot + 7 Dot', tiles: ['7', '7', '7', '7'], answer: 'Kong', explanation: 'Four identical tiles can be declared as a kong.' },
-  { label: '2 Dot + 3 Bamboo + 4 Character', tiles: ['2', '三', '4萬'], answer: 'Invalid', explanation: 'A sequence needs one suit, not mixed suits.' },
+  { label: '2 Dot + 3 Bamboo + 4 Character', tiles: ['2', '三', '4萬'], answer: 'Invalid', explanation: 'A chow needs one suit, not mixed suits.' },
 ];
 
-const handShapeScenarios = [
-  { title: 'Four sequences plus a pair', valid: true, groups: [['一', '二', '三'], ['四', '五', '六'], ['2', '3', '4'], ['6萬', '7萬', '8萬'], ['東', '東']] },
-  { title: 'Three sequences, a triplet, and a pair', valid: true, groups: [['一', '二', '三'], ['3', '4', '5'], ['七', '八', '九'], ['中', '中', '中'], ['白', '白']] },
-  { title: 'No pair', valid: false, groups: [['一', '二', '三'], ['四', '五', '六'], ['2', '3', '4'], ['6萬', '7萬', '8萬'], ['東', '南']] },
-  { title: 'Broken group', valid: false, groups: [['一', '二', '三'], ['4', '5', '6'], ['中', '中', '中'], ['東', '南', '西'], ['白', '白']] },
-];
+const handBuilderTiles = ['中', '七', '3', '白', '一', '中', '5', '九', '二', '白', '4', '中', '八', '三'].map((tile, index) => ({
+  id: `${tile}-${index}`,
+  tile,
+}));
+
+const suitRank: Record<string, { suit: 'dots' | 'bamboo' | 'characters'; rank: number }> = {
+  '1': { suit: 'dots', rank: 1 },
+  '2': { suit: 'dots', rank: 2 },
+  '3': { suit: 'dots', rank: 3 },
+  '4': { suit: 'dots', rank: 4 },
+  '5': { suit: 'dots', rank: 5 },
+  '6': { suit: 'dots', rank: 6 },
+  '7': { suit: 'dots', rank: 7 },
+  '8': { suit: 'dots', rank: 8 },
+  '9': { suit: 'dots', rank: 9 },
+  '一': { suit: 'bamboo', rank: 1 },
+  '二': { suit: 'bamboo', rank: 2 },
+  '三': { suit: 'bamboo', rank: 3 },
+  '四': { suit: 'bamboo', rank: 4 },
+  '五': { suit: 'bamboo', rank: 5 },
+  '六': { suit: 'bamboo', rank: 6 },
+  '七': { suit: 'bamboo', rank: 7 },
+  '八': { suit: 'bamboo', rank: 8 },
+  '九': { suit: 'bamboo', rank: 9 },
+  '1萬': { suit: 'characters', rank: 1 },
+  '2萬': { suit: 'characters', rank: 2 },
+  '3萬': { suit: 'characters', rank: 3 },
+  '4萬': { suit: 'characters', rank: 4 },
+  '5萬': { suit: 'characters', rank: 5 },
+  '6萬': { suit: 'characters', rank: 6 },
+  '7萬': { suit: 'characters', rank: 7 },
+  '8萬': { suit: 'characters', rank: 8 },
+  '9萬': { suit: 'characters', rank: 9 },
+};
+
+type MeldType = 'Eyes' | 'Pung' | 'Chow' | 'Kong';
+type BuilderMeld = { type: MeldType; tiles: string[]; tileIds: string[] };
+
+function isCorrectMeld(type: MeldType, tiles: string[]) {
+  if (type === 'Eyes') return tiles.length === 2 && tiles.every((tile) => tile === tiles[0]);
+  if (type === 'Pung') return tiles.length === 3 && tiles.every((tile) => tile === tiles[0]);
+  if (type === 'Kong') return tiles.length === 4 && tiles.every((tile) => tile === tiles[0]);
+  if (type !== 'Chow' || tiles.length !== 3) return false;
+
+  const suitedTiles = tiles.map((tile) => suitRank[tile]);
+  if (suitedTiles.some((tile) => !tile)) return false;
+
+  const [firstSuit] = suitedTiles;
+  const ranks = suitedTiles.map((tile) => tile.rank).sort((a, b) => a - b);
+  return suitedTiles.every((tile) => tile.suit === firstSuit.suit) && ranks[0] + 1 === ranks[1] && ranks[1] + 1 === ranks[2];
+}
 
 const sectionTwoRecapItems = [
   { title: 'Tiles split into suits and honors.', body: 'Suited tiles have suit and number. Honor tiles are winds and dragons.' },
-  { title: 'Groups are the building blocks.', body: 'Pairs, sequences, triplets, and kongs are the shapes you look for first.' },
+  { title: 'Groups (melds) are the building blocks.', body: 'Eyes (pairs), Chows (sequences), Pungs (triplets), and Kongs (quads) are the shapes you look for first.' },
   { title: 'Called tiles become public.', body: 'Open melds sit on the table where everyone can see them.' },
-  { title: 'Shape comes before scoring.', body: 'A hand must be legally shaped before fan matters.' },
+  { title: 'Shape comes before scoring.', body: 'A hand must be legally shaped before scoring matters.' },
 ];
 
 const checkpointQuestions: ChoiceQuestion[] = [
   { prompt: 'Which tile is a suited tile?', options: ['East', 'Red Dragon', '5 Bamboo', 'White Dragon'], answer: 2, explanation: '5 Bamboo has both a suit and a number.' },
   { prompt: 'Which tile is a wind?', options: ['East', 'Red', 'Green', '5 Dot'], answer: 0, explanation: 'East is one of the four wind tiles.' },
   { prompt: 'Which tile is a dragon?', options: ['South', 'North', 'White', '9 Character'], answer: 2, explanation: 'White is one of the dragon tiles.' },
-  { prompt: 'What is 3 Bamboo + 4 Bamboo + 5 Bamboo?', options: ['Pair', 'Sequence', 'Triplet', 'Invalid'], answer: 1, explanation: 'They are consecutive numbers in the same suit.' },
-  { prompt: 'What is Red + Red + Red?', options: ['Pair', 'Sequence', 'Triplet', 'Invalid'], answer: 2, explanation: 'Three identical tiles make a triplet.' },
-  { prompt: 'What is four identical declared tiles?', options: ['Pair', 'Sequence', 'Triplet', 'Kong'], answer: 3, explanation: 'A declared four-of-a-kind is a kong.' },
+  { prompt: 'What is 3 Bamboo + 4 Bamboo + 5 Bamboo?', options: ['Eyes', 'Chow', 'Pung', 'Invalid'], answer: 1, explanation: 'They are consecutive numbers in the same suit, which makes a chow.' },
+  { prompt: 'What is Red + Red + Red?', options: ['Eyes', 'Chow', 'Pung', 'Invalid'], answer: 2, explanation: 'Three identical tiles make a pung.' },
+  { prompt: 'What is four identical declared tiles?', options: ['Eyes', 'Chow', 'Pung', 'Kong'], answer: 3, explanation: 'A declared four-of-a-kind is a kong.' },
   { prompt: 'Which hand shape is usually valid?', options: ['Four melds + one pair', 'Three pairs + one tile', 'Any 14 honors', 'Five unrelated groups'], answer: 0, explanation: 'Most winning hands use four melds and one pair.' },
-  { prompt: 'Why is a scoring pattern alone not enough?', options: ['Fan is ignored in Hong Kong Mahjong', 'The hand must first have a legal shape', 'Only honor tiles can win', 'You always need Thirteen Orphans'], answer: 1, explanation: 'Shape comes first. Scoring comes second.' },
 ];
 
 function readProgress() {
@@ -154,6 +198,22 @@ function TileGroup({ label, tiles }: { label: string; tiles: string[] }) {
   );
 }
 
+function TileFamilyGroup({ label, tiles }: { label: string; tiles: { tile: string; name: string }[] }) {
+  return (
+    <div className="section-one-tile-group section-two-family-group">
+      <div className="section-two-captioned-tiles">
+        {tiles.map((tile) => (
+          <div className="section-two-captioned-tile" key={`${label}-${tile.tile}`}>
+            <MiniTile tile={tile.tile} />
+            <span>{tile.name}</span>
+          </div>
+        ))}
+      </div>
+      <small>{label}</small>
+    </div>
+  );
+}
+
 function ChoiceCheck({ question, onCorrect }: { question: ChoiceQuestion; onCorrect: () => void }) {
   const [selected, setSelected] = useState<number | null>(null);
   const correct = selected === question.answer;
@@ -233,9 +293,28 @@ export function TileSetLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       <section className="learn-content-card section-two-tile-grid-card">
         <span className="eyebrow">Visual example</span>
         <div className="section-two-family-grid">
-          <TileGroup label="Suits" tiles={['1', '二', '3萬', '8', '九']} />
-          <TileGroup label="Honors" tiles={['東', '南', '中', '發', '白']} />
-          <TileGroup label="Later note" tiles={['春', '夏']} />
+          <TileFamilyGroup
+            label="Suit Tiles"
+            tiles={[
+              { tile: '9-dot', name: 'Dot' },
+              { tile: '9-bam', name: 'Bam' },
+              { tile: '9-crak', name: 'Char' },
+            ]}
+          />
+          <TileFamilyGroup
+            label="Honor Tiles"
+            tiles={[
+              { tile: 'east-wind', name: 'Wind' },
+              { tile: 'dragon-red-chun', name: 'Dragon' },
+            ]}
+          />
+          <TileFamilyGroup
+            label="Bonus Tiles (Optional, not core tiles)"
+            tiles={[
+              { tile: 'flower-1-spring', name: 'Season' },
+              { tile: 'flower-8-nobility', name: 'Flower' },
+            ]}
+          />
         </div>
       </section>
       <section className="learn-content-card welcome-rule-card">
@@ -351,15 +430,15 @@ export function TileGroupingsLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
         <h3>Hands are built from small groups.</h3>
-        <p>A pair is two identical tiles. A sequence is three consecutive numbers in the same suit. A triplet is three identical tiles. A kong is four identical tiles declared as a kong.</p>
+        <p>A pair ("Eyes") is two identical tiles. A sequence ("Chow") is three consecutive numbers in the same suit. A triplet ("Pung") is three identical tiles. A quad ("Kong") is four identical tiles declared as a kong.</p>
         <p>Classify groups quickly before trying to read a full hand.</p>
       </article>
       <section className="learn-content-card section-two-group-examples">
         <span className="eyebrow">Visual example</span>
-        <TileGroup label="Pair" tiles={['東', '東']} />
-        <TileGroup label="Sequence" tiles={['三', '四', '五']} />
-        <TileGroup label="Triplet" tiles={['中', '中', '中']} />
-        <TileGroup label="Kong" tiles={['7', '7', '7', '7']} />
+        <TileGroup label="Eyes (a Pair)" tiles={['東', '東']} />
+        <TileGroup label="Chow (a Sequence)" tiles={['三', '四', '五']} />
+        <TileGroup label="Pung (a Triplet)" tiles={['中', '中', '中']} />
+        <TileGroup label="Kong (a Quad)" tiles={['7', '7', '7', '7']} />
       </section>
       <section className="learn-content-card welcome-rule-card">
         <span className="eyebrow">Rule in plain English</span>
@@ -372,7 +451,7 @@ export function TileGroupingsLesson({ lessonId, nextHref }: LessonRuntimeProps) 
           <h3>{scenario.label}</h3>
           <TileRail tiles={scenario.tiles} />
           <div className="section-one-answer-grid">
-            {['Pair', 'Sequence', 'Triplet', 'Kong', 'Invalid'].map((answer) => (
+            {['Eyes', 'Chow', 'Pung', 'Kong', 'Invalid'].map((answer) => (
               <button type="button" className={answered[index] && answer === scenario.answer ? 'correct' : ''} onClick={() => choose(answer)} key={answer}>
                 {answer}
               </button>
@@ -389,7 +468,7 @@ export function TileGroupingsLesson({ lessonId, nextHref }: LessonRuntimeProps) 
         </div>
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={complete} />
       </section>
-      <Takeaway title="Winning hands are built from pairs, sequences, triplets, and kongs." body="Name the group first, then decide how it helps the hand." />
+      <Takeaway title="Winning hands are built from pairs, sequences, triplets, and quads." body="Name the group first, then decide how it helps the hand." />
     </div>
   );
 }
@@ -415,8 +494,8 @@ export function OpenVsConcealedLesson({ lessonId, nextHref }: LessonRuntimeProps
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
         <h3>Called tiles become public.</h3>
-        <p>Tiles in your hand are concealed: only you can see them. When you call another player&apos;s discard, the set you make becomes open and visible to everyone.</p>
-        <p>Concealed tiles give flexibility. Open melds give speed but reveal information.</p>
+        <p>Your melds (Eyes, Chow, Pung, Kong) can either be made directly in your hand (concealed) or by revealing your meld's tiles when you call another player's discarded tile. Tiles in your hand all start as concealed: only you can see them. When you call another player&apos;s discard, the set you make becomes open and visible to everyone.</p>
+        <p>Building your winning hand with concealed tiles prevents other players from knowing your tiles. Building public "open" melds lets you utilize other player's discarded tiles but reveals information. You'll learn more about this in later sections.</p>
       </article>
       <section className="learn-content-card">
         <span className="eyebrow">Visual example</span>
@@ -447,8 +526,35 @@ export function OpenVsConcealedLesson({ lessonId, nextHref }: LessonRuntimeProps
 }
 
 export function StandardWinningShapeLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const correct = selected !== null && handShapeScenarios[selected].valid;
+  const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
+  const [lockedMelds, setLockedMelds] = useState<BuilderMeld[]>([]);
+  const [feedback, setFeedback] = useState('Select tiles, then choose the meld they form.');
+  const committedTileIds = useMemo(() => new Set(lockedMelds.flatMap((meld) => meld.tileIds)), [lockedMelds]);
+  const complete = committedTileIds.size === handBuilderTiles.length;
+
+  const selectedTiles = handBuilderTiles.filter((tile) => selectedTileIds.includes(tile.id)).map((tile) => tile.tile);
+
+  const toggleTile = (tileId: string) => {
+    if (committedTileIds.has(tileId)) return;
+    setSelectedTileIds((current) => (current.includes(tileId) ? current.filter((id) => id !== tileId) : [...current, tileId]));
+  };
+
+  const lockMeld = (type: MeldType) => {
+    if (!isCorrectMeld(type, selectedTiles)) {
+      setFeedback(`That selection is not a valid ${type}.`);
+      return;
+    }
+
+    setLockedMelds((current) => [...current, { type, tiles: selectedTiles, tileIds: selectedTileIds }]);
+    setSelectedTileIds([]);
+    setFeedback(`${type} locked in.`);
+  };
+
+  const resetBuilder = () => {
+    setSelectedTileIds([]);
+    setLockedMelds([]);
+    setFeedback('Select tiles, then choose the meld they form.');
+  };
 
   return (
     <div className="learn-lesson-template section-one-lesson section-two-lesson">
@@ -456,33 +562,55 @@ export function StandardWinningShapeLesson({ lessonId, nextHref }: LessonRuntime
         <span className="eyebrow">Concept</span>
         <h3>Show me the four groups and the pair.</h3>
         <p>Most winning hands use the standard structure: four melds plus one pair. A meld can be a sequence, triplet, or declared kong. The pair is often called the eyes.</p>
-        <p>Do not look at all fourteen tiles as a messy pile. Break them into groups.</p>
       </article>
-      <section className="learn-content-card section-two-hand-options">
-        <span className="eyebrow">Visual example</span>
-        {handShapeScenarios.map((hand, handIndex) => (
-          <button type="button" className={selected === handIndex ? (hand.valid ? 'correct' : 'incorrect') : ''} onClick={() => setSelected(handIndex)} key={hand.title}>
-            <strong>{hand.title}</strong>
-            <div>
-              {hand.groups.map((group, groupIndex) => (
-                <TileRail tiles={group} key={groupIndex} />
-              ))}
-            </div>
-          </button>
-        ))}
-      </section>
-      <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
-        <h3>Structure before style.</h3>
-        <p>If you cannot divide the hand into four melds and a pair, it is usually not a standard win.</p>
-      </section>
       <section className="learn-complete-card">
         <div>
           <span className="eyebrow">Interactive check</span>
-          <h3>Which hand has a valid standard winning shape?</h3>
-          {selected !== null ? <p className="section-one-feedback">{correct ? 'Exactly. This hand can be split into four melds and a pair.' : 'Not quite. Look for the missing pair or broken group.'}</p> : <p>Pick one of the sample hands.</p>}
+          <h3>Build four melds and the eyes.</h3>
+          <p className="section-one-feedback">{complete ? 'Exactly. This hand splits into three chows, one pung, and eyes.' : feedback}</p>
         </div>
-        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={correct} />
+        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={complete} />
+      </section>
+      <section className="learn-content-card section-two-hand-builder">
+        <span className="eyebrow">Hand builder</span>
+        <div className="section-two-builder-tiles">
+          {handBuilderTiles.map((tile) => {
+            const isCommitted = committedTileIds.has(tile.id);
+            return (
+              <button
+                type="button"
+                className={`${selectedTileIds.includes(tile.id) ? 'selected' : ''} ${isCommitted ? 'locked' : ''}`}
+                onClick={() => toggleTile(tile.id)}
+                disabled={isCommitted}
+                key={tile.id}
+              >
+                <MiniTile tile={tile.tile} />
+              </button>
+            );
+          })}
+        </div>
+        <div className="section-two-builder-actions">
+          {(['Eyes', 'Pung', 'Chow', 'Kong'] as MeldType[]).map((type) => (
+            <button type="button" onClick={() => lockMeld(type)} key={type}>
+              {type}
+            </button>
+          ))}
+          <button type="button" onClick={resetBuilder}>
+            Reset
+          </button>
+        </div>
+        <div className="section-two-locked-melds">
+          {lockedMelds.length ? (
+            lockedMelds.map((meld, index) => (
+              <div className="section-one-tile-group" key={`${meld.type}-${index}`}>
+                <TileRail tiles={meld.tiles} />
+                <small>{meld.type}</small>
+              </div>
+            ))
+          ) : (
+            <p>No melds locked yet.</p>
+          )}
+        </div>
       </section>
       <Takeaway title="A normal winning hand is four melds plus one pair." body="Break the hand apart before thinking about scoring." />
     </div>
@@ -502,9 +630,9 @@ export function ThirteenOrphansLesson({ lessonId, nextHref }: LessonRuntimeProps
     <div className="learn-lesson-template section-one-lesson section-two-lesson">
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
-        <h3>The big named exception.</h3>
+        <h3>A rare alternative winning hand.</h3>
         <p>Thirteen Orphans does not use four melds plus a pair. It uses the terminal tiles, the 1s and 9s of each suit, plus all seven honor tiles, with one duplicate to make a pair.</p>
-        <p>Beginners do not need to chase it, but should know it exists.</p>
+        <p>It's helpful to be aware of this winning hand, but it's definitely less common.</p>
       </article>
       <section className="learn-content-card">
         <span className="eyebrow">Visual example</span>
@@ -527,49 +655,6 @@ export function ThirteenOrphansLesson({ lessonId, nextHref }: LessonRuntimeProps
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={ready} />
       </section>
       <Takeaway title="Most hands use four melds plus one pair, but Thirteen Orphans is a special exception." body="Know it exists. Do not let it confuse the standard hand shape." />
-    </div>
-  );
-}
-
-export function ShapeVsScoringLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const correct = selected === 0;
-
-  return (
-    <div className="learn-lesson-template section-one-lesson section-two-lesson">
-      <article className="learn-content-card welcome-copy-card">
-        <span className="eyebrow">Concept</span>
-        <h3>Shape first, fan second.</h3>
-        <p>A hand must first be legally shaped. Scoring patterns, called fan, come after that. A beginner mistake is to see valuable-looking tiles and assume they can win.</p>
-        <p>If the tiles cannot be arranged into a legal winning shape, the hand is not a win.</p>
-      </article>
-      <section className="learn-content-card section-two-comparison">
-        <span className="eyebrow">Visual example</span>
-        <button type="button" className={selected === 0 ? 'correct' : ''} onClick={() => setSelected(0)}>
-          <strong>Valid shape + enough fan</strong>
-          <TileRail tiles={['一', '二', '三', '中', '中', '中', '東', '東']} />
-          <span>Can win when rules allow.</span>
-        </button>
-        <button type="button" className={selected === 1 ? 'incorrect' : ''} onClick={() => setSelected(1)}>
-          <strong>Fan-looking tiles, broken shape</strong>
-          <TileRail tiles={['中', '發', '白', '東', '南', '西', '4萬']} />
-          <span>Cannot win if the shape is invalid.</span>
-        </button>
-      </section>
-      <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
-        <h3>Legal shape unlocks scoring.</h3>
-        <p>Later you will check whether the legal hand has enough fan. But first, prove the shape.</p>
-      </section>
-      <section className="learn-complete-card">
-        <div>
-          <span className="eyebrow">Interactive check</span>
-          <h3>Which one can be a legal win?</h3>
-          {selected !== null ? <p className="section-one-feedback">{correct ? 'Exactly. Shape comes first, scoring comes second.' : 'Not quite. Valuable tiles do not matter if the hand shape is broken.'}</p> : <p>Choose the side that can actually win.</p>}
-        </div>
-        <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={correct} />
-      </section>
-      <Takeaway title="Shape comes first. Scoring comes second." body="That order prevents a lot of beginner mistakes." />
     </div>
   );
 }

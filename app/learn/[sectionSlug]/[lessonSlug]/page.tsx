@@ -8,7 +8,6 @@ import {
   OpenVsConcealedLesson,
   SectionTwoCheckpoint,
   SectionTwoRecap,
-  ShapeVsScoringLesson,
   StandardWinningShapeLesson,
   ThirteenOrphansLesson,
   ThreeSuitsLesson,
@@ -198,7 +197,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                 ← Previous
               </Link>
               <Link className="btn-primary gold" href={`/learn/${section.slug}/checkpoint`}>
-                Go to checkpoint
+                Go to Quiz
               </Link>
             </div>
           </div>
@@ -216,9 +215,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
               <Link href="/learn">← Curriculum</Link>
               <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
-              <span>Checkpoint</span>
+              <span>Quiz</span>
             </nav>
-            <h1 style={{ marginTop: '18px' }}>Checkpoint: {section.title}</h1>
+            <h1 style={{ marginTop: '18px' }}>Quiz: {section.title}</h1>
             <p className="lede">
               {isSectionOne
                 ? 'Answer five questions to confirm you understand the big picture.'
@@ -311,8 +310,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <StandardWinningShapeLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'thirteen-orphans' && isSectionTwo ? (
             <ThirteenOrphansLesson lessonId={lessonId} nextHref={nextHref} />
-          ) : lesson.slug === 'valid-shape-vs-scoring-pattern' && isSectionTwo ? (
-            <ShapeVsScoringLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'seating-and-seat-winds' && isSectionThree ? (
             <SeatingSeatWindsLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'dealer-and-east' && isSectionThree ? (

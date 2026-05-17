@@ -454,7 +454,6 @@ function Showcase({ onOpenSignup }: { onOpenSignup: () => void }) {
         <div className="phones-row">
           <div>
             <div className="phone">
-              <div className="notch"></div>
               <div className="screen">
                 <img src="/assets/mockup-screen-1.png" alt="Mahjong Multiplayer home screen" />
               </div>
@@ -463,7 +462,6 @@ function Showcase({ onOpenSignup }: { onOpenSignup: () => void }) {
           </div>
           <div>
             <div className="phone center">
-              <div className="notch"></div>
               <div className="screen">
                 <img src="/assets/mockup-screen-3.png" alt="In-game mahjong table" />
               </div>
@@ -472,7 +470,6 @@ function Showcase({ onOpenSignup }: { onOpenSignup: () => void }) {
           </div>
           <div>
             <div className="phone">
-              <div className="notch"></div>
               <div className="screen">
                 <img src="/assets/mockup-screen-4.png" alt="Friends tables list" />
               </div>

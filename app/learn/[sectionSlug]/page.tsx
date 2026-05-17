@@ -44,7 +44,7 @@ export default async function SectionOverviewPage({ params }: SectionPageProps) 
                 Start section
               </Link>
               <Link className="learn-secondary-link" href={`/learn/${section.slug}/checkpoint`}>
-                View checkpoint
+                Take the quiz
               </Link>
             </div>
           </div>
@@ -84,16 +84,16 @@ export default async function SectionOverviewPage({ params }: SectionPageProps) 
             <Link className="learn-lesson-row learn-lesson-row-muted" href={`/learn/${section.slug}/recap`}>
               <span className="learn-lesson-number">R</span>
               <span>
-                <strong>Section recap</strong>
-                <small>Review the key ideas before the checkpoint.</small>
+                <strong>Section Recap</strong>
+                <small>Review the key ideas before the quiz.</small>
               </span>
               <span className="learn-row-arrow">→</span>
             </Link>
             <Link className="learn-lesson-row learn-lesson-row-muted" href={`/learn/${section.slug}/checkpoint`}>
               <span className="learn-lesson-number">Q</span>
               <span>
-                <strong>Checkpoint quiz</strong>
-                <small>Locked in the full build. Scaffolded now for routing.</small>
+                <strong>Section Quiz</strong>
+                <small>Test your understanding before moving to the next section.</small>
               </span>
               <span className="learn-row-arrow">→</span>
             </Link>
