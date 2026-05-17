@@ -18,6 +18,12 @@ const styles = [
     tiles: ['東', '南', '發'],
   },
   {
+    title: 'American (NMJL)',
+    eyebrow: 'American style',
+    detail: 'Uses the American NMJL card of winning hands which gets refreshed each year, and has special rules.',
+    tiles: ['一', '九', '白'],
+  },
+  {
     title: 'Riichi',
     eyebrow: 'Japanese style',
     detail: 'Uses riichi declarations, dora, and a different scoring system.',
@@ -41,19 +47,19 @@ const handFlowSteps = ['Setup', 'Deal', 'Play', 'Calls', 'Win / Draw', 'Score'];
 
 const recapItems = [
   {
-    title: 'Hong Kong Mahjong is one ruleset.',
-    body: 'Mahjong has many variants. This course teaches 13-tile Classical Hong Kong Mahjong.',
+    title: 'Hong Kong Mahjong is one ruleset of Mahjong.',
+    body: 'Mahjong has many variants. This course teaches 13-tile Hong Kong Mahjong.',
   },
   {
-    title: 'A hand has a clear goal.',
+    title: 'Your objective: build a hand of legal melds.',
     body: 'Players race to complete a legal winning hand before the wall runs out.',
   },
   {
-    title: 'The table has a shape.',
+    title: 'The table has a specific seat winds.',
     body: 'Four players sit as East, South, West, and North. East is the dealer.',
   },
   {
-    title: 'A hand has a rhythm.',
+    title: 'A hand has a typical flow.',
     body: 'Setup, deal, play, calls, win or draw, then score.',
   },
 ];
@@ -154,9 +160,9 @@ function CompleteButton({ lessonId, nextHref, ready = true }: LessonRuntimeProps
 
 function MiniTable({ activeSeat, onSeat }: { activeSeat?: string; onSeat?: (seat: string) => void }) {
   const seats = [
+    { id: 'West', meta: 'Third Seat', className: 'welcome-seat-west' },
+    { id: 'South', meta: 'Second seat', className: 'welcome-seat-south' },
     { id: 'East', meta: 'Dealer', className: 'welcome-seat-east' },
-    { id: 'South', meta: 'Next seat', className: 'welcome-seat-south' },
-    { id: 'West', meta: 'Across', className: 'welcome-seat-west' },
     { id: 'North', meta: 'Fourth seat', className: 'welcome-seat-north' },
   ];
 
@@ -178,10 +184,6 @@ function MiniTable({ activeSeat, onSeat }: { activeSeat?: string; onSeat?: (seat
       <div className="welcome-wall welcome-wall-bottom"></div>
       <div className="welcome-wall welcome-wall-left"></div>
       <div className="welcome-table-center">
-        <strong>Draw</strong>
-        <span>Discard</span>
-        <span>Call</span>
-        <strong>Complete</strong>
       </div>
     </div>
   );
@@ -216,21 +218,21 @@ export function MahjongStylesLesson({ lessonId, nextHref }: LessonRuntimeProps) 
     <div className="learn-lesson-template section-one-lesson">
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
-        <h3>Mahjong is a family of games.</h3>
+        <h3>There's many versions of Mahjong.</h3>
         <p>
-          Mahjong is not one single universal game. It is a family of related games, like poker has Texas Hold&apos;em, Omaha, and other variants. Hong Kong Mahjong is
-          one of the most common Chinese-style rulesets.
+          Mahjong is not one single game. It is a family of related games, similar to how poker has Texas Hold&apos;em, Omaha, and other variants. Hong Kong Mahjong is
+          one of the most common Chinese-style rulesets. Even within Hong Kong Mahjong there's variations and people create family rules.
         </p>
-        <p>This course teaches 13-tile Classical Hong Kong Mahjong, so when you see rules from other versions, expect differences.</p>
+        <p>This course teaches 13-tile Hong Kong Mahjong, so when you see rules from other versions, expect differences.</p>
       </article>
 
       <section className="learn-content-card section-one-carousel">
         <div className="learn-card-title-row">
-          <span className="eyebrow">Visual example</span>
+          <span className="eyebrow">Types of Mahjong</span>
           <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={allViewed} />
         </div>
-        <h3>Swipe through common mahjong styles.</h3>
-        <p>{allViewed ? 'You viewed all styles. The important habit is knowing which ruleset your table is using.' : 'Open each style card to see how this course focuses on Hong Kong Mahjong.'}</p>
+        <h3>There's a few styles of Mahjong that are the most popular.</h3>
+        <p>{allViewed ? 'Great job! This course focuses on Hong Kong Mahjong.' : 'Click through each style to see the main Mahjong variants.'}</p>
         <div className="welcome-flow-meter" aria-label={`${viewed.size} of ${styles.length} style cards viewed`}>
           <span style={{ width: `${viewedProgress}%` }} />
         </div>
@@ -254,15 +256,15 @@ export function MahjongStylesLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       </section>
 
       <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
-        <h3>Learn one table at a time.</h3>
-        <p>Do not panic if another table plays slightly differently. This curriculum gives you one clear ruleset first.</p>
+        <span className="eyebrow">How does Hong Kong Mahjong compare? </span>
+        <h3>Hong Kong Mahjong is a great style to start with.</h3>
+        <p>The ruleset is less complex compared to other styles and so it's a great place to start for people new to Mahjong.</p>
       </section>
 
       <section className="learn-content-card learn-takeaway-card">
         <span className="eyebrow">Takeaway</span>
         <h3>Mahjong is not one universal ruleset.</h3>
-        <p>This course teaches Hong Kong Mahjong specifically.</p>
+        <p>Mahjong has many styles. This course teaches Hong Kong Mahjong.</p>
       </section>
     </div>
   );
@@ -276,28 +278,28 @@ export function ObjectiveLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <div className="learn-lesson-template section-one-lesson">
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
-        <h3>Your job is to finish a legal hand.</h3>
+        <h3>Your objective is to create a legal hand of matches & sequences.</h3>
         <p>
-          Your job in each hand is to be the first player to make a legal winning hand. The standard winning hand is four completed groups, called melds, plus one
+          Your job in each hand is to be the first player to make a legal winning hand. The standard winning hand is four completed groups, called "melds", plus one
           pair.
         </p>
-        <p>Shape comes first: before scoring or strategy matters, your tiles must actually form a legal hand.</p>
+        <p>Your tiles must form a legal hand to win, after which you tally your points via the scoring system.</p>
       </article>
 
       <section className="learn-content-card section-one-hand-card">
-        <span className="eyebrow">Visual example</span>
+        <span className="eyebrow">Example of winning tiles</span>
         <div className="section-one-hand-shape">
-          <TileGroup label="Meld 1" tiles={['一', '二', '三']} />
-          <TileGroup label="Meld 2" tiles={['五', '五', '五']} />
-          <TileGroup label="Meld 3" tiles={['七', '八', '九']} />
-          <TileGroup label="Meld 4" tiles={['發', '發', '發']} />
-          <TileGroup label="Pair" tiles={['東', '東']} />
+          <TileGroup label="Meld 1: sequence of tiles (1, 2, 3)" tiles={['一', '二', '三']} />
+          <TileGroup label="Meld 2: matching tiles (three 5 tiles)" tiles={['五', '五', '五']} />
+          <TileGroup label="Meld 3: sequence of tiles (7, 8, 9)" tiles={['七', '八', '九']} />
+          <TileGroup label="Meld 4: matching tiles (three green dragons)" tiles={['發', '發', '發']} />
+          <TileGroup label="Pair: of matching East tiles" tiles={['東', '東']} />
         </div>
       </section>
 
       <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
-        <h3>Repeat the shape.</h3>
+        <span className="eyebrow">A Winning Hand</span>
+        <h3>All tiles must be in groups</h3>
         <p>Most winning hands are four melds plus one pair. Later lessons teach what counts as a meld.</p>
       </section>
 
@@ -312,7 +314,7 @@ export function ObjectiveLesson({ lessonId, nextHref }: LessonRuntimeProps) {
               </button>
             ))}
           </div>
-          {selected !== null ? <p className="section-one-feedback">{correct ? 'Exactly. Four melds plus one pair is the shape to repeat until it becomes automatic.' : 'Not quite. Look back at the hand skeleton and count the groups.'}</p> : null}
+          {selected !== null ? <p className="section-one-feedback">{correct ? 'Exactly. Four melds plus one pair is the shape to repeat until it becomes automatic.' : 'Not quite. Look back at the example and count the groups.'}</p> : null}
         </div>
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={correct} />
       </section>
@@ -320,7 +322,6 @@ export function ObjectiveLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       <section className="learn-content-card learn-takeaway-card">
         <span className="eyebrow">Takeaway</span>
         <h3>The standard winning shape is four melds plus one pair.</h3>
-        <p>That mental shape will make every later lesson easier.</p>
       </section>
     </div>
   );
@@ -352,7 +353,8 @@ export function ShapeOfGameLesson({ lessonId, nextHref }: LessonRuntimeProps) {
           Every hand happens around a four-player table. The seats are named East, South, West, and North. East is special because East is the dealer for the current
           hand and starts play.
         </p>
-        <p>A full game is made of many individual hands, and the dealer position moves as hands finish.</p>
+        <p>East, South, West, and North are collectively called "winds". The seat which you're sitting in is your "seat wind".</p>
+        <p>A full game is made of many individual hands, and the dealer position rotates as hands finish.</p>
       </article>
 
       <section className="learn-content-card welcome-table-card">
@@ -402,7 +404,7 @@ export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
         <span className="eyebrow">Concept</span>
         <h3>A hand follows a predictable rhythm.</h3>
         <p>
-          First, players shuffle and build the wall. Then the wall is opened and tiles are dealt. East starts. Players take turns drawing and discarding. After each
+          First, players shuffle the tiles. Then they build a "wall" from the tiles (you'll learn more about this later!). The wall is then opened and tiles are dealt. East starts. Players take turns drawing and discarding. After each
           discard, other players get a chance to call that tile if it helps them.
         </p>
         <p>Eventually, someone wins, or the wall runs out and the hand is drawn.</p>
@@ -426,10 +428,6 @@ export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
             </button>
           ))}
         </div>
-      </section>
-
-      <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
         <h3>{handFlowSteps[activeStep]}</h3>
         <p>{descriptions[activeStep]}</p>
       </section>
@@ -437,7 +435,7 @@ export function HandFlowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       <section className="learn-content-card learn-takeaway-card">
         <span className="eyebrow">Takeaway</span>
         <h3>A hand is a repeated cycle of setup, play, win or draw, then scoring.</h3>
-        <p>You do not need every detailed rule yet. First, learn the rhythm.</p>
+        <p>We'll learn about each of these in detail over the next sections.</p>
       </section>
     </div>
   );

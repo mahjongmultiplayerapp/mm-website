@@ -24,10 +24,10 @@ export const learnSections: LearnSection[] = [
     estimatedMinutes: 5,
     goals: ['Explain what Hong Kong Mahjong is', 'Describe the objective of a hand', 'Understand the broad flow of a full hand'],
     lessons: [
-      { number: '1.1', slug: 'welcome-to-the-game', title: 'Welcome to the Game', objective: 'Understand mahjong as a four-player tile game about completing a legal hand.' },
-      { number: '1.2', slug: 'hk-mahjong-vs-other-styles', title: 'HK Mahjong vs Other Styles', objective: 'See how Hong Kong Mahjong fits inside the wider family of mahjong styles.' },
-      { number: '1.3', slug: 'objective-of-a-hand', title: 'The Objective of a Hand', objective: 'Learn the usual target shape: four melds and one pair.' },
-      { number: '1.4', slug: 'shape-of-the-game', title: 'The Shape of the Game', objective: 'Meet seats, winds, dealer, hands, and rounds.' },
+      { number: '1.1', slug: 'welcome-to-the-game', title: 'Welcome to the Game', objective: 'Learn the general concept and objective of Hong Kong Mahjong.' },
+      { number: '1.2', slug: 'hk-mahjong-vs-other-styles', title: 'Hong Kong Mahjong vs Other Styles', objective: 'See how Hong Kong Mahjong fits inside the wider family of mahjong styles.' },
+      { number: '1.3', slug: 'objective-of-a-hand', title: 'The Objective of a Hand', objective: 'All your tiles form groups of matches or sequences.' },
+      { number: '1.4', slug: 'shape-of-the-game', title: 'The Mahjong Table', objective: 'The four players are East, South, West, and North.' },
       { number: '1.5', slug: 'how-a-hand-flows', title: 'How a Hand Flows', objective: 'Follow one complete hand from setup through scoring.' },
     ],
   },
@@ -35,7 +35,7 @@ export const learnSections: LearnSection[] = [
     number: 2,
     slug: 'tiles-melds-winning-hands',
     title: 'Tiles, Melds, and Winning Hands',
-    purpose: 'Teach the tile set, basic groups, and the difference between hand shape and scoring value.',
+    purpose: 'Learn the tile set, basic groups, and the difference between hand shape and scoring value.',
     estimatedMinutes: 15,
     goals: ['Recognize suited and honor tiles', 'Identify pairs, chows, pungs, and kongs', 'Spot a standard winning hand shape'],
     lessons: [
@@ -46,7 +46,6 @@ export const learnSections: LearnSection[] = [
       { number: '2.5', slug: 'open-vs-concealed', title: 'Open vs Concealed', objective: 'Distinguish exposed melds from hidden tiles.' },
       { number: '2.6', slug: 'standard-winning-shape', title: 'Standard Winning Shape', objective: 'Build the common four melds plus one pair structure.' },
       { number: '2.7', slug: 'thirteen-orphans', title: 'Special Winning Hand: Thirteen Orphans', objective: 'Recognize the special thirteen-orphans exception.' },
-      { number: '2.8', slug: 'valid-shape-vs-scoring-pattern', title: 'Valid Shape vs Scoring Pattern', objective: 'Separate whether a hand is complete from whether it scores enough fan.' },
     ],
   },
   {

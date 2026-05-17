@@ -81,31 +81,27 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
     <div className="learn-lesson-template welcome-lesson">
       <article className="learn-content-card welcome-copy-card">
         <span className="eyebrow">Concept</span>
-        <h3>One hand, four players, one race.</h3>
+        <h3>Mahjong is a four-player tile game.</h3>
         <p>
-          Mahjong is a four-player tile game. Think of it as a race, but not one where everyone runs in a straight line. Each player is quietly building a complete
-          hand while also watching what the other players throw away.
-        </p>
-        <p>
-          On your turn, you usually draw one tile, decide what your hand is trying to become, and discard one tile you no longer need. Sometimes another player&apos;s
-          discard is exactly what you need, so you call it and use it immediately.
+          The objective of the game is to turn your hand of tiles into matching sets before the other players. Hong Kong Mahjong can be a fast-paced game and full of strategy, but is also easy to play once you learn the basics.
         </p>
       </article>
 
       <section className="learn-content-card welcome-table-card" aria-label="Four player mahjong table visual">
-        <span className="eyebrow">Visual example</span>
+        <span className="eyebrow">The Mahjong Table</span>
+        <p>Four players sit around a table, with each seat named after a direction. The player that is "East" is the dealer and plays first, and the order of play is counter-clockwise.</p>
         <div className="welcome-table">
           <div className="welcome-seat welcome-seat-east">
             <span>East</span>
-            <small>Dealer</small>
+            <small>First</small>
           </div>
           <div className="welcome-seat welcome-seat-south">
             <span>South</span>
-            <small>Next</small>
+            <small>Second</small>
           </div>
           <div className="welcome-seat welcome-seat-west">
             <span>West</span>
-            <small>Across</small>
+            <small>Third</small>
           </div>
           <div className="welcome-seat welcome-seat-north">
             <span>North</span>
@@ -115,28 +111,28 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
           <div className="welcome-wall welcome-wall-right"></div>
           <div className="welcome-wall welcome-wall-bottom"></div>
           <div className="welcome-wall welcome-wall-left"></div>
-          <div className="welcome-table-center">
-            <strong>Draw</strong>
+          {/* <div className="welcome-table-center">
+            <span>Draw</span>
             <span>Discard</span>
             <span>Call</span>
-            <strong>Complete a Hand</strong>
-          </div>
+            <span>Complete a Hand</span>
+          </div> */}
         </div>
       </section>
 
       <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
+        <span className="eyebrow">A Typical Turn</span>
         <h3>Most turns are simple.</h3>
-        <p>Draw one tile, improve your hand if you can, then discard one tile. Calls interrupt that rhythm only when a discard helps someone complete a set or win.</p>
+        <p>Draw one tile, improve your hand if you can, then discard one tile. Players can also pick up tiles discarded from other players in certain situations.</p>
       </section>
 
       <section className="learn-complete-card welcome-flow-card">
         <div className="welcome-flow-copy">
           <div className="learn-card-title-row">
-            <span className="eyebrow">Interactive check</span>
+            <span className="eyebrow">Learn More</span>
             <span className={`lesson-status-pill ${isComplete ? 'complete' : ''}`}>{isComplete ? 'Completed' : 'Not complete'}</span>
           </div>
-          <h3>Tap through the basic life cycle of a hand.</h3>
+          <h3>Tap through the basic life cycle of a game.</h3>
           <p>{currentStep.body}</p>
           <div className="welcome-flow-meter" aria-hidden="true">
             <span style={{ width: `${progress}%` }} />
@@ -158,7 +154,7 @@ export function WelcomeToGameLesson({ lessonId, nextHref }: WelcomeToGameLessonP
 
       <section className="learn-content-card learn-takeaway-card welcome-takeaway-card">
         <span className="eyebrow">Takeaway</span>
-        <h3>Four players, draw, discard, call, complete a hand.</h3>
+        <h3>Four players are competing to create a hand of matching tiles first.</h3>
         <p>Hong Kong Mahjong is a race to complete a legal hand through drawing, discarding, and calling tiles.</p>
       </section>
     </div>
