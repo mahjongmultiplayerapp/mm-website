@@ -18,16 +18,16 @@ type ChoiceQuestion = {
 const storageKey = 'mahjong-multiplayer-learn-progress';
 
 const checkpointQuestions: ChoiceQuestion[] = [
-  { prompt: 'What is a call?', options: ['A clear claim on the latest discard', 'A draw from the live wall', 'A scoring cap', 'A seat wind'], answer: 0, explanation: 'A call claims the most recently discarded tile.' },
+  { prompt: 'What is a call?', options: ['A draw from the live wall', 'A scoring cap', 'A clear claim on the latest discard', 'A seat wind'], answer: 2, explanation: 'A call claims the most recently discarded tile.' },
   { prompt: 'When is Chow legal?', options: ['Any discard for any group', 'A sequence from the player on your left', 'A triplet from anyone', 'Four identical tiles'], answer: 1, explanation: 'Chow completes a sequence, and only from the player on your left.' },
-  { prompt: 'When is Pung legal?', options: ['You have two matching tiles and any player discards the third', 'Only from your left', 'Only with suited tiles', 'Only after a kong'], answer: 0, explanation: 'Pung completes a triplet and can be called from any player.' },
+  { prompt: 'When is Pung legal?', options: ['Only from your left', 'Only with suited tiles', 'Only after a kong', 'You have two matching tiles and any player discards the third'], answer: 3, explanation: 'Pung completes a triplet and can be called from any player.' },
   { prompt: 'What starts a concealed kong?', options: ['Four identical tiles in your concealed hand', 'An open sequence', 'Any three honors', 'A discard from the left'], answer: 0, explanation: 'A concealed kong begins with four identical concealed tiles.' },
-  { prompt: 'What is an added kong?', options: ['Adding the fourth matching tile to an open triplet', 'Calling a sequence', 'Drawing from the river', 'Passing a discard'], answer: 0, explanation: 'An added kong upgrades an existing open triplet.' },
-  { prompt: 'What is a big exposed kong?', options: ['Calling a discard with three matching concealed tiles', 'A hidden pair', 'A Chow from the left', 'Any self-draw win'], answer: 0, explanation: 'A big exposed kong uses another player’s discard to complete four of a kind.' },
-  { prompt: 'Where does a kong supplement tile come from?', options: ['Dead wall / kong tail', 'River', 'Any opponent', 'Open meld area'], answer: 0, explanation: 'Kong supplement tiles come from the dead wall.' },
+  { prompt: 'What is an added kong?', options: ['Calling a sequence', 'Drawing from the river', 'Adding the fourth matching tile to an open triplet', 'Passing a discard'], answer: 2, explanation: 'An added kong upgrades an existing open triplet.' },
+  { prompt: 'What is a big exposed kong?', options: ['A hidden pair', 'Calling a discard with three matching concealed tiles', 'A Chow from the left', 'Any self-draw win'], answer: 1, explanation: 'A big exposed kong uses another player’s discard to complete four of a kind.' },
+  { prompt: 'Where does a kong supplement tile come from?', options: ['River', 'Any opponent', 'Open meld area', 'Dead wall / kong tail'], answer: 3, explanation: 'Kong supplement tiles come from the dead wall.' },
   { prompt: 'What is self-draw?', options: ['You draw your own winning tile', 'You win on another player’s discard', 'You call Chow', 'You pass on a discard'], answer: 0, explanation: 'Self-draw means your own draw completes the hand.' },
-  { prompt: 'What is robbing a kong?', options: ['Winning on the tile another player adds for an added kong', 'Taking a tile from the live wall early', 'Calling Chow on an honor', 'Scoring without a legal hand'], answer: 0, explanation: 'Robbing a kong stops the added kong because that tile is your winning tile.' },
-  { prompt: 'What is the call priority order?', options: ['Win > Pung/Kong > Chow', 'Chow > Pung > Win', 'Pung > Win > Chow', 'All calls are equal'], answer: 0, explanation: 'Win has highest priority, then Pung/Kong, then Chow.' },
+  { prompt: 'What is robbing a kong?', options: ['Taking a tile from the live wall early', 'Calling Chow on an honor', 'Winning on the tile another player adds for an added kong', 'Scoring without a legal hand'], answer: 2, explanation: 'Robbing a kong stops the added kong because that tile is your winning tile.' },
+  { prompt: 'What is the call priority order?', options: ['Chow > Pung > Win', 'Win > Pung/Kong > Chow', 'Pung > Win > Chow', 'All calls are equal'], answer: 1, explanation: 'Win has highest priority, then Pung/Kong, then Chow.' },
 ];
 
 const recapItems = [
@@ -147,9 +147,9 @@ function LessonFrame({
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
-  visual: React.ReactNode;
-  ruleTitle: string;
-  rule: string;
+  visual?: React.ReactNode;
+  ruleTitle?: string;
+  rule?: string;
   check: React.ReactNode;
   ready: boolean;
   takeaway: { title: string; body: string };
@@ -163,15 +163,19 @@ function LessonFrame({
           <p key={paragraph}>{paragraph}</p>
         ))}
       </article>
-      <section className="learn-content-card">
-        <span className="eyebrow">Visual example</span>
-        {visual}
-      </section>
-      <section className="learn-content-card welcome-rule-card">
-        <span className="eyebrow">Rule in plain English</span>
-        <h3>{ruleTitle}</h3>
-        <p>{rule}</p>
-      </section>
+      {visual ? (
+        <section className="learn-content-card">
+          <span className="eyebrow">Visual example</span>
+          {visual}
+        </section>
+      ) : null}
+      {ruleTitle && rule ? (
+        <section className="learn-content-card welcome-rule-card">
+          <span className="eyebrow">Rule in plain English</span>
+          <h3>{ruleTitle}</h3>
+          <p>{rule}</p>
+        </section>
+      ) : null}
       <section className="learn-complete-card">
         <div>
           <span className="eyebrow">Interactive check</span>
@@ -268,14 +272,14 @@ export function ChowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       lessonId={lessonId}
       nextHref={nextHref}
-      title="Chow completes a sequence from the player on your left."
-      copy={['Chow means using the latest discard to complete a three-tile sequence. You can Chow only from the player on your left.', 'The sequence must be three consecutive numbers in the same suit. You cannot Chow honors, and you cannot Chow from across or from your right.']}
-      visual={<MeldVisual label="Left player discards 5 Bamboo. You have 3 and 4 Bamboo." concealed={['三', '四']} open={['三', '四', '五']} />}
+      title="Play a Chow meld when you have a sequence of three tiles of the same suit."
+      copy={['You can play a Chow either as "concealed" Chow (i.e. you have the sequence concealed in your hand), or as a "revealed" Chow when you use two tiles from your hand along with the most recent discarded tile. Revealing a Chow is restricted such that you can only reveal your Chow using the discarded tile from the player to the left of you.', 'You cannot Chow honors, and you cannot play a revealed Chow using a discarded tile from players across from you or from your right.']}
+      visual={<MeldVisual label="Left player discards 5 Bamboo. You have a 3 and 4 Bamboo in your hand, and so you reveal a Chow by taking the discarded 5 Bamboo." concealed={['三', '四']} open={['三', '四', '五']} />}
       ruleTitle="Sequence from left."
       rule="Chow completes a sequence, but only from the player on your left."
       check={<ChoiceCheck question={{ prompt: 'Left player discards 5 Bamboo. You have 3 and 4 Bamboo. Can you Chow?', options: ['Yes, legal Chow', 'No, not from left', 'No, honors cannot Chow', 'Only if it is a triplet'], answer: 0, explanation: 'Correct. It completes a same-suit sequence from the left.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'Chow completes a sequence, but only from the player on your left.', body: 'Chow has the lowest call priority.' }}
+      takeaway={{ title: 'Chow completes a sequence.', body: 'If you reveal a Chow, you can only use a discarded tile from the person to your left. Chows also have the lowest call priority.' }}
     />
   );
 }
@@ -287,8 +291,8 @@ export function PungLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="Pung completes a triplet from any player."
-      copy={['Pung means using the latest discard to complete a triplet. If you have two matching tiles in your concealed hand and any player discards the third, you may call Pung.', 'The triplet becomes open, and then you discard. Unlike Chow, Pung can be called from any player.']}
-      visual={<MeldVisual label="Any player discards Red. You have two Reds." concealed={['中', '中']} open={['中', '中', '中']} />}
+      copy={['Pung means using the latest discard to complete a triplet. If you have two matching tiles in your concealed hand and any player discards the third, you may call Pung.', 'The triplet becomes open, and then you discard. Unlike Chow, Pung can be called using a discard from any player.']}
+      visual={<MeldVisual label="Any player discards a Red Dragon. You have two Red Dragons in your hand, so you play a Pung." concealed={['中', '中']} open={['中', '中', '中']} />}
       ruleTitle="Triplet from anyone."
       rule="Pung completes a triplet and can be called from any player."
       check={<ChoiceCheck question={{ prompt: 'Any player discards East. You have East + East. Can you Pung?', options: ['Yes', 'No, only from left', 'No, honors cannot Pung', 'Only if East is dealer'], answer: 0, explanation: 'Exactly. Pung can be called from any player if you have the matching pair.' }} onCorrect={() => setReady(true)} />}
@@ -305,7 +309,7 @@ export function ConcealedKongLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       lessonId={lessonId}
       nextHref={nextHref}
       title="Four concealed matching tiles can become a kong."
-      copy={['A concealed kong starts with four identical tiles in your concealed hand. On your own turn, you can declare the kong.', 'Even though it started concealed, you must announce it and place it appropriately so the table can verify it. Then you take a supplement tile from the dead wall.']}
+      copy={['A concealed kong starts with four identical tiles in your concealed hand. On your own turn, you can draw a tile from the wall, then declare the kong.', 'Even though it started as concealed, you must announce it and expose it in your open melds area so the table can verify it. After exposing your Kong, you need to draw a supplement tile from the dead wall to keep your total tile count at 13. You must expose a Kong for it to count as a meld.']}
       visual={<MeldVisual label="Four identical concealed tiles" concealed={['8', '8', '8', '8']} />}
       ruleTitle="Declare it."
       rule="Four identical concealed tiles are not automatically a kong until declared."
@@ -323,8 +327,8 @@ export function AddedKongLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="Upgrade an open triplet with the fourth tile."
-      copy={['An added kong happens when you already have an open triplet and later get the fourth matching tile.', 'On your turn, you may add that fourth tile to the open triplet and declare Kong. Then you draw a supplement tile.']}
-      visual={<MeldVisual label="Open 5 Character triplet plus fourth 5 Character" concealed={['5萬']} open={['5萬', '5萬', '5萬', '5萬']} />}
+      copy={['An added kong happens when you already have an open triplet and draw the fourth matching tile from the live wall on your turn.', 'At that point, you may add that fourth tile to the open triplet and declare Kong. Then you draw a supplement tile.']}
+      visual={<MeldVisual label="Open 5 Character triplet, plus the fourth 5 Character which you just drew to your concealed hand" concealed={['5萬']} open={['5萬', '5萬', '5萬', '5萬']} />}
       ruleTitle="Open triplet first."
       rule="An added kong upgrades your existing open triplet with the fourth tile."
       check={<ChoiceCheck question={{ prompt: 'Can an open sequence plus a matching tile become an added kong?', options: ['No', 'Yes', 'Only from the left', 'Only if it is self-draw'], answer: 0, explanation: 'Right. Added kong upgrades an open triplet, not a sequence.' }} onCorrect={() => setReady(true)} />}
@@ -341,13 +345,13 @@ export function BigExposedKongLesson({ lessonId, nextHref }: LessonRuntimeProps)
       lessonId={lessonId}
       nextHref={nextHref}
       title="Call Kong on a discard when you have the concealed triplet."
-      copy={['A big exposed kong uses another player’s discard to complete four of a kind.', 'You need three identical concealed tiles, and another player must discard the fourth. You call Kong, expose all four tiles, and draw a supplement tile from the dead wall.']}
-      visual={<MeldVisual label="Opponent discards 9 Bamboo. You have three." concealed={['九', '九', '九']} open={['九', '九', '九', '九']} />}
+      copy={['A big exposed kong uses another player’s discard to complete four of a kind. You can use the discarded tile from any player to expose a Kong (unlike a Chow).', 'You need three identical concealed tiles, and another player must discard the fourth. You call Kong, expose all four tiles, and draw a supplement tile from the dead wall.']}
+      visual={<MeldVisual label="Opponent discards 9 Bamboo. You have three and so can expose a Kong." concealed={['九', '九', '九']} open={['九', '九', '九', '九']} />}
       ruleTitle="Three in hand, fourth discarded."
       rule="A big exposed kong uses another player’s discard to complete four of a kind."
       check={<ChoiceCheck question={{ prompt: 'You have three 9 Bamboo. Another player discards the fourth. What can you call?', options: ['Kong', 'Chow', 'Pass only', 'Self-draw'], answer: 0, explanation: 'Correct. Three concealed matches plus the discard can make a big exposed kong.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'A big exposed kong uses another player’s discard to complete four of a kind.', body: 'Pung needs two matching tiles; big exposed Kong needs three.' }}
+      takeaway={{ title: 'A big exposed kong uses another player’s discard to complete four of a kind.', body: 'Pung needs two matching tiles plus the matching discarded tile; big exposed Kong needs three plus the matching discarded tile.' }}
     />
   );
 }
@@ -359,8 +363,7 @@ export function SupplementKongLesson({ lessonId, nextHref }: LessonRuntimeProps)
       lessonId={lessonId}
       nextHref={nextHref}
       title="Declare kong, expose kong, draw supplement."
-      copy={['A kong uses four physical tiles but still counts as one set in the hand structure.', 'Because the kong uses an extra tile, you draw a supplement tile after declaring it. The supplement comes from the dead wall, not the live wall.']}
-      visual={<div className="section-five-kong-flow"><MeldVisual label="Exposed Kong" concealed={[]} open={['發', '發', '發', '發']} /><span>Dead wall supplement</span></div>}
+      copy={['A kong uses four physical tiles but still counts as one set in the hand structure.', 'Because the kong uses an extra tile, you draw a supplement tile after declaring it. The supplement comes from the dead wall, not the live wall. This is to ensure your hand always has 13 tiles in it across your conceraled hand and exposed melds.']}
       ruleTitle="Expose first."
       rule="Declare and expose the kong first, then draw the supplement tile from the dead wall."
       check={<ChoiceCheck question={{ prompt: 'What must happen before drawing a kong supplement tile?', options: ['The kong must be clearly exposed and confirmed', 'A Chow must happen', 'The river must be empty', 'East must pass'], answer: 0, explanation: 'Exactly. Expose and confirm the kong before the supplement draw.' }} onCorrect={() => setReady(true)} />}
@@ -377,7 +380,7 @@ export function SelfDrawWinLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="You drew your own winning tile."
-      copy={['Self-draw means the tile you draw on your own turn completes your winning hand.', 'You declare the win immediately, reveal your hand for verification, and identify the winning tile. Self-draw matters for payment later.']}
+      copy={['Self-draw means the tile you draw on your own turn completes your winning hand.', 'You declare the win immediately, reveal your hand for verification, and identify the winning tile. A self-draw win matters for scoring later.']}
       visual={<MeldVisual label="Drawn tile completes the hand" concealed={['一', '二', '三', '中', '中', '中', '東', '東']} />}
       ruleTitle="Your draw, your win."
       rule="Self-draw means you draw your own winning tile."
@@ -396,12 +399,11 @@ export function WinOnDiscardLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       nextHref={nextHref}
       title="Another player throws your winning tile."
       copy={['Win on discard means another player discards the exact tile you need to complete your hand. During the call window, you call Win and reveal your hand.', 'The discarder is the player who dealt in. The hand still needs to be a legal shape and meet the minimum fan requirement.']}
-      visual={<CallButtonsVisual active="Win" />}
       ruleTitle="Call during the window."
       rule="Win on discard means another player throws the tile that completes your hand."
       check={<ChoiceCheck question={{ prompt: 'Another player discards the exact tile that completes your legal hand. What can you call?', options: ['Win', 'Self-draw', 'Pass only', 'Chow only'], answer: 0, explanation: 'Exactly. You may call Win on the discard.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'Win on discard means another player throws the tile that completes your hand.', body: 'Completing shape is not enough if the ruleset requires 3 fan.' }}
+      takeaway={{ title: 'Win on discard means another player throws the tile that completes your hand.', body: 'Completing shape is not enough if the ruleset requires a score 3 fan; we will discuss scoring in upcoming lessons.' }}
     />
   );
 }
@@ -449,7 +451,7 @@ export function CallsChangeFlowLesson({ lessonId, nextHref }: LessonRuntimeProps
       lessonId={lessonId}
       nextHref={nextHref}
       title="After a call, the caller exposes the set and discards."
-      copy={['After a call, the caller does not draw a tile from the wall. They take the discard, expose the completed set, and then discard from their own hand.', 'Play continues from the caller. This can cause players to be skipped, which is why everyone must pay attention after each discard.']}
+      copy={['After a call, the caller takes the discarded tile, exposes the completed meld, and then discards a tile from their own hand.', 'Play then continues after their discard as usual. This dynamic can cause other players to be skipped.']}
       visual={<div className="section-four-turn-table"><div className="seat-east"><span>East</span><small>Waiting</small></div><div className="seat-south called"><span>South</span><small>Calls</small></div><div className="seat-west"><span>West</span><small>Skipped</small></div><div className="seat-north active"><span>North</span><small>Discarded</small></div><div className="section-four-turn-center">North discard → South call</div></div>}
       ruleTitle="Caller acts next."
       rule="North discards, South calls Pung, South discards next."
@@ -486,9 +488,6 @@ export function BeginnerCallDecisionsLesson({ lessonId, nextHref }: LessonRuntim
       nextHref={nextHref}
       title="First learn legality. Strategy comes later."
       copy={['At first, do not try to master advanced strategy. Start with legality.', 'Ask: can I call this tile? What set does it make? Is it from the correct player? What happens to turn order after I call? Legal does not always mean smart, but illegal is always wrong.']}
-      visual={<div className="section-five-decision-tree"><span>Can I call?</span><span>What set?</span><span>What changes next?</span></div>}
-      ruleTitle="Decision checklist."
-      rule="Before thinking strategy, learn call legality and turn consequences."
       check={<ChoiceCheck question={{ prompt: 'Which question should come first for a beginner?', options: ['Is this call legal?', 'Will this scare opponents?', 'Can I hide this meld?', 'Can I change the score cap?'], answer: 0, explanation: 'Exactly. Legal first, strategy later.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
       takeaway={{ title: 'Before thinking strategy, learn call legality and turn consequences.', body: 'Can I call, what does it make, what changes next?' }}
@@ -507,14 +506,6 @@ export function SectionFiveRecap() {
             <p>{item.body}</p>
           </div>
         ))}
-      </div>
-      <div className="learn-complete-card section-one-recap-flow">
-        <div>
-          <span className="eyebrow">Call checklist</span>
-          <h3>Latest discard, legal set, clear declaration, visible meld.</h3>
-          <p>That checklist carries most beginner call decisions.</p>
-        </div>
-        <CallButtonsVisual active="Win" />
       </div>
     </div>
   );

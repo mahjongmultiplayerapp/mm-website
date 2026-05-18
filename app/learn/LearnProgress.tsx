@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { learnSections } from './learn-data';
 
 type LearnProgressState = {
   completedLessons: string[];
@@ -9,6 +10,7 @@ type LearnProgressState = {
 };
 
 const storageKey = 'mahjong-multiplayer-learn-progress';
+const lessonIds = new Set(learnSections.flatMap((section) => section.lessons.map((lesson) => `${section.slug}/${lesson.slug}`)));
 
 function readProgress(): LearnProgressState {
   try {
@@ -32,11 +34,18 @@ function writeProgress(progress: LearnProgressState) {
 
 export function LandingProgressActions({ firstLessonHref, totalLessons }: { firstLessonHref: string; totalLessons: number }) {
   const [progress, setProgress] = useState<LearnProgressState>({ completedLessons: [], completedSections: [] });
-  const completedCount = progress.completedLessons.length;
+  const completedCount = useMemo(() => new Set(progress.completedLessons.filter((lessonId) => lessonIds.has(lessonId))).size, [progress.completedLessons]);
   const progressLabel = useMemo(() => `${completedCount} of ${totalLessons} lessons complete`, [completedCount, totalLessons]);
 
   useEffect(() => {
-    setProgress(readProgress());
+    const refresh = () => setProgress(readProgress());
+    refresh();
+    window.addEventListener('storage', refresh);
+    window.addEventListener('learn-progress-updated', refresh);
+    return () => {
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('learn-progress-updated', refresh);
+    };
   }, []);
 
   return (

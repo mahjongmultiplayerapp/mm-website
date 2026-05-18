@@ -1882,8 +1882,6 @@
   .section-six-checklist span,
   .section-six-rule-stack span,
   .section-six-point-output span,
-  .section-six-package-card span,
-  .section-six-package-card strong,
   .section-six-present-hand > div,
   .section-six-gallery > div:first-child,
   .section-six-limit-grid button,
@@ -1961,18 +1959,6 @@
     display: grid;
     gap: 18px;
   }
-  .section-six-package-card {
-    display: grid;
-    gap: 12px;
-    margin-top: 18px;
-  }
-  .section-six-package-card strong {
-    color: var(--gold-300);
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
   .section-six-gallery {
     display: grid;
     gap: 14px;
@@ -2028,6 +2014,10 @@
   .section-six-limit-grid p {
     grid-column: 1 / -1;
     color: var(--ivory-dim);
+  }
+  .section-six-limit-grid p strong {
+    display: block;
+    margin-bottom: 8px;
   }
   .section-six-table-wrap {
     display: grid;
@@ -2085,6 +2075,10 @@
   .section-six-present-hand small {
     color: var(--ivory-dim);
   }
+  .section-six-checkpoint {
+    display: grid;
+    gap: 16px;
+  }
   .section-seven-flow,
   .section-seven-mistake-grid,
   .section-seven-etiquette-grid,
@@ -2099,7 +2093,7 @@
   .section-seven-flow button,
   .section-seven-mistake-grid span,
   .section-seven-etiquette-grid span,
-  .section-seven-readiness label,
+  .section-seven-readiness-item,
   .section-seven-round-tracker button,
   .section-seven-wall-empty,
   .section-seven-round-tracker p,
@@ -2121,7 +2115,7 @@
   .section-seven-flow button.active,
   .section-seven-round-tracker button.active,
   .section-seven-round-tracker button:hover,
-  .section-seven-readiness label:hover {
+  .section-seven-readiness-item:hover {
     border-color: rgba(197,162,92,.48);
     background: rgba(197,162,92,.12);
     color: var(--ivory);
@@ -2228,6 +2222,22 @@
     flex-wrap: wrap;
     margin-top: 14px;
   }
+  .section-seven-cycle-controls .learn-secondary-link {
+    border: 1px solid rgba(197,162,92,.34);
+    border-radius: 14px;
+    background: rgba(5,19,15,.44);
+    color: var(--gold-300);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+  .section-seven-cycle-controls .learn-secondary-link:hover {
+    border-color: rgba(197,162,92,.54);
+    background: rgba(197,162,92,.12);
+    color: var(--ivory);
+  }
   .section-seven-round-tracker {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: 18px;
@@ -2255,14 +2265,18 @@
     color: var(--ivory);
     font-weight: 700;
   }
-  .section-seven-readiness label {
+  .section-seven-readiness-item {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 32px 1fr auto;
     align-items: center;
-    gap: 12px;
+    column-gap: 16px;
+    row-gap: 8px;
   }
   .section-seven-readiness input {
     accent-color: var(--gold-300);
+    height: 24px;
+    justify-self: center;
+    width: 24px;
   }
   .section-seven-readiness a {
     color: var(--gold-300);
@@ -2288,6 +2302,10 @@
     border-radius: inherit;
     background: linear-gradient(90deg, var(--jade-500), var(--gold-300));
     transition: width .2s ease;
+  }
+  .section-seven-checkpoint {
+    display: grid;
+    gap: 16px;
   }
   .final-test {
     display: grid;
@@ -2906,19 +2924,32 @@
     .section-four-call-example,
     .section-four-call-flow,
     .section-four-call-window,
-    .section-five-call-buttons,
     .section-five-decision-tree,
     .section-six-fan-badges,
     .section-six-payment-visual,
     .section-six-point-output,
     .section-six-present-hand,
-    .section-six-limit-grid,
     .section-seven-wall-empty,
     .section-seven-round-tracker,
-    .section-seven-mistake-grid,
-    .section-seven-etiquette-grid,
     .final-test-category-strip {
       grid-template-columns: 1fr;
+    }
+    .section-five-call-buttons {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .section-five-call-buttons span {
+      font-size: 12px;
+      padding: 10px 4px;
+    }
+    .section-six-limit-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .section-six-limit-grid p {
+      grid-column: 1 / -1;
+    }
+    .section-six-limit-grid button {
+      min-height: 68px;
+      padding: 12px 8px;
     }
     .section-seven-dealer-table {
       min-height: 300px;
@@ -2931,8 +2962,12 @@
       inset: 43% 22%;
       font-size: 10px;
     }
-    .section-seven-readiness label {
-      grid-template-columns: auto 1fr;
+    .section-seven-mistake-grid,
+    .section-seven-etiquette-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .section-seven-readiness-item {
+      grid-template-columns: 32px 1fr;
     }
     .section-seven-readiness a {
       grid-column: 2;
