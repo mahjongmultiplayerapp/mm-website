@@ -15,7 +15,6 @@ import {
   TileSetLesson,
 } from '../../SectionTwoLessons';
 import {
-  CommonSetupMistakesLesson,
   DealerEastLesson,
   DealingTilesLesson,
   DiceOpeningLesson,
@@ -324,8 +323,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <DealingTilesLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'table-areas' && isSectionThree ? (
             <TableAreasLesson lessonId={lessonId} nextHref={nextHref} />
-          ) : lesson.slug === 'common-setup-mistakes' && isSectionThree ? (
-            <CommonSetupMistakesLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'dealer-starts' && isSectionFour ? (
             <DealerStartsLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'anatomy-of-a-turn' && isSectionFour ? (

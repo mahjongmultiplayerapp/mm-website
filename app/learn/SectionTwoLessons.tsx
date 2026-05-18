@@ -308,13 +308,6 @@ export function TileSetLesson({ lessonId, nextHref }: LessonRuntimeProps) {
               { tile: 'dragon-red-chun', name: 'Dragon' },
             ]}
           />
-          <TileFamilyGroup
-            label="Bonus Tiles (Optional, not core tiles)"
-            tiles={[
-              { tile: 'flower-1-spring', name: 'Season' },
-              { tile: 'flower-8-nobility', name: 'Flower' },
-            ]}
-          />
         </div>
       </section>
       <section className="learn-content-card welcome-rule-card">
@@ -328,6 +321,19 @@ export function TileSetLesson({ lessonId, nextHref }: LessonRuntimeProps) {
           <ChoiceCheck question={question} onCorrect={() => setReady(true)} />
         </div>
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={ready} />
+      </section>
+      <section className="learn-content-card">
+        <h3>There&apos;s also Flower and Season tiles</h3>
+        <p>Also included in Mahjong tile sets are 4 &quot;Flower&quot; tiles and 4 &quot;Season&quot; tiles. These are called &quot;Bonus Tiles&quot; and only influence scoring in Hong Kong Mahjong. It&apos;s common to play both with and without these tiles. This learning course assumes that the 8 Bonus Tiles are excluded from the game and scoring.</p>
+        <div className="section-two-family-grid">
+          <TileFamilyGroup
+            label="Bonus Tiles (Optional, not core tiles)"
+            tiles={[
+              { tile: 'flower-1-spring', name: 'Season' },
+              { tile: 'flower-8-nobility', name: 'Flower' },
+            ]}
+          />
+        </div>
       </section>
       <Takeaway title="The core tile set is made of suited tiles and honor tiles." body="That split makes every later tile lesson easier." />
     </div>

@@ -19,7 +19,21 @@ const storageKey = 'mahjong-multiplayer-learn-progress';
 
 const seats = ['East', 'South', 'West', 'North'];
 const wallSteps = ['Shuffle face down', 'Stack tiles in pairs', 'Build four walls', 'Push walls together'];
+const wallStepRules = [
+  'Start with all tiles face down and mix them thoroughly so no one knows where any tile is.',
+  'Each player stacks tiles two high in front of them, building a straight wall 17 stacks long.',
+  'The four player walls become the full square wall that supplies tiles for the hand.',
+  'Push the walls inward until they form a tidy square, leaving a clean center for discards.',
+];
 const dealSteps = ['East takes first', 'South takes next', 'West takes next', 'North takes next', 'Repeat around the table', 'East starts the hand'];
+const dealStepRules = [
+  'East begins the deal by taking the first two stacks from the live wall, immediately beside the break.',
+  'South takes the next two stacks from the wall after East has drawn.',
+  'West follows South and takes the next two stacks in the dealing sequence.',
+  'North takes the next two stacks, completing one full pass around the table.',
+  'Continue cycling East, South, West, North until each player has 12 tiles.',
+  'East takes the final two top-tier tiles to reach 14, while the other players finish with 13 tiles.',
+];
 const diceWallMap = [
   { totals: '2, 6, 10', wall: 'South' },
   { totals: '3, 7, 11', wall: 'West' },
@@ -28,28 +42,28 @@ const diceWallMap = [
 ];
 const diceOpeningQuestions: ChoiceQuestion[] = [
   {
-    prompt: 'East rolls 3 + 5 = 8. Which wall is broken?',
+    prompt: 'East rolls 1 + 4 = 5. Which wall is broken?',
     options: ['East', 'South', 'West', 'North'],
-    answer: 3,
-    explanation: 'Starting with East as 1 and counting East, South, West, North, a total of 8 lands on North.',
+    answer: 0,
+    explanation: 'Starting with East as 1 and counting East, South, West, North, a total of 5 lands back on East.',
   },
   {
-    prompt: 'Once North’s wall is selected, where do you start counting stacks?',
-    options: ['From North’s right-hand end', 'From East’s wall', 'From the center of the wall', 'From any loose tile'],
+    prompt: 'Once East’s wall is selected, where do you start counting stacks?',
+    options: ['From East’s right-hand end', 'From South’s wall', 'From the center of the wall', 'From any loose tile'],
     answer: 0,
     explanation: 'Count stacks from the selected player’s right-hand end, from that player’s perspective.',
   },
   {
-    prompt: 'With a dice total of 8, where is the break made?',
-    options: ['Before the 8th stack', 'After the 8th stack', 'After 8 individual tiles', 'At the opposite wall'],
+    prompt: 'With a dice total of 5, where is the break made?',
+    options: ['Before the 5th stack', 'After the 5th stack', 'After 5 individual tiles', 'At the opposite wall'],
     answer: 1,
-    explanation: 'Count 8 stacks, then break immediately after the counted stack.',
+    explanation: 'Count 5 stacks, then break immediately after the counted stack.',
   },
 ];
 const liveDeadQuestions: ChoiceQuestion[] = [
   {
     prompt: 'On a normal turn, where does a player draw from?',
-    options: ['Live wall', 'Dead wall / kong box', 'River', 'Open meld area'],
+    options: ['Live wall', 'Dead wall', 'River', 'Open meld area'],
     answer: 0,
     explanation: 'Normal turn draws come from the live wall.',
   },
@@ -67,25 +81,18 @@ const liveDeadQuestions: ChoiceQuestion[] = [
   },
   {
     prompt: 'Which event uses the dead wall?',
-    options: ['A normal turn draw', 'A flower, season, or kong replacement', 'Any discard', 'The final draw after the live wall runs out'],
+    options: ['A normal turn draw', 'Kong tile replacement', 'Any discard', 'The final draw after the live wall runs out'],
     answer: 1,
-    explanation: 'Flowers, seasons, and declared kongs need replacement tiles from the dead wall.',
+    explanation: 'Declared kongs need replacement tiles from the dead wall.',
   },
 ];
 
 const tableAreas: Record<string, string> = {
-  Wall: 'The face-down supply of tiles for the hand.',
-  River: 'The face-up discard area where played tiles collect.',
   'Concealed hand': 'Your private tiles, kept in front of you.',
   'Open meld area': 'Called melds and declared kongs, visible to everyone.',
+  River: 'The face-up discard area where played tiles collect.',
+  Wall: 'The face-down supply of tiles for the hand.',
 };
-
-const mistakes = [
-  { title: 'South starts dealing instead of East.', answer: 'Wrong dealer', explanation: 'East is the dealer for the current hand and starts the deal.' },
-  { title: 'A player looks before the deal is confirmed.', answer: 'Looking too early', explanation: 'Slow down during setup. Confirm the deal before reading tiles.' },
-  { title: 'A player draws from the dead wall on a normal turn.', answer: 'Wrong wall area', explanation: 'Normal turns draw from the live wall.' },
-  { title: 'A player has too many tiles after the deal.', answer: 'Wrong tile count', explanation: 'Tile counts should be checked before play begins.' },
-];
 
 const recapItems = [
   { title: 'East is the dealer.', body: 'Identify East first, then follow seat order around the table.' },
@@ -287,7 +294,7 @@ function WallPhotoVisual() {
   return (
     <img
       className="section-three-wall-photo"
-      src="/assets/lesson-3-mahjong-wall.jpg"
+      src="/assets/board-images/hong_kong/setup_walls.jpg"
       alt="A mahjong wall built from stacked face-down tiles."
     />
   );
@@ -298,30 +305,23 @@ function DiceOpeningVisual() {
     <div className="section-three-dice-guide">
       <div className="section-three-dice-example">
         <span className="eyebrow">Example roll</span>
-        <strong>3 + 5 = 8</strong>
-        <p>Count players from East in turn order: East, South, West, North. The 8 lands on North.</p>
+        <strong>1 + 4 = 5</strong>
+        <p>Count players from East in turn order: East, South, West, North. The 5 lands back on East.</p>
       </div>
       <div className="section-three-dice-map">
         {diceWallMap.map((item) => (
-          <div className={item.wall.startsWith('North') ? 'active' : ''} key={item.totals}>
+          <div className={item.wall === 'East' ? 'active' : ''} key={item.totals}>
             <span>{item.totals}</span>
             <strong>{item.wall}</strong>
           </div>
         ))}
       </div>
-      <div className="section-three-stack-count" aria-label="Eight stacks counted from the right end of North's wall">
-        {Array.from({ length: 17 }).map((_, index) => {
-          const stackNumber = 17 - index;
-          const isCounted = stackNumber <= 8;
-
-          return (
-            <span className={`${isCounted ? 'counted' : ''} ${stackNumber === 8 ? 'break-after' : ''}`} key={stackNumber}>
-              {isCounted ? stackNumber : ''}
-            </span>
-          );
-        })}
-      </div>
-      <p className="section-three-dice-note">From North’s right-hand end, count 8 stacks and break after the 8th stack.</p>
+      <img
+        className="section-three-wall-photo section-three-opening-photo"
+        src="/assets/board-images/hong_kong/opening_the_wall.jpg"
+        alt="A mahjong wall opened at the break point."
+      />
+      <p className="section-three-dice-note">From East’s right-hand end, count 5 stacks and break after the 5th stack.</p>
     </div>
   );
 }
@@ -336,7 +336,7 @@ function DiceOpeningCheck({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="section-three-dice-check">
-      <h3>Use the roll 3 + 5 = 8.</h3>
+      <h3>Use the roll 1 + 4 = 5.</h3>
       {diceOpeningQuestions.map((question, questionIndex) => (
         <div className="section-three-dice-question" key={question.prompt}>
           <p>{question.prompt}</p>
@@ -367,53 +367,11 @@ function DiceOpeningCheck({ onComplete }: { onComplete: () => void }) {
 
 function LiveDeadWallVisual() {
   return (
-    <div className="section-three-live-dead-guide">
-      <div className="section-three-live-dead-wall">
-        <div className="section-three-live-dead-row" aria-label="Dead wall and live wall separated by the break point">
-          {Array.from({ length: 17 }).map((_, index) => {
-            const stackNumber = index + 1;
-            const isDead = stackNumber <= 7;
-            const isLiveStart = stackNumber === 8;
-
-            return (
-              <span className={`${isDead ? 'dead' : 'live'} ${isLiveStart ? 'live-start' : ''}`} key={stackNumber}>
-                {isDead ? stackNumber : isLiveStart ? 8 : ''}
-              </span>
-            );
-          })}
-        </div>
-        <div className="section-three-live-dead-legend">
-          <span>Dead wall / kong box: 7 stacks behind the break</span>
-          <span>Live wall starts at stack 8 and continues right</span>
-        </div>
-      </div>
-      <div className="section-three-live-dead-labels">
-        <div>
-          <span className="eyebrow">Live wall</span>
-          <strong>Main draw pile</strong>
-          <p>Normal turns draw from here after the initial deal.</p>
-        </div>
-        <div>
-          <span className="eyebrow">Dead wall / kong box</span>
-          <strong>7 stacks = 14 tiles</strong>
-          <p>The 7 stacks immediately behind the break become the replacement reserve.</p>
-        </div>
-      </div>
-      <div className="section-three-replacement-grid">
-        <div>
-          <strong>Flower or season</strong>
-          <p>Reveal it, set it aside, then draw a replacement from the dead wall.</p>
-        </div>
-        <div>
-          <strong>Kong</strong>
-          <p>Declare the kong, draw one replacement from the dead wall, then discard.</p>
-        </div>
-        <div>
-          <strong>Live wall empty</strong>
-          <p>If no one wins before the live wall runs out, the hand is a draw.</p>
-        </div>
-      </div>
-    </div>
+    <img
+      className="section-three-wall-photo"
+      src="/assets/board-images/hong_kong/live_and_dead_wall.jpg"
+      alt="A mahjong wall showing the live wall and dead wall areas."
+    />
   );
 }
 
@@ -526,14 +484,14 @@ export function WallLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       lessonId={lessonId}
       nextHref={nextHref}
-      title="The wall is the face-down supply."
+      title="The wall is the face-down supply of tiles."
       copy={[
-        'Before the hand begins, all tiles are shuffled face down. Each player builds a wall in front of them using two-tile-high stacks.',
+        'Before the hand begins, all 136 tiles are shuffled face down. Each player builds a wall in front of them using two-tile-high stacks that is 17 tiles long.',
         'The four walls form a square. Players draw from the wall in order, so keeping it neat matters.',
       ]}
       visual={<WallPhotoVisual />}
       ruleTitle={wallSteps[active]}
-      rule="The wall is built before play and becomes the supply of tiles for the hand."
+      rule={wallStepRules[active]}
       check={<><h3>Build the wall step by step.</h3><FlowStepper steps={wallSteps} active={active} onActive={setActive} /></>}
       ready={ready}
       takeaway={{ title: 'The wall is the face-down supply of tiles used during the hand.', body: 'Neat walls make the rest of setup easier.' }}
@@ -550,15 +508,15 @@ export function DiceOpeningLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       title="Dice choose the wall and the break point."
       copy={[
         'After the four walls are built, East rolls two dice and adds the total. That same total does two jobs: it chooses which player’s wall is broken, and it chooses the exact break point in that wall.',
-        'Count players from East as 1 in normal turn order: East, South, West, North. Totals 2, 6, and 10 break South’s wall; 3, 7, and 11 break West’s wall; 4, 8, and 12 break North’s wall; 5 and 9 break East’s wall.',
-        'Once the wall is selected, count that number of stacks from the selected player’s right-hand end. Count stacks, not individual tiles. Break immediately after the counted stack, then dealing begins from the break.',
+        'Count players in counter-clockwise order starting from East as the first seat: East, South, West, North, East, South, West, etc. Keep going until you reach the number shown on the dice. This seat which you landed on is the wall which will be broken at.',
+        'Once the wall is selected, count that number of stacks from the selected player’s right end of their wall. Count stacks, not individual tiles. Break immediately after the counted stack, then dealing begins from the break.',
       ]}
       visual={<DiceOpeningVisual />}
       ruleTitle="Count walls, then stacks."
       rule="Use the dice total to count players from East, then count that many stacks from the selected wall’s right-hand end and break after the counted stack."
       check={<DiceOpeningCheck onComplete={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'The dice total chooses both the wall and the break point.', body: 'For a roll of 8, break North’s wall after counting 8 stacks from North’s right-hand end.' }}
+      takeaway={{ title: 'The dice total chooses both the wall and the break point.', body: 'For a roll of 5, break East’s wall after counting 5 stacks from East’s right-hand end.' }}
     />
   );
 }
@@ -569,20 +527,56 @@ export function LiveDeadWallLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       lessonId={lessonId}
       nextHref={nextHref}
-      title="Live wall for normal draws, dead wall for replacements."
+      title="Draw from the live wall for normal draws, and dead wall for replacements."
       copy={[
-        'After the dice break, the wall has two jobs. The live wall is the main draw pile: after the initial deal, ordinary turns draw from the live wall in order.',
-        'The dead wall, also called the kong box, is a reserved section of 14 tiles, or 7 stacks. After the break is made, those 7 stacks are taken from the back side of the break, opposite the side where the dealer starts taking tiles. The remaining wall from the draw side is the live wall.',
-        'The dead wall is used for replacement tiles. If a player receives or draws a flower or season, they reveal it, set it aside, and draw a replacement from the dead wall. When a player declares a kong, they also draw the replacement tile from the dead wall before discarding.',
+        'After the dice break, the wall has two distinct ends. The live wall is the main draw pile: after the initial deal, ordinary turns draw from the live wall in order.',
+        'The dead wall is a reserved section of 14 tiles, or 7 stacks. After the break is made, those 7 stacks are taken from the back side of the break, opposite the side where the dealer starts taking tiles.',
+        'The dead wall is used for replacement tiles. When a player declares a Kong, they also draw the replacement tile from the dead wall before discarding.',
         'If the live wall runs out before anyone wins, the hand ends in a draw. The dead wall does not become a normal draw pile.',
       ]}
       visual={<LiveDeadWallVisual />}
-      ruleTitle="Reserve 7 stacks behind the break."
-      rule="The live wall begins on the draw side of the break. The 7 stacks immediately behind the break become the 14-tile dead wall reserve."
+      ruleTitle="Draw from the live wall, unless you had a Kong."
+      rule="Normal draws come from the live wall. The dead wall is reserved for Kong replacement tiles."
       check={<LiveDeadWallCheck onComplete={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'Live wall is ordinary play; dead wall is replacement reserve.', body: 'Do not use the dead wall as a normal draw pile, even near the end of the hand.' }}
+      takeaway={{ title: 'Live wall is ordinary play; dead wall is replacement reserve.', body: 'Do not use the dead wall as a normal draw pile. Only use it for Kong tile replacements, which you will learn about in more detail in later sections.' }}
     />
+  );
+}
+
+function DealingTilesVisual() {
+  return (
+    <div className="section-three-dealing-photos">
+      <img
+        className="section-three-wall-photo"
+        src="/assets/board-images/hong_kong/draw_from_wall.jpg"
+        alt="A player drawing tiles from the opened mahjong wall."
+      />
+      <img
+        className="section-three-wall-photo"
+        src="/assets/board-images/hong_kong/drawing_final_tiles.jpg"
+        alt="A player drawing the final setup tiles from the wall."
+      />
+    </div>
+  );
+}
+
+function TableAreasVisual({ active, onChoose }: { active: string; onChoose: (area: string) => void }) {
+  return (
+    <div>
+      <img
+        className="section-three-wall-photo"
+        src="/assets/board-images/hong_kong/table_areas.jpg"
+        alt="A mahjong table showing the concealed hand, open meld area, river, and wall."
+      />
+      <div className="section-two-table-map">
+        {Object.keys(tableAreas).map((area) => (
+          <button type="button" className={active === area ? 'active' : ''} onClick={() => onChoose(area)} key={area}>
+            {area}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -593,14 +587,16 @@ export function DealingTilesLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       lessonId={lessonId}
       nextHref={nextHref}
-      title="East starts; everyone else follows in table order."
+      title="East draws first, followed by South, then West, and North, and so on."
       copy={[
-        'After the wall is opened, tiles are dealt starting with East and continuing around the table.',
-        'The deal gives everyone their starting hand. East begins with the extra tile needed to start play, then discards first.',
+        'After the wall is opened, East starts by drawing four tiles (two stacks) left of where the wall was broken.',
+        'After East draws, then South draws the next two stacks, and then West, and then North. This continues until each player has twelve tiles in their hand.',
+        'The order of play is counter-clockwise (e.g. East then South, etc). In contrast, the order of drawing tiles from the wall is clockwise.',
+        'Once the dealer has twelve tiles, they draw two more from the top tier of the wall, by drawing one tile, skipping a tile, and then drawing one more tile (all from the top tier). This means the dealer has 14 tiles in their hand. All other players pick one last tile to end with 13 tiles in their hand.'
       ]}
-      visual={<SeatTable activeSeat={seats[Math.min(active, 3)]} />}
+      visual={<DealingTilesVisual />}
       ruleTitle={dealSteps[active]}
-      rule="Dealing starts with East and proceeds around the table."
+      rule={dealStepRules[active]}
       check={<><h3>Tap through the dealing sequence.</h3><FlowStepper steps={dealSteps} active={active} onActive={setActive} /></>}
       ready={ready}
       takeaway={{ title: 'Dealing starts with East and proceeds around the table.', body: 'East starts the first play rhythm by discarding.' }}
@@ -609,8 +605,8 @@ export function DealingTilesLesson({ lessonId, nextHref }: LessonRuntimeProps) {
 }
 
 export function TableAreasLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [active, setActive] = useState('Wall');
-  const [visited, setVisited] = useState(() => new Set(['Wall']));
+  const [active, setActive] = useState('Concealed hand');
+  const [visited, setVisited] = useState(() => new Set(['Concealed hand']));
   const ready = visited.size === Object.keys(tableAreas).length;
 
   const choose = (area: string) => {
@@ -627,43 +623,12 @@ export function TableAreasLesson({ lessonId, nextHref }: LessonRuntimeProps) {
         'A mahjong table has distinct areas. The wall is the face-down supply. The river is the face-up discard area.',
         'Your concealed hand is private. Open melds are exposed sets from calls or declared kongs.',
       ]}
-      visual={<div className="section-two-table-map">{Object.keys(tableAreas).map((area) => <button type="button" className={active === area ? 'active' : ''} onClick={() => choose(area)} key={area}>{area}</button>)}</div>}
+      visual={<TableAreasVisual active={active} onChoose={choose} />}
       ruleTitle={active}
       rule={tableAreas[active]}
-      check={<><h3>Tap each area of the table.</h3><p>{ready ? 'You visited each area.' : 'Tap wall, river, concealed hand, and open meld area.'}</p></>}
+      check={<><h3>Tap each area of the table.</h3><p>{ready ? 'You visited each area.' : 'Tap concealed hand, open meld area, river, and wall.'}</p></>}
       ready={ready}
       takeaway={{ title: 'Knowing the table areas helps you follow the game and avoid mistakes.', body: 'Clear placement makes the game easier for everyone.' }}
-    />
-  );
-}
-
-export function CommonSetupMistakesLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [index, setIndex] = useState(0);
-  const [solved, setSolved] = useState<Record<number, boolean>>({});
-  const scenario = mistakes[index];
-  const ready = mistakes.every((_, mistakeIndex) => solved[mistakeIndex]);
-
-  const choose = (answer: string) => {
-    if (answer === scenario.answer) {
-      setSolved((current) => ({ ...current, [index]: true }));
-    }
-  };
-
-  return (
-    <LessonFrame
-      lessonId={lessonId}
-      nextHref={nextHref}
-      title="Setup errors are normal; careful habits prevent them."
-      copy={[
-        'Most setup mistakes come from rushing: wrong dealer, wrong tile count, looking too early, drawing from the wrong part of the wall, or confusing live wall with dead wall.',
-        'The best beginner habit is to slow down and confirm East, the wall opening, and tile counts before play begins.',
-      ]}
-      visual={<div className="section-three-mistake-card"><span className="eyebrow">Scenario</span><h3>{scenario.title}</h3>{solved[index] ? <p>{scenario.explanation}</p> : null}</div>}
-      ruleTitle="Check before play."
-      rule="Confirm dealer, wall opening, and tile counts before the first discard."
-      check={<><h3>Spot the setup mistake.</h3><div className="section-one-answer-grid">{['Wrong dealer', 'Wrong tile count', 'Looking too early', 'Wrong wall area'].map((answer) => <button type="button" className={solved[index] && answer === scenario.answer ? 'correct' : ''} onClick={() => choose(answer)} key={answer}>{answer}</button>)}</div><div className="section-two-pager">{mistakes.map((item, mistakeIndex) => <button type="button" className={mistakeIndex === index ? 'active' : ''} onClick={() => setIndex(mistakeIndex)} key={item.title}>{mistakeIndex + 1}</button>)}</div></>}
-      ready={ready}
-      takeaway={{ title: 'Most setup mistakes come from wrong dealer, wrong count, or wrong wall area.', body: 'Slow setup creates cleaner play.' }}
     />
   );
 }

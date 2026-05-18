@@ -110,6 +110,21 @@ function TileRail({ tiles }: { tiles: string[] }) {
   );
 }
 
+function ArrangingHandVisual() {
+  const tiles = ['一', '二', '三', '中', '中', '中', '發', '發', '發', '東', '東', '9萬', '5', '北'];
+
+  return (
+    <div className="section-four-choice-panel">
+      <div className="learn-tile-rail section-four-arranging-hand">
+        {tiles.map((tile, index) => (
+          <MiniTile tile={tile} className={index === tiles.length - 1 ? 'drawn' : ''} key={`${tile}-${index}`} />
+        ))}
+      </div>
+      <div><button>Win?</button><button>Kong?</button><button>Discard?</button></div>
+    </div>
+  );
+}
+
 function ChoiceCheck({ question, onCorrect }: { question: ChoiceQuestion; onCorrect: () => void }) {
   const [selected, setSelected] = useState<number | null>(null);
   const correct = selected === question.answer;
@@ -147,7 +162,7 @@ function LessonFrame({
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
-  visual: React.ReactNode;
+  visual?: React.ReactNode;
   ruleTitle: string;
   rule: string;
   check: React.ReactNode;
@@ -163,10 +178,12 @@ function LessonFrame({
           <p key={paragraph}>{paragraph}</p>
         ))}
       </article>
-      <section className="learn-content-card">
-        <span className="eyebrow">Visual example</span>
-        {visual}
-      </section>
+      {visual ? (
+        <section className="learn-content-card">
+          <span className="eyebrow">Visual example</span>
+          {visual}
+        </section>
+      ) : null}
       <section className="learn-content-card welcome-rule-card">
         <span className="eyebrow">Rule in plain English</span>
         <h3>{ruleTitle}</h3>
@@ -188,16 +205,69 @@ function LessonFrame({
   );
 }
 
-function TurnTable({ activeSeat = 'East', calledSeat }: { activeSeat?: string; calledSeat?: string }) {
+function TurnTable({ activeSeat = 'East', calledSeat, discardedSeat }: { activeSeat?: string; calledSeat?: string; discardedSeat?: string }) {
   return (
     <div className="section-four-turn-table">
       {seats.map((seat) => (
-        <div className={`${activeSeat === seat ? 'active' : ''} ${calledSeat === seat ? 'called' : ''} seat-${seat.toLowerCase()}`} key={seat}>
+        <div className={`${activeSeat === seat ? 'active' : ''} ${calledSeat === seat ? 'called' : ''} ${discardedSeat === seat ? 'discarded' : ''} seat-${seat.toLowerCase()}`} key={seat}>
           <span>{seat}</span>
-          <small>{calledSeat === seat ? 'Called' : activeSeat === seat ? 'Turn' : 'Waiting'}</small>
+          <small>{discardedSeat === seat ? 'Discarded' : calledSeat === seat ? 'Called' : activeSeat === seat ? 'Turn' : 'Waiting'}</small>
         </div>
       ))}
       <div className="section-four-turn-center">{calledSeat ? 'Call interrupts order' : 'Normal order'}</div>
+    </div>
+  );
+}
+
+function CallWindowVisual() {
+  return (
+    <div className="section-four-call-example">
+      <div className="section-four-call-step">
+        <span className="eyebrow">East discards</span>
+        <MiniTile tile="4" />
+        <strong>4 Dot</strong>
+      </div>
+      <div className="section-four-call-step active">
+        <span className="eyebrow">West calls</span>
+        <strong>Uses the 4 Dot, exposes a Pung</strong>
+        <div className="learn-tile-rail">
+          <MiniTile tile="4" className="called-tile" />
+          <MiniTile tile="4" />
+          <MiniTile tile="4" />
+        </div>
+      </div>
+      <div className="section-four-call-step muted">
+        <span className="eyebrow">South / North</span>
+        <strong>No call</strong>
+        <p>They do not try to take the tile.</p>
+      </div>
+    </div>
+  );
+}
+
+function TurnOrderCallVisual() {
+  return (
+    <div className="section-four-turn-call-example">
+      <TurnTable activeSeat="North" calledSeat="North" discardedSeat="South" />
+      <div className="section-four-call-flow">
+        <div>
+          <span className="eyebrow">South discards</span>
+          <MiniTile tile="中" />
+        </div>
+        <div>
+          <span className="eyebrow">North calls</span>
+          <div className="learn-tile-rail">
+            <MiniTile tile="中" className="called-tile" />
+            <MiniTile tile="中" />
+            <MiniTile tile="中" />
+          </div>
+        </div>
+        <div>
+          <span className="eyebrow">North discards</span>
+          <MiniTile tile="北" />
+        </div>
+      </div>
+      <p>After exposing the meld, North discards so North’s concealed hand plus exposed melds tallies to 13 tiles until a winning hand.</p>
     </div>
   );
 }
@@ -222,7 +292,7 @@ export function DealerStartsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="East starts; normal order continues if no one calls."
-      copy={['After the deal, East starts the play phase. For beginners, think of East as making the first discard.', 'If nobody calls that discard, play passes to the next player in order.']}
+      copy={['After the deal, East starts the play phase and discards a tile first.', 'The other players can "call" the discarded tile, which lets them use the discarded tile to form an open meld. If nobody calls that discard, play passes to the next player in order.']}
       visual={<TurnTable activeSeat="East" />}
       ruleTitle="East discards first."
       rule="East starts the hand, then play continues around the table unless interrupted."
@@ -247,7 +317,7 @@ export function AnatomyTurnLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       rule={['Draw a tile from the live wall.', 'Check whether to win, kong, or continue.', 'Place one tile face up in the river.', 'Pause so other players may call.'][active]}
       check={<><h3>Tap through the four stages of a turn.</h3><p>{ready ? 'You reached the call window.' : 'Move through each stage in order.'}</p></>}
       ready={ready}
-      takeaway={{ title: 'Every normal turn follows draw, arrange, discard, then call window.', body: 'This is the rhythm to hear in your head while playing.' }}
+      takeaway={{ title: 'Every normal turn follows draw, arrange, discard, then call window.', body: 'This is the rhythm to hear in your head while playing. We will go through how to call tiles and play Kongs in upcoming lessons.' }}
     />
   );
 }
@@ -259,8 +329,7 @@ export function DrawingTileLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="Hands off the wall until the discard is released."
-      copy={['Only draw when it is your turn. Draw from the live wall, not the dead wall, unless you are taking a kong supplement.', 'Do not reach early while the previous player is still deciding or has not clearly discarded. Other players may still have the right to call.']}
-      visual={<div className="section-four-draw-visual"><div className="section-four-wall-mini"></div><TileRail tiles={['三', '四', '五', '中']} /><span>Wait for discard → then draw</span></div>}
+      copy={['Only draw when it is your turn. Draw from the live wall, not the dead wall, unless you are taking a kong supplement.', 'Do not reach early while the previous player is still deciding or has not clearly discarded. Other players may still have the right to call. The correct amount of time to wait is ultimately subjective and depends on the pace of play at your mahjong table.']}
       ruleTitle="No early draw."
       rule="Wait until the previous discard is clearly placed and released."
       check={<ChoiceCheck question={{ prompt: 'What is wrong if a player reaches before the previous discard lands?', options: ['They are drawing too early', 'They are scoring', 'They are calling Pung', 'Nothing is wrong'], answer: 0, explanation: 'Exactly. Early draws create confusion and can block legal calls.' }} onCorrect={() => setReady(true)} />}
@@ -277,8 +346,8 @@ export function ArrangingHandLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       lessonId={lessonId}
       nextHref={nextHref}
       title="Do not discard automatically."
-      copy={['After drawing, pause and evaluate. Did the tile complete your hand? If yes, you may declare self-draw if the hand is legal and has enough fan.', 'Did the tile give you a kong? You may be able to declare it. Otherwise, choose a discard that moves your hand forward.']}
-      visual={<div className="section-four-choice-panel"><TileRail tiles={['一', '二', '三', '中', '中', '中', '東', '東']} /><div><button>Win?</button><button>Kong?</button><button>Discard?</button></div></div>}
+      copy={['After drawing, pause and evaluate. Did the tile complete your hand? If yes, you may declare self-draw win if the hand is legal and has enough fan.', 'Did the tile give you a kong? You may be able to declare it. Otherwise, choose a discard that moves your hand forward.']}
+      visual={<ArrangingHandVisual />}
       ruleTitle="Think first."
       rule="The arrangement stage is where you decide whether to win, kong, or discard."
       check={<ChoiceCheck question={{ prompt: 'You draw a tile that completes your hand. What can you declare?', options: ['Self-draw', 'Pass', 'Dead wall', 'River'], answer: 0, explanation: 'Correct. A winning draw is a self-draw.' }} onCorrect={() => setReady(true)} />}
@@ -303,7 +372,7 @@ export function DiscardingLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       rule="A discard must be clear, face up, and visible to everyone."
       check={<><h3>Place one tile into the river.</h3><p>{ready ? 'Discard confirmed. Other players can now call or pass.' : 'Choose a tile, then tap the river.'}</p></>}
       ready={ready}
-      takeaway={{ title: 'A discard must be clear, face up, and visible to everyone.', body: 'Visible discards make calls fair.' }}
+      takeaway={{ title: 'A discard must be clear, face up, and visible to everyone.', body: 'Visible discards make calling tiles fair for other players.' }}
     />
   );
 }
@@ -315,13 +384,13 @@ export function CallWindowLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="Discard, pause, then next draw."
-      copy={['After a discard, the table briefly pauses. Other players may call the most recent discard for Chow, Pung, Kong, or Win if the rules allow it.', 'If nobody calls, the next player draws from the live wall. The pause matters because drawing too quickly can block a legal call.']}
-      visual={<div className="section-four-call-window"><MiniTile tile="中" /><button>Call</button><button>Pass</button><button>Pass</button></div>}
+      copy={['After East discards 4 Dot, the table briefly pauses. West may call the 4 Dot if it completes a legal meld, while the other players may choose not to call.', 'When West calls, West must make a legal move with the discard, such as exposing a meld that uses the 4 Dot.']}
+      visual={<CallWindowVisual />}
       ruleTitle="Pause after discard."
-      rule="After every discard, there is a brief chance for opponents to call."
-      check={<ChoiceCheck question={{ prompt: 'A tile is discarded. Nobody calls. What happens next?', options: ['Next player draws from the live wall', 'The tile returns to hand', 'The hand ends', 'East scores'], answer: 0, explanation: 'Correct. If nobody calls, the next player draws.' }} onCorrect={() => setReady(true)} />}
+      rule="If West calls East’s 4 Dot, West must expose a legal meld that uses that 4 Dot."
+      check={<ChoiceCheck question={{ prompt: 'East discards 4 Dot and West calls it. What must West do?', options: ['Expose a legal meld using 4 Dot', 'Put it straight into the river', 'Hide it in the wall', 'Skip the discard step forever'], answer: 0, explanation: 'Correct. A called tile must be used in a legal exposed meld.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'After every discard, there is a brief chance for opponents to call.', body: 'The rhythm is discard, pause, then next draw.' }}
+      takeaway={{ title: 'A call must create a legal exposed meld.', body: 'The rhythm is discard, pause, call if legal, then the caller discards.' }}
     />
   );
 }
@@ -333,13 +402,13 @@ export function TurnOrderLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       title="Calls interrupt turn order."
-      copy={['Normally, play moves around the table in order. Calls interrupt that order.', 'If a player calls Pung, Kong, or Chow, that player exposes the set and then discards. Play continues from the caller, not from the player who would have drawn next.']}
-      visual={<TurnTable activeSeat="South" calledSeat="West" />}
+      copy={['Normally, play moves around the table in order. Calls interrupt that order.', 'If South discards and North calls, North exposes the set and then discards. North discards because the tiles in North’s exposed melds and concealed hand should tally to 13 until North has a winning hand.']}
+      visual={<TurnOrderCallVisual />}
       ruleTitle="Caller discards next."
-      rule="South discards, West calls Pung, West discards next."
-      check={<ChoiceCheck question={{ prompt: 'South discards. West calls Pung. Who discards next?', options: ['South', 'East', 'West', 'North'], answer: 2, explanation: 'Exactly. Calls move play to the caller.' }} onCorrect={() => setReady(true)} />}
+      rule="South discards, North calls, North exposes the meld, then North discards."
+      check={<ChoiceCheck question={{ prompt: 'South discards. North calls. Who discards next?', options: ['South', 'East', 'West', 'North'], answer: 3, explanation: 'Exactly. Calls move play to the caller, so North discards next.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
-      takeaway={{ title: 'Calls interrupt turn order and move play to the caller.', body: 'This is why calls can skip players.' }}
+      takeaway={{ title: 'Calls interrupt turn order and move play to the caller.', body: 'The caller exposes the set, then discards to return to the normal tile count.' }}
     />
   );
 }
