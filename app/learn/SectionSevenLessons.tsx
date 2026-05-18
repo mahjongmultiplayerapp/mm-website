@@ -28,7 +28,7 @@ const checkpointQuestions: ChoiceQuestion[] = [
 ];
 
 const recapItems = [
-  { title: 'Hands have an afterlife.', body: 'A win or draw is followed by verification, settlement, dealer movement, and setup for the next hand.' },
+  { title: 'There are defined steps after a hand.', body: 'A win or draw is followed by verification, settlement, dealer movement, and setup for the next hand.' },
   { title: 'Draws move the table forward.', body: 'In this ruleset, a drawn hand happens when the live wall runs out with no winner, and dealer does not continue.' },
   { title: 'Dealer movement gives structure.', body: 'When the deal passes, previous South becomes the next East.' },
   { title: 'Rounds are bigger than hands.', body: 'Dealer cycles and round winds organize a full game session.' },
@@ -147,7 +147,7 @@ function LessonFrame({
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
-  visual: React.ReactNode;
+  visual?: React.ReactNode;
   ruleTitle: string;
   rule: string;
   check: React.ReactNode;
@@ -163,10 +163,12 @@ function LessonFrame({
           <p key={paragraph}>{paragraph}</p>
         ))}
       </article>
-      <section className="learn-content-card">
-        <span className="eyebrow">Visual example</span>
-        {visual}
-      </section>
+      {visual ? (
+        <section className="learn-content-card">
+          <span className="eyebrow">Visual example</span>
+          {visual}
+        </section>
+      ) : null}
       <section className="learn-content-card welcome-rule-card">
         <span className="eyebrow">Rule in plain English</span>
         <h3>{ruleTitle}</h3>
@@ -199,18 +201,6 @@ function FlowSteps({ steps }: { steps: string[] }) {
           {step}
         </button>
       ))}
-    </div>
-  );
-}
-
-function WallDrawVisual() {
-  return (
-    <div className="section-seven-wall-empty">
-      {Array.from({ length: 12 }).map((_, index) => (
-        <span className={index > 2 ? 'empty' : ''} key={index} />
-      ))}
-      <strong>Drawn Hand</strong>
-      <p>No winner before the live wall is exhausted.</p>
     </div>
   );
 }
@@ -260,7 +250,7 @@ function WindCycleVisual() {
 }
 
 function RoundTracker() {
-  const [complete, setComplete] = useState(2);
+  const [complete, setComplete] = useState(0);
 
   return (
     <div className="section-seven-round-tracker">
@@ -269,7 +259,7 @@ function RoundTracker() {
           Cycle {cycle}
         </button>
       ))}
-      <p>{complete === 4 ? 'Round endpoint reached. Verify final scores.' : 'Keep playing until the formal endpoint is reached.'}</p>
+      <p>{complete === 0 ? 'Select a cycle to track round progress.' : complete === 4 ? 'Round endpoint reached. Verify final scores.' : 'Keep playing until the formal endpoint is reached.'}</p>
     </div>
   );
 }
@@ -282,6 +272,7 @@ function MistakeSpotter({ scenarios, onReady }: { scenarios: ChoiceQuestion[]; o
   return (
     <div>
       <ChoiceCheck
+        key={question.prompt}
         question={question}
         onCorrect={() => {
           setCorrectCount((current) => {
@@ -330,15 +321,16 @@ function ReadinessChecklist({ onReady }: { onReady: () => void }) {
         <span style={{ width: `${(checkedCount / readinessItems.length) * 100}%` }} />
       </div>
       {readinessItems.map((item) => (
-        <label key={item.label}>
+        <div className="section-seven-readiness-item" key={item.label}>
           <input
             type="checkbox"
+            aria-label={item.label}
             checked={Boolean(checked[item.label])}
             onChange={(event) => setChecked((current) => ({ ...current, [item.label]: event.target.checked }))}
           />
           <span>{item.label}</span>
           {!checked[item.label] ? <a href={item.review}>Review</a> : null}
-        </label>
+        </div>
       ))}
       <p>{checkedCount >= 6 ? 'Good. You have enough confidence marked to continue.' : 'Mark the areas you feel comfortable with. Review links appear beside unchecked areas.'}</p>
     </div>
@@ -384,10 +376,9 @@ export function DrawnHandsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       title="A draw means the wall ran out"
       copy={[
-        'A drawn hand happens when the final live-wall tile is drawn and discarded with no win. No one wins that hand.',
-        'In these tournament-style rules, the dealer does not continue on a draw. Social tables may vary, so confirm house rules when you play elsewhere.',
+        'A drawn hand happens when the final live-wall tile is drawn and discarded with no win player having declared a win. No one wins that hand.',
+        'In the rules used in this course, the dealer does not continue (i.e. remain the dealer) on a draw. Social tables may vary, so confirm house rules when you play elsewhere.',
       ]}
-      visual={<WallDrawVisual />}
       ruleTitle="Wall runs out, no winner, hand is drawn"
       rule="For this course, a draw moves the table forward and dealer does not continue."
       check={
@@ -417,7 +408,7 @@ export function PassingDealLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       title="East is dealer, but East changes"
       copy={[
         'The dealer is East. When the hand ends, the dealer may remain or the deal may pass depending on the result and table rules.',
-        'In the beginner model, if East does not win, the deal passes and the previous South becomes the next East.',
+        'In the ruleset used in this course (which is based on most common gameplay), if East does not win, the deal passes to the next player and the previous South becomes the next East.',
       ]}
       visual={<DealerTable dealer="South" />}
       ruleTitle="Previous South becomes new East when the deal passes"
@@ -446,13 +437,13 @@ export function WindCyclesRoundsLesson({ lessonId, nextHref }: LessonRuntimeProp
 
   return (
     <LessonFrame
-      title="Hands build into rounds"
+      title="Hands build into rounds, which are named after the four winds"
       copy={[
         'A full game is organized by dealer movement and round winds. Each player gets chances to be dealer.',
-        'When the dealer position cycles back to the original dealer, a wind cycle is complete. Round winds, such as East round and South round, provide the larger match structure.',
+        'When the dealer position cycles back to the original dealer, a "wind cycle" is complete. Round winds, starting with East, then South, then West, then North, provide the larger match structure of rounds of play.',
       ]}
       visual={<WindCycleVisual />}
-      ruleTitle="Hands combine into cycles; cycles combine into rounds"
+      ruleTitle="Hands combine into wind cycles; cycles combine into rounds"
       rule="Seat wind and round wind can both matter for scoring."
       check={
         <ChoiceCheck
@@ -480,7 +471,7 @@ export function EndRoundLesson({ lessonId, nextHref }: LessonRuntimeProps) {
     <LessonFrame
       title="Formal rounds have endpoints"
       copy={[
-        'A formal round has a defined endpoint. In the tournament rulebook, one round consists of four complete wind cycles, and there may also be time or hand-count limits.',
+        'A formal round has a defined endpoint. In the tournament rulebook and most common gameplay, one round consists of four complete wind cycles, and there may also be time or hand-count limits.',
         'At the end, players verify scores before leaving the table. A game session is a structured series of hands, not just one hand.',
       ]}
       visual={<RoundTracker />}
@@ -508,9 +499,9 @@ export function EndRoundLesson({ lessonId, nextHref }: LessonRuntimeProps) {
 export function DeadHandsErrorsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
   const [ready, setReady] = useState(false);
   const scenarios = [
-    { prompt: 'A player has too many tiles after drawing out of turn. What is the issue?', options: ['Wrong tile count', 'A legal Chow', 'A wind cycle', 'A normal discard'], answer: 0, explanation: 'Too many tiles is a serious tile-count problem.' },
-    { prompt: 'A player draws before the prior discard window is resolved. What is the issue?', options: ['Wrong timing', 'A limit hand', 'A legal self-draw', 'A round wind'], answer: 0, explanation: 'Drawing too early disrupts the table order.' },
-    { prompt: 'A player calls Chow from the player across the table. What is the issue?', options: ['Invalid call', 'Correct Chow', 'Package payment', 'Passing the deal'], answer: 0, explanation: 'Chow is only from the player on your left.' },
+    { prompt: 'A player has too many tiles after drawing out of turn. What is the issue?', options: ['A legal Chow', 'Wrong tile count', 'A wind cycle', 'A normal discard'], answer: 1, explanation: 'Too many tiles is a serious tile-count problem.' },
+    { prompt: 'A player draws before the prior discard window is resolved. What is the issue?', options: ['A limit hand', 'A legal self-draw', 'Wrong timing', 'A round wind'], answer: 2, explanation: 'Drawing too early disrupts the table order.' },
+    { prompt: 'A player calls Chow from the player across the table. What is the issue?', options: ['Correct Chow', 'Passing the deal', 'A scoring bonus', 'Invalid call'], answer: 3, explanation: 'Chow is only from the player on your left.' },
     { prompt: 'A player declares win with invalid shape. What is the issue?', options: ['False win', 'Drawn hand', 'Dealer continuation', 'Good etiquette'], answer: 0, explanation: 'Declaring a win without a legal shape is a serious error.' },
   ];
 
@@ -542,8 +533,8 @@ export function DeadHandsErrorsLesson({ lessonId, nextHref }: LessonRuntimeProps
 export function TableEtiquetteLesson({ lessonId, nextHref }: LessonRuntimeProps) {
   const [ready, setReady] = useState(false);
   const scenarios = [
-    { prompt: 'Which behavior is good etiquette?', options: ['Saying Pung clearly, exposing the set, then discarding', 'Saying wait without a call', 'Mixing tiles before score confirmation', 'Touching the wall early'], answer: 0, explanation: 'Clear calls and orderly action make the game fair.' },
-    { prompt: 'A player mixes tiles before the win is verified. What is the issue?', options: ['Bad etiquette', 'A required scoring step', 'A legal call', 'A drawn hand'], answer: 0, explanation: 'Do not disturb tiles before the hand is verified.' },
+    { prompt: 'Which behavior is good etiquette?', options: ['Saying wait without a call', 'Saying Pung clearly, exposing the set, then discarding', 'Mixing tiles before score confirmation', 'Touching the wall early'], answer: 1, explanation: 'Clear calls and orderly action make the game fair.' },
+    { prompt: 'A player mixes tiles before the win is verified. What is the issue?', options: ['A required scoring step', 'A legal call', 'A drawn hand', 'Bad etiquette'], answer: 3, explanation: 'Do not disturb tiles before the hand is verified.' },
     { prompt: 'A player gives strategic advice during another player’s decision. What is the issue?', options: ['Table talk affecting play', 'Correct scoring', 'Dealer movement', 'A wind cycle'], answer: 0, explanation: 'Avoid table talk that changes live decisions.' },
   ];
 

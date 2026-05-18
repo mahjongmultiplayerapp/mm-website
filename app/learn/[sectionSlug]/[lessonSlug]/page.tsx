@@ -60,7 +60,6 @@ import {
   BeginnerFanLesson,
   IntermediateFanLesson,
   LimitHandsLesson,
-  PackagePaymentLesson,
   PaymentBasicsLesson,
   PointsConversionTableLesson,
   PresentingWinningHandLesson,
@@ -161,7 +160,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                       : isSectionFive
                         ? 'Review call legality, kongs, wins, priority, and call turn flow.'
                         : isSectionSix
-                          ? 'Review fan, minimums, caps, payment, package payment, and winning-hand presentation.'
+                          ? 'Review fan, minimums, caps, payment, common patterns, and winning-hand presentation.'
                           : isSectionSeven
                             ? 'Review hand endings, draws, dealer movement, wind cycles, dead hands, and etiquette.'
                             : 'This recap page is scaffolded for the section summary, key concepts, and checkpoint preparation.'}
@@ -375,8 +374,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <BasicScoringPrinciplesLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'payment-basics' && isSectionSix ? (
             <PaymentBasicsLesson lessonId={lessonId} nextHref={nextHref} />
-          ) : lesson.slug === 'package-payment' && isSectionSix ? (
-            <PackagePaymentLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'beginner-fan' && isSectionSix ? (
             <BeginnerFanLesson lessonId={lessonId} nextHref={nextHref} />
           ) : lesson.slug === 'intermediate-fan' && isSectionSix ? (

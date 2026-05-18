@@ -38,7 +38,7 @@ const beginnerFanCards = [
 ];
 
 const intermediateFanCards = [
-  { name: 'Half Flush', clue: 'One suit plus honors.', tiles: ['1', '3', '5', '東', '中'] },
+  { name: 'Half Flush', clue: 'One suit plus honors.', tiles: ['1', '2', '3', '東', '東'] },
   { name: 'Full Flush', clue: 'One suit only, with no honors.', tiles: ['1', '2', '3', '5', '6', '7'] },
   { name: 'All Triplets', clue: 'Triplets and a pair, no sequences.', tiles: ['2', '2', '2', '發', '發', '發'] },
   { name: 'Little Three Dragons', clue: 'Two dragon triplets plus a dragon pair.', tiles: ['中', '中', '中', '發', '發', '發', '白', '白'] },
@@ -46,17 +46,17 @@ const intermediateFanCards = [
 ];
 
 const limitHands = [
-  'All Honors',
-  'Little Four Winds',
-  'Big Four Winds',
-  'Four Concealed Triplets',
-  'Eighteen Arhats',
-  'Pure Terminals',
-  'Heavenly Hand',
-  'Earthly Hand',
-  'Thirteen Orphans',
-  'Kong-on-Kong Self-Draw',
-  'Nine Gates',
+  { name: 'All Honors', detail: 'All tiles are honors: winds and dragons only, with no suited number tiles.' },
+  { name: 'Little Four Winds', detail: 'Three wind triplets plus a pair of the fourth wind.' },
+  { name: 'Big Four Winds', detail: 'Triplets of East, South, West, and North.' },
+  { name: 'Four Concealed Triplets', detail: 'Four triplets are kept concealed until the hand wins.' },
+  { name: 'Eighteen Arhats', detail: 'Four kongs plus the pair, creating an unusually tile-heavy winning hand.' },
+  { name: 'Pure Terminals', detail: 'The hand uses only suited 1s and 9s, with no honors or middle numbers.' },
+  { name: 'Heavenly Hand', detail: 'East wins immediately from the dealt starting hand.' },
+  { name: 'Earthly Hand', detail: 'A non-dealer wins before taking a normal turn, on the earliest possible discard.' },
+  { name: 'Thirteen Orphans', detail: 'One of every terminal and honor tile, plus a matching pair of one of them.' },
+  { name: 'Kong-on-Kong Self-Draw', detail: 'A supplement draw after one kong leads into another kong supplement that completes the win.' },
+  { name: 'Nine Gates', detail: 'A concealed one-suit pattern built around 1112345678999 plus any extra tile in that suit.' },
 ];
 
 const checkpointQuestions: ChoiceQuestion[] = [
@@ -65,7 +65,7 @@ const checkpointQuestions: ChoiceQuestion[] = [
   { prompt: 'What is the fan cap in this ruleset?', options: ['5 fan', '8 fan', '10 fan', 'No cap'], answer: 2, explanation: 'Fan is capped at 10. Limit hands count as 10 fan.' },
   { prompt: 'Who pays when you win on a discard?', options: ['Only the discarder', 'All three opponents', 'Only the dealer', 'Nobody pays'], answer: 0, explanation: 'On a discard win, the player who dealt in pays the full amount.' },
   { prompt: 'Who pays when you self-draw?', options: ['Only the player on your left', 'The discarder', 'All three opponents', 'Only East'], answer: 2, explanation: 'Self-draw is paid by all three opponents.' },
-  { prompt: 'What is package payment?', options: ['A penalty for enabling certain dangerous exposed hands', 'A bonus for every chow', 'A way to skip scoring', 'A tile arrangement rule'], answer: 0, explanation: 'Package payment is a liability rule for dangerous exposed hands.' },
+  { prompt: 'What should happen before scoring a winning hand?', options: ['The hand should be revealed and grouped clearly', 'The tiles should be mixed into the wall', 'The pair should stay hidden', 'The winner should discard again'], answer: 0, explanation: 'Reveal and group the hand clearly so the table can verify it before scoring.' },
   { prompt: 'Which is a beginner fan pattern?', options: ['Dragon Pung', 'Random honors', 'Two unrelated pairs', 'Any open chow'], answer: 0, explanation: 'A triplet of dragon tiles is a common beginner scoring pattern.' },
   { prompt: 'Which hand points toward Half Flush?', options: ['One suit plus honors', 'All three suits mixed freely', 'Only terminals and honors', 'Four unrelated pairs'], answer: 0, explanation: 'Half Flush uses one suit together with honors.' },
   { prompt: 'Which one is a limit hand?', options: ['Thirteen Orphans', 'One Chow', 'Two suited pairs', 'Dealer starts'], answer: 0, explanation: 'Thirteen Orphans is a rare limit hand counted as 10 fan.' },
@@ -77,7 +77,7 @@ const recapItems = [
   { title: 'Fan is pattern value.', body: 'Fan names the value created by scoring patterns in the winning hand.' },
   { title: 'Only the winner scores.', body: 'The table counts valid fan, applies the cap, then converts fan to points.' },
   { title: 'Payment follows the win type.', body: 'Discard win means one payer. Self-draw means three payers.' },
-  { title: 'Package payment is liability.', body: 'Some dangerous exposed hands can make one player responsible.' },
+  { title: 'Common fan are visible.', body: 'Start with patterns like Self-Draw, Dragon Pung, Wind Pung, and All Sequences.' },
   { title: 'Limit hands hit the cap.', body: 'Rare special hands count as 10 fan in this ruleset.' },
 ];
 
@@ -189,7 +189,7 @@ function LessonFrame({
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
-  visual: React.ReactNode;
+  visual?: React.ReactNode;
   ruleTitle: string;
   rule: string;
   check: React.ReactNode;
@@ -205,10 +205,12 @@ function LessonFrame({
           <p key={paragraph}>{paragraph}</p>
         ))}
       </article>
-      <section className="learn-content-card">
-        <span className="eyebrow">Visual example</span>
-        {visual}
-      </section>
+      {visual ? (
+        <section className="learn-content-card">
+          <span className="eyebrow">Visual example</span>
+          {visual}
+        </section>
+      ) : null}
       <section className="learn-content-card welcome-rule-card">
         <span className="eyebrow">Rule in plain English</span>
         <h3>{ruleTitle}</h3>
@@ -252,17 +254,6 @@ function ScoreChecklist() {
   );
 }
 
-function PaymentVisual({ mode }: { mode: 'discard' | 'self-draw' }) {
-  return (
-    <div className="section-six-payment-visual">
-      <div className={mode === 'self-draw' ? 'payer' : ''}>Left</div>
-      <div className="winner">You win</div>
-      <div className={mode === 'discard' ? 'payer' : mode === 'self-draw' ? 'payer' : ''}>{mode === 'discard' ? 'Discarder' : 'Across'}</div>
-      <div className={mode === 'self-draw' ? 'payer' : ''}>Right</div>
-    </div>
-  );
-}
-
 function FanCardGallery({ cards }: { cards: { name: string; clue: string; tiles: string[] }[] }) {
   const [index, setIndex] = useState(0);
   const card = cards[index];
@@ -287,17 +278,19 @@ function FanCardGallery({ cards }: { cards: { name: string; clue: string; tiles:
 
 function LimitHandGallery() {
   const [selected, setSelected] = useState(8);
+  const selectedHand = limitHands[selected];
 
   return (
     <div className="section-six-limit-grid">
+      <p>
+        <strong>{selectedHand.name}</strong>
+        {selectedHand.detail}
+      </p>
       {limitHands.map((hand, index) => (
-        <button type="button" className={selected === index ? 'active' : ''} onClick={() => setSelected(index)} key={hand}>
-          {hand}
+        <button type="button" className={selected === index ? 'active' : ''} onClick={() => setSelected(index)} key={hand.name}>
+          {hand.name}
         </button>
       ))}
-      <p>
-        <strong>{limitHands[selected]}</strong> counts as 10 fan here. Beginners only need to recognize these as rare, special hands.
-      </p>
     </div>
   );
 }
@@ -359,8 +352,8 @@ export function WhatMakesHandWinnableLesson({ lessonId, nextHref }: LessonRuntim
     <LessonFrame
       title="A legal win has three gates"
       copy={[
-        'To win, a hand needs more than a pleasing shape. It must be a legal winning shape, it must meet the minimum fan requirement, and it must be declared at the correct time.',
-        'In this curriculum, the minimum is 3 fan. A valid shape with only 1 fan is not enough, and a valuable-looking pattern with invalid shape is not a win.',
+        'To win, a hand needs more than the legal shape. It must also meet the minimum "fan" requirement (i.e. be worth above a specific score minimum), and it must be declared at the correct time.',
+        'In this curriculum, we assume the minimum is 3 fan, which is a common threshold people play with.',
       ]}
       visual={<ScoreChecklist />}
       ruleTitle="Legal shape + 3 fan + correct declaration"
@@ -379,7 +372,7 @@ export function WhatMakesHandWinnableLesson({ lessonId, nextHref }: LessonRuntim
       lessonId={lessonId}
       nextHref={nextHref}
       ready={ready}
-      takeaway={{ title: 'Shape is necessary, not enough', body: 'To win, you need a valid shape and at least 3 fan.' }}
+      takeaway={{ title: 'Your hand needs to meet the fan minimum', body: 'To win, you need a valid shape and at least 3 fan.' }}
     />
   );
 }
@@ -392,7 +385,7 @@ export function WhatIsFanLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       title="Fan is hand value"
       copy={[
         'Fan is the scoring value attached to patterns in your winning hand. Some patterns are simple and common; others are rare and valuable.',
-        'Fan is not the same as points paid. First the table counts fan, then the payment table converts that fan value into points.',
+        'Fan is not the same as points earned. First the table counts fan, then the scoring table converts that fan value into points. In addition to requiring a minimum fan, there is also typically a maximum fan you can earn per hand.',
       ]}
       visual={<FanBadges />}
       ruleTitle="Fan measures how valuable the win is"
@@ -411,7 +404,7 @@ export function WhatIsFanLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       ready={ready}
-      takeaway={{ title: 'Count fan before points', body: 'Fan measures how valuable your winning hand is.' }}
+      takeaway={{ title: 'Each winning hand is worth an amount of fan', body: 'Fan measures how valuable your winning hand is.' }}
     />
   );
 }
@@ -424,7 +417,7 @@ export function BasicScoringPrinciplesLesson({ lessonId, nextHref }: LessonRunti
       title="The winner scores"
       copy={[
         'Only a winning hand scores. The table identifies every valid fan pattern in that hand, adds them according to the rules, applies the minimum and cap, and then converts fan to points.',
-        'This ruleset uses a 3-fan minimum and a 10-fan cap. Limit hands count as 10 fan.',
+        'The ruleset assumed in this course uses a 3-fan minimum and a 10-fan cap. Limit hands count as 10 fan.',
       ]}
       visual={
         <div className="section-six-rule-stack">
@@ -456,29 +449,15 @@ export function BasicScoringPrinciplesLesson({ lessonId, nextHref }: LessonRunti
 }
 
 export function PaymentBasicsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [mode, setMode] = useState<'discard' | 'self-draw'>('discard');
   const [ready, setReady] = useState(false);
 
   return (
     <LessonFrame
-      title="Payment depends on how you won"
+      title="Payment (scoring) depends on how you won"
       copy={[
         'Fan tells the table how valuable the hand is. Payment tells the table who pays that value.',
         'If you win on another player\'s discard, the discarder pays the full amount. If you self-draw, all three opponents pay.',
       ]}
-      visual={
-        <div className="section-six-payment-toggle">
-          <div className="section-one-tabs">
-            <button type="button" className={mode === 'discard' ? 'active' : ''} onClick={() => setMode('discard')}>
-              Win on discard
-            </button>
-            <button type="button" className={mode === 'self-draw' ? 'active' : ''} onClick={() => setMode('self-draw')}>
-              Self-draw
-            </button>
-          </div>
-          <PaymentVisual mode={mode} />
-        </div>
-      }
       ruleTitle="Discard win = one payer; self-draw = three payers"
       rule="This payment rule is separate from identifying the hand's fan."
       check={
@@ -496,44 +475,6 @@ export function PaymentBasicsLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       nextHref={nextHref}
       ready={ready}
       takeaway={{ title: 'Separate fan from payer', body: 'First count fan, then decide who pays based on self-draw or discard win.' }}
-    />
-  );
-}
-
-export function PackagePaymentLesson({ lessonId, nextHref }: LessonRuntimeProps) {
-  const [ready, setReady] = useState(false);
-
-  return (
-    <LessonFrame
-      title="A liability rule for dangerous hands"
-      copy={[
-        'Package payment is a special liability rule. It applies when a player enables certain dangerous exposed hands, and that player may become responsible for payments that would otherwise be shared.',
-        'Beginners do not need every edge case yet. Learn the warning: some discards are dangerous because they help an opponent complete an obvious high-value exposed hand.',
-      ]}
-      visual={
-        <div className="section-six-package-card">
-          <span>Opponent has 12 open tiles</span>
-          <strong>Dangerous exposed hand</strong>
-          <span>One liable player may pay for everyone</span>
-        </div>
-      }
-      ruleTitle="Package payment punishes the enabling discard"
-      rule="The classic beginner idea is table safety: do not feed obvious high-value exposed hands."
-      check={
-        <ChoiceCheck
-          question={{
-            prompt: 'In package payment, who may pay?',
-            options: ['The liable player who enabled the dangerous hand', 'Every player equally, always', 'Only the winner', 'Nobody pays'],
-            answer: 0,
-            explanation: 'Correct. Package payment can make one liable player cover what others would have paid.',
-          }}
-          onCorrect={() => setReady(true)}
-        />
-      }
-      lessonId={lessonId}
-      nextHref={nextHref}
-      ready={ready}
-      takeaway={{ title: 'Advanced, but important', body: 'Package payment is a table-safety rule for dangerous exposed hands.' }}
     />
   );
 }
