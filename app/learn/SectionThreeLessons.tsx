@@ -665,7 +665,7 @@ export function SectionThreeCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('setup-and-dealing/checkpoint', '/learn/turn-flow-and-discarding');
+    completeLesson('setup-and-dealing/checkpoint', '/learn/hong-kong/turn-flow-and-discarding');
     completeSection('section-3');
   };
 
@@ -711,7 +711,7 @@ export function SectionThreeCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/turn-flow-and-discarding">
+          <a className="btn-primary gold" href="/learn/hong-kong/turn-flow-and-discarding">
             Continue to next section
           </a>
         ) : (

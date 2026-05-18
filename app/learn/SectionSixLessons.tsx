@@ -687,7 +687,7 @@ export function SectionSixCheckpoint() {
 
   useEffect(() => {
     if (!submitted) return;
-    completeLesson('scoring-and-fan/checkpoint', '/learn/rounds-draws-table-rules');
+    completeLesson('scoring-and-fan/checkpoint', '/learn/hong-kong/rounds-draws-table-rules');
     completeSection('section-6');
   }, [submitted]);
 
@@ -732,7 +732,7 @@ export function SectionSixCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/rounds-draws-table-rules">
+          <a className="btn-primary gold" href="/learn/hong-kong/rounds-draws-table-rules">
             Continue to next section
           </a>
         ) : (

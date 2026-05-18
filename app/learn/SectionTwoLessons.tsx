@@ -707,7 +707,7 @@ export function SectionTwoCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('tiles-melds-winning-hands/checkpoint', '/learn/setup-and-dealing');
+    completeLesson('tiles-melds-winning-hands/checkpoint', '/learn/hong-kong/setup-and-dealing');
     completeSection('section-2');
   };
 
@@ -753,7 +753,7 @@ export function SectionTwoCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/setup-and-dealing">
+          <a className="btn-primary gold" href="/learn/hong-kong/setup-and-dealing">
             Continue to next section
           </a>
         ) : (

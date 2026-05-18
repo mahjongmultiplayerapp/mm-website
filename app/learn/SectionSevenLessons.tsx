@@ -37,16 +37,16 @@ const recapItems = [
 ];
 
 const readinessItems = [
-  { label: 'Tile set', review: '/learn/tiles-melds-winning-hands/the-tile-set' },
-  { label: 'Standard winning shape', review: '/learn/tiles-melds-winning-hands/standard-winning-shape' },
-  { label: 'Setup and dealing', review: '/learn/setup-and-dealing/dealing-the-tiles' },
-  { label: 'Turn flow', review: '/learn/turn-flow-and-discarding/anatomy-of-a-turn' },
-  { label: 'Chow, Pung, Kong, Win', review: '/learn/calls-chow-pung-kong-win/what-is-a-call' },
-  { label: 'Call priority', review: '/learn/calls-chow-pung-kong-win/call-priority' },
-  { label: '3-fan minimum', review: '/learn/scoring-and-fan/what-makes-a-hand-winnable' },
-  { label: 'Self-draw vs discard payment', review: '/learn/scoring-and-fan/payment-basics' },
-  { label: 'Dealer and round flow', review: '/learn/rounds-draws-table-rules/passing-the-deal' },
-  { label: 'Common mistakes', review: '/learn/rounds-draws-table-rules/dead-hands-and-common-errors' },
+  { label: 'Tile set', review: '/learn/hong-kong/tiles-melds-winning-hands/the-tile-set' },
+  { label: 'Standard winning shape', review: '/learn/hong-kong/tiles-melds-winning-hands/standard-winning-shape' },
+  { label: 'Setup and dealing', review: '/learn/hong-kong/setup-and-dealing/dealing-the-tiles' },
+  { label: 'Turn flow', review: '/learn/hong-kong/turn-flow-and-discarding/anatomy-of-a-turn' },
+  { label: 'Chow, Pung, Kong, Win', review: '/learn/hong-kong/calls-chow-pung-kong-win/what-is-a-call' },
+  { label: 'Call priority', review: '/learn/hong-kong/calls-chow-pung-kong-win/call-priority' },
+  { label: '3-fan minimum', review: '/learn/hong-kong/scoring-and-fan/what-makes-a-hand-winnable' },
+  { label: 'Self-draw vs discard payment', review: '/learn/hong-kong/scoring-and-fan/payment-basics' },
+  { label: 'Dealer and round flow', review: '/learn/hong-kong/rounds-draws-table-rules/passing-the-deal' },
+  { label: 'Common mistakes', review: '/learn/hong-kong/rounds-draws-table-rules/dead-hands-and-common-errors' },
 ];
 
 function readProgress() {
@@ -629,7 +629,7 @@ export function SectionSevenCheckpoint() {
 
   useEffect(() => {
     if (!submitted) return;
-    completeLesson('rounds-draws-table-rules/checkpoint', '/learn/final-readiness-test');
+    completeLesson('rounds-draws-table-rules/checkpoint', '/learn/hong-kong/final-readiness-test');
     completeSection('section-7');
   }, [submitted]);
 
@@ -674,7 +674,7 @@ export function SectionSevenCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/final-readiness-test">
+          <a className="btn-primary gold" href="/learn/hong-kong/final-readiness-test">
             Continue to final test
           </a>
         ) : (

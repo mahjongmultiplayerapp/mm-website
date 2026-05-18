@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { hongKongLearnPath } from './learn-data';
 
 type Category = 'Tiles' | 'Setup' | 'Turn flow' | 'Calls' | 'Scoring' | 'Rounds';
 
@@ -26,7 +27,7 @@ const questions: FinalQuestion[] = [
     options: ['2-3-4 bamboo', 'East-East-East', '1-1-2 dots', 'Red-Red-Red'],
     answer: 0,
     explanation: '2-3-4 in the same suit is a chow, which is a sequence.',
-    reviewHref: '/learn/tiles-melds-winning-hands/tile-groupings',
+    reviewHref: '/learn/hong-kong/tiles-melds-winning-hands/tile-groupings',
     reviewLabel: 'Review tile groupings',
   },
   {
@@ -36,7 +37,7 @@ const questions: FinalQuestion[] = [
     options: ['3-4-5 characters', 'East-South-West', '1-2-3 bamboo', '6-7-8 dots'],
     answer: 1,
     explanation: 'Wind tiles are honors, so East-South-West cannot be a sequence.',
-    reviewHref: '/learn/tiles-melds-winning-hands/honor-tiles',
+    reviewHref: '/learn/hong-kong/tiles-melds-winning-hands/honor-tiles',
     reviewLabel: 'Review honors',
   },
   {
@@ -46,7 +47,7 @@ const questions: FinalQuestion[] = [
     options: ['Five pairs and one single', 'Four melds plus one pair', 'Three melds only', 'Four pairs and no melds'],
     answer: 1,
     explanation: 'The standard shape is four melds and a pair.',
-    reviewHref: '/learn/tiles-melds-winning-hands/standard-winning-shape',
+    reviewHref: '/learn/hong-kong/tiles-melds-winning-hands/standard-winning-shape',
     reviewLabel: 'Review winning shape',
   },
   {
@@ -56,7 +57,7 @@ const questions: FinalQuestion[] = [
     options: ['1 dot, 2 dot, 3 dot', 'East, Red Dragon, White Dragon', '7 character, 8 character, 9 character', '4 bamboo, 5 bamboo, 6 bamboo'],
     answer: 1,
     explanation: 'Winds and dragons are honor tiles.',
-    reviewHref: '/learn/tiles-melds-winning-hands/honor-tiles',
+    reviewHref: '/learn/hong-kong/tiles-melds-winning-hands/honor-tiles',
     reviewLabel: 'Review honor tiles',
   },
   {
@@ -66,7 +67,7 @@ const questions: FinalQuestion[] = [
     options: ['South', 'West', 'East', 'North'],
     answer: 2,
     explanation: 'East is the dealer and starts the hand.',
-    reviewHref: '/learn/setup-and-dealing/dealer-and-east',
+    reviewHref: '/learn/hong-kong/setup-and-dealing/dealer-and-east',
     reviewLabel: 'Review dealer and East',
   },
   {
@@ -76,7 +77,7 @@ const questions: FinalQuestion[] = [
     options: ['Normal draws during play', 'Score verification', 'Discard storage', 'Seat assignment only'],
     answer: 0,
     explanation: 'Players draw from the live wall during normal play.',
-    reviewHref: '/learn/setup-and-dealing/live-wall-vs-dead-wall',
+    reviewHref: '/learn/hong-kong/setup-and-dealing/live-wall-vs-dead-wall',
     reviewLabel: 'Review walls',
   },
   {
@@ -86,7 +87,7 @@ const questions: FinalQuestion[] = [
     options: ['Everyone scores immediately', 'All exposed melds are declared', 'The round ends', 'Tiles are dealt to the players'],
     answer: 3,
     explanation: 'After opening the wall, tiles are dealt into starting hands.',
-    reviewHref: '/learn/setup-and-dealing/dealing-the-tiles',
+    reviewHref: '/learn/hong-kong/setup-and-dealing/dealing-the-tiles',
     reviewLabel: 'Review dealing',
   },
   {
@@ -96,7 +97,7 @@ const questions: FinalQuestion[] = [
     options: ['West', 'North', 'East again', 'South'],
     answer: 3,
     explanation: 'If nobody calls, play continues to the next player in order: South.',
-    reviewHref: '/learn/turn-flow-and-discarding/turn-order-around-the-table',
+    reviewHref: '/learn/hong-kong/turn-flow-and-discarding/turn-order-around-the-table',
     reviewLabel: 'Review turn order',
   },
   {
@@ -106,7 +107,7 @@ const questions: FinalQuestion[] = [
     options: ['Discard, draw, score', 'Draw, consider, discard', 'Score, draw, reveal', 'Call, shuffle, pass'],
     answer: 1,
     explanation: 'The basic turn rhythm is draw, consider, discard.',
-    reviewHref: '/learn/turn-flow-and-discarding/anatomy-of-a-turn',
+    reviewHref: '/learn/hong-kong/turn-flow-and-discarding/anatomy-of-a-turn',
     reviewLabel: 'Review turn anatomy',
   },
   {
@@ -116,7 +117,7 @@ const questions: FinalQuestion[] = [
     options: ['Immediately after a discard', 'Before anyone discards', 'After scoring is complete', 'During the deal'],
     answer: 0,
     explanation: 'The call window opens immediately after a discard.',
-    reviewHref: '/learn/turn-flow-and-discarding/the-call-window',
+    reviewHref: '/learn/hong-kong/turn-flow-and-discarding/the-call-window',
     reviewLabel: 'Review call window',
   },
   {
@@ -126,7 +127,7 @@ const questions: FinalQuestion[] = [
     options: ['From any player for any group', 'Only from the dealer', 'Only from the player on your left', 'Only with honor tiles'],
     answer: 2,
     explanation: 'Chow is legal only from the player on your left, and only for a sequence.',
-    reviewHref: '/learn/calls-chow-pung-kong-win/chow',
+    reviewHref: '/learn/hong-kong/calls-chow-pung-kong-win/chow',
     reviewLabel: 'Review Chow',
   },
   {
@@ -136,7 +137,7 @@ const questions: FinalQuestion[] = [
     options: ['When any player discards the third matching tile and you hold two', 'Only from your left', 'Only after a kong', 'Only with numbered sequences'],
     answer: 0,
     explanation: 'Pung can claim a matching discard from any player when you hold the other two tiles.',
-    reviewHref: '/learn/calls-chow-pung-kong-win/pung',
+    reviewHref: '/learn/hong-kong/calls-chow-pung-kong-win/pung',
     reviewLabel: 'Review Pung',
   },
   {
@@ -146,7 +147,7 @@ const questions: FinalQuestion[] = [
     options: ['You call Chow from the left', 'You draw a winning tile', 'You reveal a pair', 'You hold three matching tiles and claim the fourth from a discard'],
     answer: 3,
     explanation: 'A big exposed kong claims the fourth matching tile from another player’s discard.',
-    reviewHref: '/learn/calls-chow-pung-kong-win/big-exposed-kong',
+    reviewHref: '/learn/hong-kong/calls-chow-pung-kong-win/big-exposed-kong',
     reviewLabel: 'Review kong calls',
   },
   {
@@ -156,7 +157,7 @@ const questions: FinalQuestion[] = [
     options: ['Chow has priority', 'The closest player always wins', 'Both players take the tile', 'Win has priority'],
     answer: 3,
     explanation: 'Win has highest priority over other calls.',
-    reviewHref: '/learn/calls-chow-pung-kong-win/call-priority',
+    reviewHref: '/learn/hong-kong/calls-chow-pung-kong-win/call-priority',
     reviewLabel: 'Review call priority',
   },
   {
@@ -166,7 +167,7 @@ const questions: FinalQuestion[] = [
     options: ['Every hand must have exactly 3 pairs', 'Only 3 players pay', 'A legal hand must have at least 3 fan to win', 'The dealer draws 3 extra tiles'],
     answer: 2,
     explanation: 'In this curriculum, a winning hand needs legal shape and at least 3 fan.',
-    reviewHref: '/learn/scoring-and-fan/what-makes-a-hand-winnable',
+    reviewHref: '/learn/hong-kong/scoring-and-fan/what-makes-a-hand-winnable',
     reviewLabel: 'Review 3-fan minimum',
   },
   {
@@ -176,7 +177,7 @@ const questions: FinalQuestion[] = [
     options: ['Three consecutive suited tiles', 'Any pair of winds', 'A discarded tile from East', 'Three matching dragon tiles'],
     answer: 3,
     explanation: 'A triplet of dragon tiles is Dragon Pung.',
-    reviewHref: '/learn/scoring-and-fan/beginner-fan',
+    reviewHref: '/learn/hong-kong/scoring-and-fan/beginner-fan',
     reviewLabel: 'Review beginner fan',
   },
   {
@@ -186,7 +187,7 @@ const questions: FinalQuestion[] = [
     options: ['All three opponents pay equally', 'Only East pays', 'The discarder pays the full amount', 'Nobody pays'],
     answer: 2,
     explanation: 'On a discard win, the discarder pays the full amount.',
-    reviewHref: '/learn/scoring-and-fan/payment-basics',
+    reviewHref: '/learn/hong-kong/scoring-and-fan/payment-basics',
     reviewLabel: 'Review payment basics',
   },
   {
@@ -196,7 +197,7 @@ const questions: FinalQuestion[] = [
     options: ['Only the previous discarder', 'All three opponents', 'Only South', 'Only the dealer'],
     answer: 1,
     explanation: 'Self-draw wins are paid by all three opponents.',
-    reviewHref: '/learn/scoring-and-fan/payment-basics',
+    reviewHref: '/learn/hong-kong/scoring-and-fan/payment-basics',
     reviewLabel: 'Review payment basics',
   },
   {
@@ -206,7 +207,7 @@ const questions: FinalQuestion[] = [
     options: ['East always wins', 'A player calls Pung', 'The live wall runs out and nobody wins', 'A player reveals a chow'],
     answer: 2,
     explanation: 'A drawn hand means the live wall ran out before anyone won.',
-    reviewHref: '/learn/rounds-draws-table-rules/drawn-hands',
+    reviewHref: '/learn/hong-kong/rounds-draws-table-rules/drawn-hands',
     reviewLabel: 'Review drawn hands',
   },
   {
@@ -216,7 +217,7 @@ const questions: FinalQuestion[] = [
     options: ['Drawing before the prior discard window resolves', 'Keeping discards orderly', 'Calling Pung clearly', 'Verifying scores after a round'],
     answer: 0,
     explanation: 'Drawing too early disrupts the table order and can lead to a dead hand.',
-    reviewHref: '/learn/rounds-draws-table-rules/dead-hands-and-common-errors',
+    reviewHref: '/learn/hong-kong/rounds-draws-table-rules/dead-hands-and-common-errors',
     reviewLabel: 'Review common errors',
   },
 ];
@@ -243,7 +244,7 @@ function completeFinalTest() {
   saveProgress({
     ...progress,
     completedSections: progress.completedSections.includes('final-readiness-test') ? progress.completedSections : [...progress.completedSections, 'final-readiness-test'],
-    lastVisitedPath: '/learn/final-readiness-test',
+    lastVisitedPath: '/learn/hong-kong/final-readiness-test',
   });
 }
 
@@ -358,13 +359,13 @@ export function FinalReadinessTest() {
         <section className="final-test-next-steps">
           {passed ? (
             <>
-              <Link className="btn-primary gold" href="/learn">
+              <Link className="btn-primary gold" href={hongKongLearnPath}>
                 Start practice drills
               </Link>
-              <Link className="learn-secondary-link" href="/learn/scoring-and-fan">
+              <Link className="learn-secondary-link" href="/learn/hong-kong/scoring-and-fan">
                 Review scoring
               </Link>
-              <Link className="learn-secondary-link" href="/learn/turn-flow-and-discarding">
+              <Link className="learn-secondary-link" href="/learn/hong-kong/turn-flow-and-discarding">
                 Play a guided hand
               </Link>
             </>

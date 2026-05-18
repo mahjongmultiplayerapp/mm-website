@@ -11,6 +11,11 @@ type LearnProgressState = {
 
 const storageKey = 'mahjong-multiplayer-learn-progress';
 const lessonIds = new Set(learnSections.flatMap((section) => section.lessons.map((lesson) => `${section.slug}/${lesson.slug}`)));
+const legacyPathPattern = /^\/learn\/(what-is-hong-kong-mahjong|tiles-melds-winning-hands|setup-and-dealing|turn-flow-and-discarding|calls-chow-pung-kong-win|scoring-and-fan|rounds-draws-table-rules|final-readiness-test)(\/|$)/;
+
+function normalizeLastVisitedPath(path?: string) {
+  return path?.replace(legacyPathPattern, '/learn/hong-kong/$1$2');
+}
 
 function readProgress(): LearnProgressState {
   try {
@@ -20,7 +25,7 @@ function readProgress(): LearnProgressState {
     return {
       completedLessons: Array.isArray(parsed.completedLessons) ? parsed.completedLessons : [],
       completedSections: Array.isArray(parsed.completedSections) ? parsed.completedSections : [],
-      lastVisitedPath: typeof parsed.lastVisitedPath === 'string' ? parsed.lastVisitedPath : undefined,
+      lastVisitedPath: typeof parsed.lastVisitedPath === 'string' ? normalizeLastVisitedPath(parsed.lastVisitedPath) : undefined,
     };
   } catch {
     return { completedLessons: [], completedSections: [] };

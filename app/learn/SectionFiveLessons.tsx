@@ -519,7 +519,7 @@ export function SectionFiveCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('calls-chow-pung-kong-win/checkpoint', '/learn/scoring-and-fan');
+    completeLesson('calls-chow-pung-kong-win/checkpoint', '/learn/hong-kong/scoring-and-fan');
     completeSection('section-5');
   };
 
@@ -565,7 +565,7 @@ export function SectionFiveCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/scoring-and-fan">
+          <a className="btn-primary gold" href="/learn/hong-kong/scoring-and-fan">
             Continue to next section
           </a>
         ) : (

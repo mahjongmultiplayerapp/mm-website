@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { FinalReadinessTest } from '../FinalReadinessTest';
-import { LearnShell } from '../components';
+import { FinalReadinessTest } from '../../FinalReadinessTest';
+import { LearnShell } from '../../components';
+import { hongKongLearnPath } from '../../learn-data';
 
 export const metadata: Metadata = {
   title: 'Final Readiness Test | Learn Hong Kong Mahjong',
@@ -14,7 +15,7 @@ export default function FinalReadinessTestPage() {
       <section className="learn-lesson-page felt">
         <div className="wrap learn-readable">
           <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
-            <Link href="/learn">← Curriculum</Link>
+            <Link href={hongKongLearnPath}>← Curriculum</Link>
             <span>Final readiness test</span>
           </nav>
           <h1 style={{ marginTop: '18px' }}>Are You Ready to Play Hong Kong Mahjong?</h1>

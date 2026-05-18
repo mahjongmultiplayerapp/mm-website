@@ -463,7 +463,7 @@ export function SectionFourCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('turn-flow-and-discarding/checkpoint', '/learn/calls-chow-pung-kong-win');
+    completeLesson('turn-flow-and-discarding/checkpoint', '/learn/hong-kong/calls-chow-pung-kong-win');
     completeSection('section-4');
   };
 
@@ -509,7 +509,7 @@ export function SectionFourCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/calls-chow-pung-kong-win">
+          <a className="btn-primary gold" href="/learn/hong-kong/calls-chow-pung-kong-win">
             Continue to next section
           </a>
         ) : (

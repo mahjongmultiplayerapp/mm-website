@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { LessonCompletionPanel } from '../../LearnProgress';
-import { HandFlowLesson, MahjongStylesLesson, ObjectiveLesson, SectionOneCheckpoint, SectionOneRecap, ShapeOfGameLesson } from '../../SectionOneLessons';
+import { LessonCompletionPanel } from '../../../LearnProgress';
+import { HandFlowLesson, MahjongStylesLesson, ObjectiveLesson, SectionOneCheckpoint, SectionOneRecap, ShapeOfGameLesson } from '../../../SectionOneLessons';
 import {
   HonorTilesLesson,
   OpenVsConcealedLesson,
@@ -13,7 +13,7 @@ import {
   ThreeSuitsLesson,
   TileGroupingsLesson,
   TileSetLesson,
-} from '../../SectionTwoLessons';
+} from '../../../SectionTwoLessons';
 import {
   DealerEastLesson,
   DealingTilesLesson,
@@ -24,7 +24,7 @@ import {
   SectionThreeRecap,
   TableAreasLesson,
   WallLesson,
-} from '../../SectionThreeLessons';
+} from '../../../SectionThreeLessons';
 import {
   AnatomyTurnLesson,
   ArrangingHandLesson,
@@ -36,7 +36,7 @@ import {
   SectionFourRecap,
   TurnOrderLesson,
   WhatEndsHandLesson,
-} from '../../SectionFourLessons';
+} from '../../../SectionFourLessons';
 import {
   AddedKongLesson,
   BeginnerCallDecisionsLesson,
@@ -54,7 +54,7 @@ import {
   SupplementKongLesson,
   WhatIsCallLesson,
   WinOnDiscardLesson,
-} from '../../SectionFiveLessons';
+} from '../../../SectionFiveLessons';
 import {
   BasicScoringPrinciplesLesson,
   BeginnerFanLesson,
@@ -67,7 +67,7 @@ import {
   SectionSixRecap,
   WhatIsFanLesson,
   WhatMakesHandWinnableLesson,
-} from '../../SectionSixLessons';
+} from '../../../SectionSixLessons';
 import {
   AfterHandEndsLesson,
   DeadHandsErrorsLesson,
@@ -79,10 +79,10 @@ import {
   SectionSevenRecap,
   TableEtiquetteLesson,
   WindCyclesRoundsLesson,
-} from '../../SectionSevenLessons';
-import { WelcomeToGameLesson } from '../../WelcomeToGameLesson';
-import { CompleteProgressItem, LearnShell, SectionTopProgress, TileRail } from '../../components';
-import { getLesson, getNextLessonPath, getPreviousLessonPath, learnSections } from '../../learn-data';
+} from '../../../SectionSevenLessons';
+import { WelcomeToGameLesson } from '../../../WelcomeToGameLesson';
+import { CompleteProgressItem, LearnShell, SectionTopProgress, TileRail } from '../../../components';
+import { getLesson, getLessonPath, getNextLessonPath, getPreviousLessonPath, getSectionPath, hongKongLearnPath, learnSections } from '../../../learn-data';
 
 type LessonPageProps = {
   params: Promise<{ sectionSlug: string; lessonSlug: string }>;
@@ -141,10 +141,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <section className="learn-lesson-page felt">
           <SectionTopProgress section={section} />
           <div className="wrap learn-readable">
-            <CompleteProgressItem itemId={`${section.slug}/recap`} nextHref={`/learn/${section.slug}/checkpoint`} />
+            <CompleteProgressItem itemId={`${section.slug}/recap`} nextHref={getLessonPath(section.slug, 'checkpoint')} />
             <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
-              <Link href="/learn">← Curriculum</Link>
-              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <Link href={hongKongLearnPath}>← Curriculum</Link>
+              <Link href={getSectionPath(section.slug)}>Section {section.number}</Link>
               <span>Recap</span>
             </nav>
             <h1 style={{ marginTop: '18px' }}>{section.title}</h1>
@@ -194,7 +194,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
               <Link className="learn-secondary-link" href={previousHref}>
                 ← Previous
               </Link>
-              <Link className="btn-primary gold" href={`/learn/${section.slug}/checkpoint`}>
+              <Link className="btn-primary gold" href={getLessonPath(section.slug, 'checkpoint')}>
                 Go to Quiz
               </Link>
             </div>
@@ -211,8 +211,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <SectionTopProgress section={section} />
           <div className="wrap learn-readable">
             <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
-              <Link href="/learn">← Curriculum</Link>
-              <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+              <Link href={hongKongLearnPath}>← Curriculum</Link>
+              <Link href={getSectionPath(section.slug)}>Section {section.number}</Link>
               <span>Quiz</span>
             </nav>
             <h1 style={{ marginTop: '18px' }}>Quiz: {section.title}</h1>
@@ -254,7 +254,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                   <h3>Quiz shell</h3>
                   <p>Multiple choice, ordering, and table-identification checks will live here.</p>
                 </div>
-                <Link className="btn-primary gold" href="/learn">
+                <Link className="btn-primary gold" href={hongKongLearnPath}>
                   Back to curriculum
                 </Link>
               </div>
@@ -277,8 +277,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <SectionTopProgress section={section} />
         <div className="wrap learn-readable">
           <nav className="learn-breadcrumb-trail" aria-label="Breadcrumb">
-            <Link href="/learn">← Curriculum</Link>
-            <Link href={`/learn/${section.slug}`}>Section {section.number}</Link>
+            <Link href={hongKongLearnPath}>← Curriculum</Link>
+            <Link href={getSectionPath(section.slug)}>Section {section.number}</Link>
             <span>Lesson {lesson.number}</span>
           </nav>
           <h1 style={{ marginTop: '18px' }}>{lesson.title}</h1>

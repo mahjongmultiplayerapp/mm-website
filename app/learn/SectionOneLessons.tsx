@@ -477,7 +477,7 @@ export function SectionOneCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('what-is-hong-kong-mahjong/checkpoint', '/learn/tiles-melds-winning-hands');
+    completeLesson('what-is-hong-kong-mahjong/checkpoint', '/learn/hong-kong/tiles-melds-winning-hands');
     completeSection('section-1');
   };
 
@@ -525,7 +525,7 @@ export function SectionOneCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/tiles-melds-winning-hands">
+          <a className="btn-primary gold" href="/learn/hong-kong/tiles-melds-winning-hands">
             Continue to next section
           </a>
         ) : (
