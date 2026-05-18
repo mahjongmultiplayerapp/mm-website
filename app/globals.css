@@ -1295,12 +1295,20 @@
   .section-three-wall-photo {
     display: block;
     width: 100%;
-    height: clamp(260px, 42vw, 420px);
+    height: auto;
+    max-height: min(70vh, 720px);
     margin-top: 18px;
     border-radius: 20px;
     border: 1px solid rgba(245,238,221,.08);
     box-shadow: 0 18px 38px -24px rgba(0,0,0,.85);
-    object-fit: cover;
+    object-fit: contain;
+  }
+  .section-three-dealing-photos {
+    display: grid;
+    gap: 18px;
+  }
+  .section-three-dealing-photos .section-three-wall-photo:not(:first-child) {
+    margin-top: 0;
   }
   .section-three-dice-guide {
     display: grid;
@@ -1602,6 +1610,10 @@
     border-color: rgba(197,162,92,.52) !important;
     background: rgba(197,162,92,.14) !important;
   }
+  .section-four-turn-table .discarded {
+    border-color: rgba(77,181,137,.72) !important;
+    box-shadow: 0 0 0 3px rgba(77,181,137,.16);
+  }
   .section-four-turn-table span {
     display: block;
     font-family: var(--font-display);
@@ -1656,6 +1668,12 @@
   .section-four-call-window {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  .section-four-arranging-hand .mini-tile.drawn {
+    border-radius: 8px;
+    outline: 3px solid rgba(197,162,92,.86);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(197,162,92,.14), 0 12px 22px -12px rgba(0,0,0,.9);
+  }
   .section-four-choice-panel button,
   .section-four-call-window button,
   .section-four-river,
@@ -1700,6 +1718,53 @@
   }
   .section-four-call-window .mini-tile {
     margin: 0 auto;
+  }
+  .section-four-call-example,
+  .section-four-call-flow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .section-four-call-step,
+  .section-four-call-flow > div {
+    min-width: 0;
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    align-content: center;
+    text-align: center;
+    border: 1px solid rgba(245,238,221,.1);
+    background: rgba(5,19,15,.44);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .section-four-call-step strong {
+    color: var(--ivory);
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .section-four-call-step p,
+  .section-four-turn-call-example > p {
+    color: var(--ivory-dim);
+    margin: 0;
+  }
+  .section-four-call-step.active {
+    border-color: rgba(197,162,92,.42);
+    background: rgba(197,162,92,.1);
+  }
+  .section-four-call-step.muted {
+    opacity: .78;
+  }
+  .mini-tile.called-tile {
+    border-radius: 8px;
+    outline: 2px solid rgba(197,162,92,.82);
+    outline-offset: 3px;
+  }
+  .section-four-turn-call-example {
+    display: grid;
+    gap: 16px;
   }
   .section-four-ending-branches {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2808,10 +2873,10 @@
     }
     .section-two-table-map {
       grid-template-areas:
-        "wall"
         "hand"
         "meld"
-        "river";
+        "river"
+        "wall";
       min-height: auto;
     }
     .section-three-live-dead-labels,
@@ -2838,6 +2903,8 @@
     .section-four-discard-board,
     .section-four-ending-branches,
     .section-four-choice-panel > div:last-child,
+    .section-four-call-example,
+    .section-four-call-flow,
     .section-four-call-window,
     .section-five-call-buttons,
     .section-five-decision-tree,

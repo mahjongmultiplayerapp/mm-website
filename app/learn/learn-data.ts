@@ -60,10 +60,9 @@ export const learnSections: LearnSection[] = [
       { number: '3.2', slug: 'dealer-and-east', title: 'Dealer and the Meaning of East', objective: 'Understand why East starts and how dealer status matters.' },
       { number: '3.3', slug: 'the-wall', title: 'The Wall', objective: 'Learn how shuffled tiles become the wall.' },
       { number: '3.4', slug: 'rolling-dice-opening-wall', title: 'Rolling Dice and Opening the Wall', objective: 'See how the break point is chosen.' },
-      { number: '3.5', slug: 'live-wall-vs-dead-wall', title: 'Live Wall vs Dead Wall', objective: 'Understand which tiles are drawn in normal play and after kongs.' },
-      { number: '3.6', slug: 'dealing-the-tiles', title: 'Dealing the Tiles', objective: 'Follow the deal from wall to player hands.' },
+      { number: '3.5', slug: 'dealing-the-tiles', title: 'Dealing the Tiles', objective: 'Follow the deal from wall to player hands.' },
+      { number: '3.6', slug: 'live-wall-vs-dead-wall', title: 'Live Wall vs Dead Wall', objective: 'Understand which tiles are drawn in normal play and after kongs.' },
       { number: '3.7', slug: 'table-areas', title: 'Table Areas', objective: 'Locate hands, walls, discards, and exposed melds.' },
-      { number: '3.8', slug: 'common-setup-mistakes', title: 'Common Setup Mistakes', objective: 'Catch beginner errors before a hand begins.' },
     ],
   },
   {
