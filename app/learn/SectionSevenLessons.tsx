@@ -144,6 +144,7 @@ function LessonFrame({
   nextHref,
   ready,
   takeaway,
+  conceptClassName = '',
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
@@ -153,10 +154,11 @@ function LessonFrame({
   check: React.ReactNode;
   ready: boolean;
   takeaway: { title: string; body: string };
+  conceptClassName?: string;
 }) {
   return (
     <div className="learn-lesson-template section-one-lesson section-seven-lesson">
-      <article className="learn-content-card welcome-copy-card">
+      <article className={`learn-content-card welcome-copy-card ${conceptClassName}`.trim()}>
         <span className="eyebrow">Concept</span>
         <h3>{title}</h3>
         {copy.map((paragraph) => (
@@ -395,6 +397,7 @@ export function DrawnHandsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       lessonId={lessonId}
       nextHref={nextHref}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'No winner before the wall ends', body: 'A drawn hand means the wall ran out before anyone won.' }}
     />
   );

@@ -159,6 +159,7 @@ function LessonFrame({
   nextHref,
   ready,
   takeaway,
+  conceptClassName = '',
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
@@ -168,10 +169,11 @@ function LessonFrame({
   check: React.ReactNode;
   ready: boolean;
   takeaway: { title: string; body: string };
+  conceptClassName?: string;
 }) {
   return (
     <div className="learn-lesson-template section-one-lesson section-four-lesson">
-      <article className="learn-content-card welcome-copy-card">
+      <article className={`learn-content-card welcome-copy-card ${conceptClassName}`.trim()}>
         <span className="eyebrow">Concept</span>
         <h3>{title}</h3>
         {copy.map((paragraph) => (
@@ -334,6 +336,7 @@ export function DrawingTileLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       rule="Wait until the previous discard is clearly placed and released."
       check={<ChoiceCheck question={{ prompt: 'What is wrong if a player reaches before the previous discard lands?', options: ['They are drawing too early', 'They are scoring', 'They are calling Pung', 'Nothing is wrong'], answer: 0, explanation: 'Exactly. Early draws create confusion and can block legal calls.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'Wait for the previous discard before drawing.', body: 'At a real table, patience keeps calls fair.' }}
     />
   );

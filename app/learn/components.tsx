@@ -268,6 +268,26 @@ export function MiniTile({ tile, className = '' }: { tile: string; className?: s
   );
 }
 
+export function ZoomableImage({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button type="button" className="zoomable-image-trigger" onClick={() => setIsOpen(true)} aria-label={`Expand image: ${alt}`}>
+        <img className={className} src={src} alt={alt} />
+      </button>
+      {isOpen ? (
+        <div className="zoomable-image-modal" role="dialog" aria-modal="true" aria-label={alt} onClick={() => setIsOpen(false)}>
+          <button type="button" className="zoomable-image-close" onClick={() => setIsOpen(false)} aria-label="Close expanded image">
+            Close
+          </button>
+          <img src={src} alt={alt} onClick={(event) => event.stopPropagation()} />
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 export function SectionProgress({ section }: { section: LearnSection }) {
   return (
     <div className="learn-progress-ring" aria-label={`${section.lessons.length} lessons`}>

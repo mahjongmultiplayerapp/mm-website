@@ -186,6 +186,8 @@ function LessonFrame({
   nextHref,
   ready,
   takeaway,
+  conceptClassName = '',
+  visualClassName = '',
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
@@ -195,10 +197,12 @@ function LessonFrame({
   check: React.ReactNode;
   ready: boolean;
   takeaway: { title: string; body: string };
+  conceptClassName?: string;
+  visualClassName?: string;
 }) {
   return (
     <div className="learn-lesson-template section-one-lesson section-six-lesson">
-      <article className="learn-content-card welcome-copy-card">
+      <article className={`learn-content-card welcome-copy-card ${conceptClassName}`.trim()}>
         <span className="eyebrow">Concept</span>
         <h3>{title}</h3>
         {copy.map((paragraph) => (
@@ -206,7 +210,7 @@ function LessonFrame({
         ))}
       </article>
       {visual ? (
-        <section className="learn-content-card">
+        <section className={`learn-content-card ${visualClassName}`.trim()}>
           <span className="eyebrow">Visual example</span>
           {visual}
         </section>
@@ -474,6 +478,7 @@ export function PaymentBasicsLesson({ lessonId, nextHref }: LessonRuntimeProps) 
       lessonId={lessonId}
       nextHref={nextHref}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'Separate fan from payer', body: 'First count fan, then decide who pays based on self-draw or discard win.' }}
     />
   );
@@ -642,6 +647,8 @@ export function PresentingWinningHandLesson({ lessonId, nextHref }: LessonRuntim
       lessonId={lessonId}
       nextHref={nextHref}
       ready={ready}
+      conceptClassName="lesson-concept-full"
+      visualClassName="lesson-visual-full"
       takeaway={{ title: 'Make scoring easy', body: 'A winning hand should be displayed clearly so everyone can verify and score it.' }}
     />
   );
