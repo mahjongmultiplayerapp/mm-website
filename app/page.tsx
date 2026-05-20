@@ -574,7 +574,7 @@ function FAQ() {
             <summary>
               Is there a desktop version? <span className="plus">+</span>
             </summary>
-            <div className="answer">We plan to make it possible to play in your web browser, and have the game be cross-platform. This means you can be playing in the web browser while you&apos;re playing against a friend who&apos;s playing on the app.</div>
+            <div className="answer">Yes! You can play in your web browser as well. This means you can be playing in the web browser while you&apos;re playing against a friend who&apos;s playing on the app.</div>
           </details>
         </div>
       </div>

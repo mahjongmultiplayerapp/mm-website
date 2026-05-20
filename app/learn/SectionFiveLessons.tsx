@@ -144,6 +144,7 @@ function LessonFrame({
   nextHref,
   ready,
   takeaway,
+  conceptClassName = '',
 }: LessonRuntimeProps & {
   title: string;
   copy: string[];
@@ -153,10 +154,11 @@ function LessonFrame({
   check: React.ReactNode;
   ready: boolean;
   takeaway: { title: string; body: string };
+  conceptClassName?: string;
 }) {
   return (
     <div className="learn-lesson-template section-one-lesson section-five-lesson">
-      <article className="learn-content-card welcome-copy-card">
+      <article className={`learn-content-card welcome-copy-card ${conceptClassName}`.trim()}>
         <span className="eyebrow">Concept</span>
         <h3>{title}</h3>
         {copy.map((paragraph) => (
@@ -368,6 +370,7 @@ export function SupplementKongLesson({ lessonId, nextHref }: LessonRuntimeProps)
       rule="Declare and expose the kong first, then draw the supplement tile from the dead wall."
       check={<ChoiceCheck question={{ prompt: 'What must happen before drawing a kong supplement tile?', options: ['The kong must be clearly exposed and confirmed', 'A Chow must happen', 'The river must be empty', 'East must pass'], answer: 0, explanation: 'Exactly. Expose and confirm the kong before the supplement draw.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'Declare and expose the kong first, then draw the supplement tile from the dead wall.', body: 'That order keeps the table state clear.' }}
     />
   );
@@ -403,6 +406,7 @@ export function WinOnDiscardLesson({ lessonId, nextHref }: LessonRuntimeProps) {
       rule="Win on discard means another player throws the tile that completes your hand."
       check={<ChoiceCheck question={{ prompt: 'Another player discards the exact tile that completes your legal hand. What can you call?', options: ['Win', 'Self-draw', 'Pass only', 'Chow only'], answer: 0, explanation: 'Exactly. You may call Win on the discard.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'Win on discard means another player throws the tile that completes your hand.', body: 'Completing shape is not enough if the ruleset requires a score 3 fan; we will discuss scoring in upcoming lessons.' }}
     />
   );
@@ -490,6 +494,7 @@ export function BeginnerCallDecisionsLesson({ lessonId, nextHref }: LessonRuntim
       copy={['At first, do not try to master advanced strategy. Start with legality.', 'Ask: can I call this tile? What set does it make? Is it from the correct player? What happens to turn order after I call? Legal does not always mean smart, but illegal is always wrong.']}
       check={<ChoiceCheck question={{ prompt: 'Which question should come first for a beginner?', options: ['Is this call legal?', 'Will this scare opponents?', 'Can I hide this meld?', 'Can I change the score cap?'], answer: 0, explanation: 'Exactly. Legal first, strategy later.' }} onCorrect={() => setReady(true)} />}
       ready={ready}
+      conceptClassName="lesson-concept-full"
       takeaway={{ title: 'Before thinking strategy, learn call legality and turn consequences.', body: 'Can I call, what does it make, what changes next?' }}
     />
   );
@@ -519,7 +524,7 @@ export function SectionFiveCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('calls-chow-pung-kong-win/checkpoint', '/learn/scoring-and-fan');
+    completeLesson('calls-chow-pung-kong-win/checkpoint', '/learn/hong-kong/scoring-and-fan');
     completeSection('section-5');
   };
 
@@ -565,7 +570,7 @@ export function SectionFiveCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/scoring-and-fan">
+          <a className="btn-primary gold" href="/learn/hong-kong/scoring-and-fan">
             Continue to next section
           </a>
         ) : (

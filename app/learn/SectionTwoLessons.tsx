@@ -322,7 +322,7 @@ export function TileSetLesson({ lessonId, nextHref }: LessonRuntimeProps) {
         </div>
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={ready} />
       </section>
-      <section className="learn-content-card">
+      <section className="learn-content-card section-two-bonus-card">
         <h3>There&apos;s also Flower and Season tiles</h3>
         <p>Also included in Mahjong tile sets are 4 &quot;Flower&quot; tiles and 4 &quot;Season&quot; tiles. These are called &quot;Bonus Tiles&quot; and only influence scoring in Hong Kong Mahjong. It&apos;s common to play both with and without these tiles. This learning course assumes that the 8 Bonus Tiles are excluded from the game and scoring.</p>
         <div className="section-two-family-grid">
@@ -350,7 +350,7 @@ export function ThreeSuitsLesson({ lessonId, nextHref }: LessonRuntimeProps) {
 
   return (
     <div className="learn-lesson-template section-one-lesson section-two-lesson">
-      <article className="learn-content-card welcome-copy-card">
+      <article className="learn-content-card welcome-copy-card section-two-standard-shape-concept">
         <span className="eyebrow">Concept</span>
         <h3>Every suited tile has two facts.</h3>
         <p>The three suits are Dots, Bamboos, and Characters. Each suit runs from 1 through 9, and there are four copies of each tile.</p>
@@ -577,7 +577,7 @@ export function StandardWinningShapeLesson({ lessonId, nextHref }: LessonRuntime
         </div>
         <CompleteButton lessonId={lessonId} nextHref={nextHref} ready={complete} />
       </section>
-      <section className="learn-content-card section-two-hand-builder">
+      <section className="learn-content-card section-two-hand-builder section-two-standard-shape-builder">
         <span className="eyebrow">Hand builder</span>
         <div className="section-two-builder-tiles">
           {handBuilderTiles.map((tile) => {
@@ -707,7 +707,7 @@ export function SectionTwoCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('tiles-melds-winning-hands/checkpoint', '/learn/setup-and-dealing');
+    completeLesson('tiles-melds-winning-hands/checkpoint', '/learn/hong-kong/setup-and-dealing');
     completeSection('section-2');
   };
 
@@ -753,7 +753,7 @@ export function SectionTwoCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/setup-and-dealing">
+          <a className="btn-primary gold" href="/learn/hong-kong/setup-and-dealing">
             Continue to next section
           </a>
         ) : (

@@ -1,18 +1,48 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { LandingProgressActions } from './LearnProgress';
-import { LearnShell, SectionProgress, TileRail } from './components';
-import { getFirstLessonPath, learnSections, totalLessonCount } from './learn-data';
+import { LearnShell } from './components';
+import { hongKongLearnPath, learnSections, totalLessonCount } from './learn-data';
 
 export const metadata: Metadata = {
-  title: 'Learn Hong Kong Mahjong | Mahjong Multiplayer',
-  description: 'Learn Hong Kong Mahjong interactively, from tiles and turns to calls, scoring, rounds, and table rules.',
+  title: 'Learn Mahjong | Mahjong Multiplayer',
+  description: 'Choose a mahjong ruleset to learn, starting with Hong Kong Mahjong.',
 };
 
-export default function LearnLandingPage() {
-  const firstLessonHref = getFirstLessonPath(learnSections[0]);
-  const totalMinutes = learnSections.reduce((sum, section) => sum + section.estimatedMinutes, 0);
+const mahjongVersions = [
+  {
+    name: 'Hong Kong Mahjong',
+    label: 'Available now',
+    description: 'A beginner-friendly path through 13-tile Hong Kong Mahjong, from tiles and turns to calls, scoring, and table flow.',
+    href: hongKongLearnPath,
+    isAvailable: true,
+    stats: [`${learnSections.length} sections`, `${totalLessonCount} lessons`],
+  },
+  {
+    name: 'American Mahjong (NMJL)',
+    label: 'Coming Soon',
+    description: 'Card-based hands, jokers, Charleston, and the National Mah Jongg League style of play.',
+    isAvailable: false,
+    stats: ['NMJL card', 'Jokers'],
+  },
+  {
+    name: 'Riichi Mahjong (Japanese)',
+    label: 'Coming Soon',
+    description: 'Yaku, riichi declarations, furiten, dora, and the distinctive flow of Japanese mahjong.',
+    isAvailable: false,
+    stats: ['Yaku', 'Dora'],
+  },
+  {
+    name: 'Taiwanese Mahjong',
+    label: 'Coming Soon',
+    description: 'The 16-tile style with Taiwanese table structure, winning shapes, and scoring patterns.',
+    isAvailable: false,
+    stats: ['16 tiles', 'Scoring'],
+  },
+];
 
+const [hongKongVersion, ...comingSoonVersions] = mahjongVersions;
+
+export default function LearnVersionPickerPage() {
   return (
     <LearnShell>
       <section className="learn-hero felt">
@@ -27,64 +57,50 @@ export default function LearnLandingPage() {
         <div className="wrap learn-hero-grid">
           <div>
             <span className="eyebrow">Learning Hub</span>
-            <h1 style={{ marginTop: '18px' }}>Learn Hong Kong Mahjong</h1>
-            <p className="lede">Free guide which is perfect for beginners looking to learn enough of the basics to play a full round.</p>
-            <LandingProgressActions firstLessonHref={firstLessonHref} totalLessons={totalLessonCount} />
+            <h1 style={{ marginTop: '18px' }}>Choose Your Mahjong Style</h1>
+            <p className="lede">
+              <strong>Start with learning Hong Kong Mahjong, the world&apos;s most popular version</strong>, then come back to learn other rulesets over time.
+            </p>
           </div>
-          <div className="learn-hero-card">
-            <TileRail />
-            <div className="learn-hero-stat">
-              <span>{learnSections.length}</span>
-              <small>sections</small>
+          <Link className="learn-version-card learn-version-card-featured" href={hongKongLearnPath}>
+            <div className="learn-version-card-top">
+              <span className="learn-version-mark">HK</span>
+              <span className="learn-status-pill available">{hongKongVersion.label}</span>
             </div>
-            <div className="learn-hero-stat">
-              <span>{totalLessonCount}</span>
-              <small>lessons</small>
+            <h3>{hongKongVersion.name}</h3>
+            <p>{hongKongVersion.description}</p>
+            <div className="learn-card-meta">
+              {hongKongVersion.stats.map((stat) => (
+                <span key={stat}>{stat}</span>
+              ))}
             </div>
-            <div className="learn-hero-stat">
-              <span>{totalMinutes}</span>
-              <small>minutes</small>
-            </div>
-          </div>
+            <span className="btn-primary gold learn-version-card-cta">Start Learning Hong Kong Mahjong</span>
+          </Link>
         </div>
       </section>
 
-      <section id="curriculum" className="learn-curriculum">
+      <section className="learn-curriculum">
         <div className="wrap">
           <div className="section-head">
-            <span className="eyebrow">Curriculum</span>
-            <h2 style={{ marginTop: '14px' }}>Learn the basics in seven sections.</h2>
+            <span className="eyebrow">Versions</span>
+            <h2 style={{ marginTop: '14px' }}>More Mahjong ruleset lessons coming soon</h2>
           </div>
-          <div className="learn-section-grid">
-            {learnSections.map((section) => (
-              <Link className="learn-section-card" href={`/learn/${section.slug}`} key={section.slug}>
-                <div className="learn-section-card-top">
-                  <span className="learn-section-number">{String(section.number).padStart(2, '0')}</span>
-                  <SectionProgress section={section} />
+          <div className="learn-version-grid">
+            {comingSoonVersions.map((version) => (
+              <article className="learn-version-card disabled" aria-disabled="true" key={version.name}>
+                <div className="learn-version-card-top">
+                  <span className="learn-version-mark">{version.name.slice(0, 2).toUpperCase()}</span>
+                  <span className="learn-status-pill">{version.label}</span>
                 </div>
-                <h3>{section.title}</h3>
-                <p>{section.purpose}</p>
+                <h3>{version.name}</h3>
+                <p>{version.description}</p>
                 <div className="learn-card-meta">
-                  <span>{section.estimatedMinutes} min</span>
-                  <span>Start →</span>
+                  {version.stats.map((stat) => (
+                    <span key={stat}>{stat}</span>
+                  ))}
                 </div>
-              </Link>
+              </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="learn-outcome tight felt">
-        <div className="wrap">
-          <div className="final learn-outcome-card">
-            <span className="eyebrow">Check your readiness</span>
-            <h2 style={{ marginTop: '14px' }}>Take the Final Quiz</h2>
-            <p className="lede">
-              Check how well you understand Hong Kong Mahjong so that you're prepared for your first game.
-            </p>
-            <Link className="btn-primary gold" href="/learn/final-readiness-test">
-              Take Final Quiz
-            </Link>
           </div>
         </div>
       </section>

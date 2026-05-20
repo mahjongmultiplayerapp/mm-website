@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { MiniTile } from './components';
+import { MiniTile, ZoomableImage } from './components';
 
 type LessonRuntimeProps = {
   lessonId: string;
@@ -292,7 +292,7 @@ function WallVisual({ liveDead = false, breakPoint = false }: { liveDead?: boole
 
 function WallPhotoVisual() {
   return (
-    <img
+    <ZoomableImage
       className="section-three-wall-photo"
       src="/assets/board-images/hong_kong/setup_walls.jpg"
       alt="A mahjong wall built from stacked face-down tiles."
@@ -316,7 +316,7 @@ function DiceOpeningVisual() {
           </div>
         ))}
       </div>
-      <img
+      <ZoomableImage
         className="section-three-wall-photo section-three-opening-photo"
         src="/assets/board-images/hong_kong/opening_the_wall.jpg"
         alt="A mahjong wall opened at the break point."
@@ -367,7 +367,7 @@ function DiceOpeningCheck({ onComplete }: { onComplete: () => void }) {
 
 function LiveDeadWallVisual() {
   return (
-    <img
+    <ZoomableImage
       className="section-three-wall-photo"
       src="/assets/board-images/hong_kong/live_and_dead_wall.jpg"
       alt="A mahjong wall showing the live wall and dead wall areas."
@@ -547,12 +547,12 @@ export function LiveDeadWallLesson({ lessonId, nextHref }: LessonRuntimeProps) {
 function DealingTilesVisual() {
   return (
     <div className="section-three-dealing-photos">
-      <img
+      <ZoomableImage
         className="section-three-wall-photo"
         src="/assets/board-images/hong_kong/draw_from_wall.jpg"
         alt="A player drawing tiles from the opened mahjong wall."
       />
-      <img
+      <ZoomableImage
         className="section-three-wall-photo"
         src="/assets/board-images/hong_kong/drawing_final_tiles.jpg"
         alt="A player drawing the final setup tiles from the wall."
@@ -564,7 +564,7 @@ function DealingTilesVisual() {
 function TableAreasVisual({ active, onChoose }: { active: string; onChoose: (area: string) => void }) {
   return (
     <div>
-      <img
+      <ZoomableImage
         className="section-three-wall-photo"
         src="/assets/board-images/hong_kong/table_areas.jpg"
         alt="A mahjong table showing the concealed hand, open meld area, river, and wall."
@@ -665,7 +665,7 @@ export function SectionThreeCheckpoint() {
 
   const submit = () => {
     setSubmitted(true);
-    completeLesson('setup-and-dealing/checkpoint', '/learn/turn-flow-and-discarding');
+    completeLesson('setup-and-dealing/checkpoint', '/learn/hong-kong/turn-flow-and-discarding');
     completeSection('section-3');
   };
 
@@ -711,7 +711,7 @@ export function SectionThreeCheckpoint() {
           <p>{submitted ? 'Score recorded. Keep moving while the ideas are fresh.' : 'Submit when every question has an answer.'}</p>
         </div>
         {submitted ? (
-          <a className="btn-primary gold" href="/learn/turn-flow-and-discarding">
+          <a className="btn-primary gold" href="/learn/hong-kong/turn-flow-and-discarding">
             Continue to next section
           </a>
         ) : (

@@ -147,6 +147,7 @@ export const learnSections: LearnSection[] = [
 ];
 
 export const totalLessonCount = learnSections.reduce((sum, section) => sum + section.lessons.length, 0);
+export const hongKongLearnPath = '/learn/hong-kong';
 
 export function getSection(sectionSlug: string) {
   return learnSections.find((section) => section.slug === sectionSlug);
@@ -161,7 +162,11 @@ export function getLesson(sectionSlug: string, lessonSlug: string) {
 }
 
 export function getLessonPath(sectionSlug: string, lessonSlug: string) {
-  return `/learn/${sectionSlug}/${lessonSlug}`;
+  return `${hongKongLearnPath}/${sectionSlug}/${lessonSlug}`;
+}
+
+export function getSectionPath(sectionSlug: string) {
+  return `${hongKongLearnPath}/${sectionSlug}`;
 }
 
 export function getFirstLessonPath(section: LearnSection) {
@@ -171,26 +176,26 @@ export function getFirstLessonPath(section: LearnSection) {
 export function getNextLessonPath(sectionSlug: string, lessonSlug: string) {
   const sectionIndex = learnSections.findIndex((section) => section.slug === sectionSlug);
   const section = learnSections[sectionIndex];
-  if (!section) return '/learn';
+  if (!section) return hongKongLearnPath;
 
   const lessonIndex = section.lessons.findIndex((lesson) => lesson.slug === lessonSlug);
   const nextLesson = section.lessons[lessonIndex + 1];
   if (nextLesson) return getLessonPath(section.slug, nextLesson.slug);
 
-  return `/learn/${section.slug}/recap`;
+  return getLessonPath(section.slug, 'recap');
 }
 
 export function getPreviousLessonPath(sectionSlug: string, lessonSlug: string) {
   const sectionIndex = learnSections.findIndex((section) => section.slug === sectionSlug);
   const section = learnSections[sectionIndex];
-  if (!section) return '/learn';
+  if (!section) return hongKongLearnPath;
 
   if (lessonSlug === 'recap') return getLessonPath(section.slug, section.lessons[section.lessons.length - 1].slug);
-  if (lessonSlug === 'checkpoint') return `/learn/${section.slug}/recap`;
+  if (lessonSlug === 'checkpoint') return getLessonPath(section.slug, 'recap');
 
   const lessonIndex = section.lessons.findIndex((lesson) => lesson.slug === lessonSlug);
   const previousLesson = section.lessons[lessonIndex - 1];
   if (previousLesson) return getLessonPath(section.slug, previousLesson.slug);
 
-  return `/learn/${section.slug}`;
+  return getSectionPath(section.slug);
 }
